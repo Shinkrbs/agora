@@ -6,7 +6,7 @@
 | --- | --- |
 AG.010.000 | 2025-02-27 |
 
-## AB.010.000 Release Notes 
+## AG.010.000 Release Notes 
 
 ● Add NextJS project framework
 

@@ -1,5 +1,16 @@
 import { Button } from "@/components/ui/button";
-import { Shield, CheckSquare, Eye, Star, Zap, Bell, Globe } from "lucide-react";
+import { 
+  Shield, 
+  CheckSquare, 
+  Eye, 
+  Star, 
+  Zap, 
+  Bell, 
+  Globe,
+  BarChart2,
+  Users,
+  Archive
+} from "lucide-react";
 
 export default function LandingPage() {
   return (
@@ -98,8 +109,6 @@ export default function LandingPage() {
       {/* ================= WHY SOES SECTION ================= */}
       <section className="w-full bg-gray-50/50 dark:bg-gray-900/10 py-20 border-t border-gray-100 dark:border-gray-800">
         <div className="container mx-auto px-4 sm:px-8">
-          
-          {/* Section Header */}
           <div className="text-center mb-16">
             <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
               Why SOES?
@@ -109,10 +118,7 @@ export default function LandingPage() {
             </p>
           </div>
 
-          {/* Features Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-            
-            {/* Card 1: Easy To Use */}
             <div className="bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-2xl p-8 text-center shadow-sm hover:shadow-md transition-shadow">
               <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-xl bg-green-50 dark:bg-[#2e7d32]/20 mb-6">
                 <Zap className="h-6 w-6 text-[#2e7d32]" />
@@ -125,7 +131,6 @@ export default function LandingPage() {
               </p>
             </div>
 
-            {/* Card 2: Real-Time Updates */}
             <div className="bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-2xl p-8 text-center shadow-sm hover:shadow-md transition-shadow">
               <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-xl bg-green-50 dark:bg-[#2e7d32]/20 mb-6">
                 <Bell className="h-6 w-6 text-[#2e7d32]" />
@@ -138,7 +143,6 @@ export default function LandingPage() {
               </p>
             </div>
 
-            {/* Card 3: Multi-Session Support */}
             <div className="bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-2xl p-8 text-center shadow-sm hover:shadow-md transition-shadow">
               <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-xl bg-green-50 dark:bg-[#2e7d32]/20 mb-6">
                 <Globe className="h-6 w-6 text-[#2e7d32]" />
@@ -150,10 +154,132 @@ export default function LandingPage() {
                 Manage multiple elections simultaneously with session-specific candidates, voters, and configurations.
               </p>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ================= ONBOARDING GUIDE SECTION ================= */}
+      <section className="w-full py-20">
+        <div className="container mx-auto px-4 sm:px-8">
+          
+          <div className="text-center mb-16">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
+              Get Started in Minutes
+            </h2>
+            <p className="mt-4 text-gray-500 dark:text-gray-400 text-sm sm:text-base max-w-2xl mx-auto">
+              Simple steps to launch your first election
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center max-w-5xl mx-auto">
+            
+            {/* Left Column: Steps */}
+            <div className="space-y-8">
+              {/* Step 1 */}
+              <div className="flex gap-4">
+                <div className="flex-shrink-0 w-8 h-8 rounded text-white bg-[#2e7d32] flex items-center justify-center font-bold text-sm">
+                  1
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white">Set up your organization</h3>
+                  <p className="mt-1 text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
+                    Configure your organization details, create position templates, and add your branding.
+                  </p>
+                </div>
+              </div>
+
+              {/* Step 2 */}
+              <div className="flex gap-4">
+                <div className="flex-shrink-0 w-8 h-8 rounded text-white bg-[#2e7d32] flex items-center justify-center font-bold text-sm">
+                  2
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white">Create an election session</h3>
+                  <p className="mt-1 text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
+                    Set election dates, add candidates with photos, and upload your voter list for the specific election.
+                  </p>
+                </div>
+              </div>
+
+              {/* Step 3 */}
+              <div className="flex gap-4">
+                <div className="flex-shrink-0 w-8 h-8 rounded text-white bg-[#2e7d32] flex items-center justify-center font-bold text-sm">
+                  3
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white">Share voting links</h3>
+                  <p className="mt-1 text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
+                    Generate unique voting links and distribute them to your registered voters securely.
+                  </p>
+                </div>
+              </div>
+
+              {/* Step 4 */}
+              <div className="flex gap-4">
+                <div className="flex-shrink-0 w-8 h-8 rounded text-white bg-[#2e7d32] flex items-center justify-center font-bold text-sm">
+                  4
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white">Monitor & publish results</h3>
+                  <p className="mt-1 text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
+                    Track votes in real-time and publish transparent results for everyone to see.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column: Dashboard Phone Mockup */}
+            <div className="relative flex justify-center lg:justify-end">
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-green-400/20 blur-[80px] rounded-full pointer-events-none"></div>
+              
+              <div className="relative w-full max-w-[320px] bg-white dark:bg-gray-50 border-[8px] border-gray-50 dark:border-gray-200 rounded-[2.5rem] shadow-2xl overflow-hidden">
+                {/* Dark Green Inner Screen */}
+                <div className="bg-[#2e7d32] h-full w-full p-6 text-white rounded-[1.8rem] flex flex-col justify-center">
+                  <h3 className="font-semibold text-lg mb-6 justify-center flex items-center">Election Dashboard</h3>
+                  
+                  <div className="space-y-4 flex-1">
+                    {/* Stat Card 1 */}
+                    <div className="bg-white/10 rounded-xl p-4 border border-white/10 shadow-sm backdrop-blur-sm">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm text-green-50">Total Votes</span>
+                        <BarChart2 className="w-4 h-4 text-green-100" />
+                      </div>
+                      <div className="text-2xl font-bold">1,247</div>
+                    </div>
+
+                    {/* Stat Card 2 */}
+                    <div className="bg-white/10 rounded-xl p-4 border border-white/10 shadow-sm backdrop-blur-sm">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm text-green-50">Participation</span>
+                        <Users className="w-4 h-4 text-green-100" />
+                      </div>
+                      <div className="text-2xl font-bold">82.3%</div>
+                    </div>
+
+                    {/* Stat Card 3 */}
+                    <div className="bg-white/10 rounded-xl p-4 border border-white/10 shadow-sm backdrop-blur-sm">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm text-green-50">Active Elections</span>
+                        <Archive className="w-4 h-4 text-green-100" />
+                      </div>
+                      <div className="text-2xl font-bold">3</div>
+                    </div>
+                  </div>
+
+                  {/* View Full Report Button */}
+                  <div className="mt-8 mb-2 flex justify-center">
+                    <div className="bg-white text-[#2e7d32] text-xs font-bold py-2.5 px-6 rounded-full transition-colors w-3/4 shadow-sm justify-center flex items-center ">
+                      View Full Report
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
           </div>
         </div>
       </section>
+
     </div>
   );
 }

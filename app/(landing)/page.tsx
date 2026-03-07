@@ -1,20 +1,25 @@
 import { Button } from "@/components/ui/button";
 import { 
-  Shield, 
-  CheckSquare, 
-  Eye, 
-  Star, 
-  Zap, 
-  Bell, 
-  Globe,
-  BarChart2,
-  Users,
-  Archive,
-  ShieldCheck,
-  UserCheck,
-  BarChart3,
-  Smartphone
+  Shield, CheckSquare, Eye, Star, Zap, Bell, Globe,
+  BarChart2, Users, Archive, ShieldCheck, UserCheck, BarChart3, Smartphone
 } from "lucide-react";
+import { LandingCard } from "./components/LandingCard";
+
+// Data arrays for cleaner rendering
+const whySoesFeatures = [
+  { icon: Zap, title: "Easy To Use", description: "Intuitive interface that makes managing elections simple for administrators and voting effortless for students." },
+  { icon: Bell, title: "Real-Time Updates", description: "Live notifications and instant updates on election progress, vote counts, and participation rates." },
+  { icon: Globe, title: "Multi-Session Support", description: "Manage multiple elections simultaneously with session-specific candidates, voters, and configurations." },
+];
+
+const capabilities = [
+  { icon: ShieldCheck, title: "Secure Authentication", description: "One-time voting codes ensure security and anonymity" },
+  { icon: Users, title: "Candidate Management", description: "Add candidates with photos, partylists, and details" },
+  { icon: UserCheck, title: "Voter Management", description: "Manage voter lists per election session" },
+  { icon: BarChart3, title: "Live Analytics", description: "Real-time vote tracking and participation metrics" },
+  { icon: Eye, title: "Public Results", description: "Transparent results accessible to everyone" },
+  { icon: Smartphone, title: "Mobile Responsive", description: "Optimized for all devices and screen sizes" },
+];
 
 export default function LandingPage() {
   return (
@@ -120,41 +125,15 @@ export default function LandingPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-            <div className="bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-2xl p-8 text-center shadow-sm hover:shadow-md transition-shadow">
-              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-xl bg-green-50 dark:bg-[#2e7d32]/20 mb-6">
-                <Zap className="h-6 w-6 text-[#2e7d32]" />
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-                Easy To Use
-              </h3>
-              <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
-                Intuitive interface that makes managing elections simple for administrators and voting effortless for students.
-              </p>
-            </div>
-
-            <div className="bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-2xl p-8 text-center shadow-sm hover:shadow-md transition-shadow">
-              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-xl bg-green-50 dark:bg-[#2e7d32]/20 mb-6">
-                <Bell className="h-6 w-6 text-[#2e7d32]" />
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-                Real-Time Updates
-              </h3>
-              <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
-                Live notifications and instant updates on election progress, vote counts, and participation rates.
-              </p>
-            </div>
-
-            <div className="bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-2xl p-8 text-center shadow-sm hover:shadow-md transition-shadow">
-              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-xl bg-green-50 dark:bg-[#2e7d32]/20 mb-6">
-                <Globe className="h-6 w-6 text-[#2e7d32]" />
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-                Multi-Session Support
-              </h3>
-              <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
-                Manage multiple elections simultaneously with session-specific candidates, voters, and configurations.
-              </p>
-            </div>
+            {whySoesFeatures.map((feature, index) => (
+              <LandingCard
+                key={index}
+                type="why-soes"
+                Icon={feature.icon}
+                title={feature.title}
+                description={feature.description}
+              />
+            ))}
           </div>
         </div>
       </section>
@@ -268,77 +247,15 @@ export default function LandingPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-            <div className="bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow">
-              <div className="flex items-center gap-4 mb-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-green-50 dark:bg-[#2e7d32]/20">
-                  <ShieldCheck className="h-6 w-6 text-[#2e7d32]" />
-                </div>
-                <h3 className="text-base font-semibold text-gray-900 dark:text-white">Secure Authentication</h3>
-              </div>
-              <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
-                One-time voting codes ensure security and anonymity
-              </p>
-            </div>
-
-            <div className="bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow">
-              <div className="flex items-center gap-4 mb-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-green-50 dark:bg-[#2e7d32]/20">
-                  <Users className="h-6 w-6 text-[#2e7d32]" />
-                </div>
-                <h3 className="text-base font-semibold text-gray-900 dark:text-white">Candidate Management</h3>
-              </div>
-              <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
-                Add candidates with photos, partylists, and details
-              </p>
-            </div>
-
-            <div className="bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow">
-              <div className="flex items-center gap-4 mb-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-green-50 dark:bg-[#2e7d32]/20">
-                  <UserCheck className="h-6 w-6 text-[#2e7d32]" />
-                </div>
-                <h3 className="text-base font-semibold text-gray-900 dark:text-white">Voter Management</h3>
-              </div>
-              <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
-                Manage voter lists per election session
-              </p>
-            </div>
-
-            <div className="bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow">
-              <div className="flex items-center gap-4 mb-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-green-50 dark:bg-[#2e7d32]/20">
-                  <BarChart3 className="h-6 w-6 text-[#2e7d32]" />
-                </div>
-                <h3 className="text-base font-semibold text-gray-900 dark:text-white">Live Analytics</h3>
-              </div>
-              <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
-                Real-time vote tracking and participation metrics
-              </p>
-            </div>
-
-            <div className="bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow">
-              <div className="flex items-center gap-4 mb-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-green-50 dark:bg-[#2e7d32]/20">
-                  <Eye className="h-6 w-6 text-[#2e7d32]" />
-                </div>
-                <h3 className="text-base font-semibold text-gray-900 dark:text-white">Public Results</h3>
-              </div>
-              <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
-                Transparent results accessible to everyone
-              </p>
-            </div>
-
-            <div className="bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow">
-              <div className="flex items-center gap-4 mb-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-green-50 dark:bg-[#2e7d32]/20">
-                  <Smartphone className="h-6 w-6 text-[#2e7d32]" />
-                </div>
-                <h3 className="text-base font-semibold text-gray-900 dark:text-white">Mobile Responsive</h3>
-              </div>
-              <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
-                Optimized for all devices and screen sizes
-              </p>
-            </div>
+            {capabilities.map((capability, index) => (
+              <LandingCard
+                key={index}
+                type="capability"
+                Icon={capability.icon}
+                title={capability.title}
+                description={capability.description}
+              />
+            ))}
           </div>
         </div>
       </section>

@@ -268,97 +268,99 @@ export default function LandingPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-            
-            {/* Card 1 */}
             <div className="bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow">
               <div className="flex items-center gap-4 mb-3">
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-green-50 dark:bg-[#2e7d32]/20">
                   <ShieldCheck className="h-6 w-6 text-[#2e7d32]" />
                 </div>
-                <h3 className="text-base font-semibold text-gray-900 dark:text-white">
-                  Secure Authentication
-                </h3>
+                <h3 className="text-base font-semibold text-gray-900 dark:text-white">Secure Authentication</h3>
               </div>
               <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
                 One-time voting codes ensure security and anonymity
               </p>
             </div>
 
-            {/* Card 2 */}
             <div className="bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow">
               <div className="flex items-center gap-4 mb-3">
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-green-50 dark:bg-[#2e7d32]/20">
                   <Users className="h-6 w-6 text-[#2e7d32]" />
                 </div>
-                <h3 className="text-base font-semibold text-gray-900 dark:text-white">
-                  Candidate Management
-                </h3>
+                <h3 className="text-base font-semibold text-gray-900 dark:text-white">Candidate Management</h3>
               </div>
               <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
                 Add candidates with photos, partylists, and details
               </p>
             </div>
 
-            {/* Card 3 */}
             <div className="bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow">
               <div className="flex items-center gap-4 mb-3">
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-green-50 dark:bg-[#2e7d32]/20">
                   <UserCheck className="h-6 w-6 text-[#2e7d32]" />
                 </div>
-                <h3 className="text-base font-semibold text-gray-900 dark:text-white">
-                  Voter Management
-                </h3>
+                <h3 className="text-base font-semibold text-gray-900 dark:text-white">Voter Management</h3>
               </div>
               <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
                 Manage voter lists per election session
               </p>
             </div>
 
-            {/* Card 4 */}
             <div className="bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow">
               <div className="flex items-center gap-4 mb-3">
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-green-50 dark:bg-[#2e7d32]/20">
                   <BarChart3 className="h-6 w-6 text-[#2e7d32]" />
                 </div>
-                <h3 className="text-base font-semibold text-gray-900 dark:text-white">
-                  Live Analytics
-                </h3>
+                <h3 className="text-base font-semibold text-gray-900 dark:text-white">Live Analytics</h3>
               </div>
               <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
                 Real-time vote tracking and participation metrics
               </p>
             </div>
 
-            {/* Card 5 */}
             <div className="bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow">
               <div className="flex items-center gap-4 mb-3">
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-green-50 dark:bg-[#2e7d32]/20">
                   <Eye className="h-6 w-6 text-[#2e7d32]" />
                 </div>
-                <h3 className="text-base font-semibold text-gray-900 dark:text-white">
-                  Public Results
-                </h3>
+                <h3 className="text-base font-semibold text-gray-900 dark:text-white">Public Results</h3>
               </div>
               <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
                 Transparent results accessible to everyone
               </p>
             </div>
 
-            {/* Card 6 */}
             <div className="bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow">
               <div className="flex items-center gap-4 mb-3">
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-green-50 dark:bg-[#2e7d32]/20">
                   <Smartphone className="h-6 w-6 text-[#2e7d32]" />
                 </div>
-                <h3 className="text-base font-semibold text-gray-900 dark:text-white">
-                  Mobile Responsive
-                </h3>
+                <h3 className="text-base font-semibold text-gray-900 dark:text-white">Mobile Responsive</h3>
               </div>
               <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
                 Optimized for all devices and screen sizes
               </p>
             </div>
+          </div>
+        </div>
+      </section>
 
+      {/* ================= DUAL CTA SECTION ================= */}
+      <section className="w-full py-20 pb-32">
+        <div className="container mx-auto px-4 sm:px-8">
+          <div className="bg-[#439b47] rounded-[2.5rem] p-10 md:p-16 text-center max-w-5xl mx-auto shadow-xl">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-6">
+              Ready to modernize your elections?
+            </h2>
+            <p className="text-green-50 mb-10 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed">
+              Join student organizations using SOES for secure, transparent, and efficient elections.
+            </p>
+            <div className="flex flex-col sm:flex-row justify-center gap-4">
+              <Button className="bg-[#e8f5e9] hover:bg-[#c8e6c9] text-[#2e7d32] font-semibold px-8 py-6 rounded-xl text-base transition-colors">
+                Setup Now
+              </Button>
+              <Button className="bg-white hover:bg-gray-100 text-gray-900 font-semibold px-8 py-6 rounded-xl text-base shadow-sm transition-colors">
+                Vote Now
+              </Button>
+            </div>
           </div>
         </div>
       </section>

@@ -1,8 +1,19 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Arimo, Space_Mono } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+// Configure Arimo
+const arimo = Arimo({ 
+  subsets: ["latin"],
+  variable: "--font-arimo",
+});
+
+// Configure Space Mono (requires weight specification)
+const spaceMono = Space_Mono({ 
+  weight: ["400", "700"],
+  subsets: ["latin"],
+  variable: "--font-space-mono",
+});
 
 export const metadata: Metadata = {
   title: "SOES",
@@ -16,7 +27,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      {/* Inject both font variables and set the default font to sans */}
+      <body className={`${arimo.variable} ${spaceMono.variable} font-sans antialiased`}>
+        {children}
+      </body>
     </html>
   );
 }

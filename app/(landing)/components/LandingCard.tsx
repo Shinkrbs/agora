@@ -17,7 +17,7 @@ const WhySoesCard = ({ Icon, title, description }: Omit<LandingCardProps, "type"
       <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
         {title}
       </h3>
-      <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
+      <p className="font-mono text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
         {description}
       </p>
     </div>
@@ -36,7 +36,7 @@ const CapabilityCard = ({ Icon, title, description }: Omit<LandingCardProps, "ty
           {title}
         </h3>
       </div>
-      <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
+      <p className="font-mono text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
         {description}
       </p>
     </div>

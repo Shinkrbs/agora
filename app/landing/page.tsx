@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { 
   Shield, CheckSquare, Eye, Star, Zap, Bell, Globe,
-  BarChart2, Users, Archive, ShieldCheck, UserCheck, BarChart3, Smartphone
+  BarChart2, Users, Archive, ShieldCheck, UserCheck, BarChart3, Smartphone, LaptopMinimalCheck
 } from "lucide-react";
 
 import {LandingPageHeader } from "./components/LandingPageHeader";
@@ -36,11 +36,11 @@ export default function HomePage() {
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-8 items-center">
             
             <div className="max-w-2xl">
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold italic tracking-tight">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extraboldtracking-tight">
                 All Your Elections In One Place
               </h1>
               {/* text-muted-foreground automatically adapts to a readable gray in both modes */}
-              <p className="mt-6 text-lg text-muted-foreground">
+              <p className="font-mono mt-6 text-lg text-muted-foreground">
                 Streamline your student organization elections with a secure,
                 transparent, and modern platform designed for administrators,
                 voters, and public transparency.
@@ -65,7 +65,7 @@ export default function HomePage() {
                     <Star className="h-4 w-4 fill-current" />
                     <Star className="h-4 w-4 fill-current" />
                   </div>
-                  <span className="text-sm text-muted-foreground font-medium">
+                  <span className="font-mono text-sm text-muted-foreground font-medium">
                     Secure & Transparent
                   </span>
                 </div>
@@ -138,7 +138,7 @@ export default function HomePage() {
               <h2 className="text-2xl sm:text-3xl font-bold">
                 Why SOES?
               </h2>
-              <p className="mt-4 text-muted-foreground text-sm sm:text-base max-w-2xl mx-auto">
+              <p className=" font-mono mt-4 text-muted-foreground text-sm sm:text-base max-w-2xl mx-auto">
                 Built specifically for student organizations with everything you need
               </p>
             </div>
@@ -164,7 +164,7 @@ export default function HomePage() {
               <h2 className="text-2xl sm:text-3xl font-bold">
                 Get Started in Minutes
               </h2>
-              <p className="mt-4 text-muted-foreground text-sm sm:text-base max-w-2xl mx-auto">
+              <p className=" font-mono mt-4 text-muted-foreground text-sm sm:text-base max-w-2xl mx-auto">
                 Simple steps to launch your first election
               </p>
             </div>
@@ -178,7 +178,7 @@ export default function HomePage() {
                     </div>
                     <div>
                       <h3 className="text-lg font-bold">{step}</h3>
-                      <p className="mt-1 text-sm text-muted-foreground leading-relaxed">
+                      <p className=" font-mono mt-1 text-sm text-muted-foreground leading-relaxed">
                         {idx === 0 && "Configure your organization details, create position templates, and add your branding."}
                         {idx === 1 && "Set election dates, add candidates with photos, and upload your voter list."}
                         {idx === 2 && "Generate unique voting links and distribute them to your registered voters securely."}
@@ -201,14 +201,21 @@ export default function HomePage() {
                           <span className="text-sm opacity-80">Total Votes</span>
                           <BarChart2 className="w-4 h-4" />
                         </div>
-                        <div className="text-2xl font-bold">1,247</div>
+                        <div className="font-mono text-2xl font-bold">1,247</div>
                       </div>
                       <div className="bg-background/10 rounded-xl p-4 border border-background/20 shadow-sm backdrop-blur-sm">
                         <div className="flex justify-between items-center mb-2">
                           <span className="text-sm opacity-80">Participation</span>
                           <Users className="w-4 h-4" />
                         </div>
-                        <div className="text-2xl font-bold">82.3%</div>
+                        <div className="font-mono text-2xl font-bold">82.3%</div>
+                      </div>
+                      <div className="bg-background/10 rounded-xl p-4 border border-background/20 shadow-sm backdrop-blur-sm">
+                        <div className="flex justify-between items-center mb-2">
+                          <span className="text-sm opacity-80">Active Elections</span>
+                          <LaptopMinimalCheck className="w-4 h-4" />
+                        </div>
+                        <div className="font-mono text-2xl font-bold">3</div>
                       </div>
                     </div>
                     <div className="mt-8 mb-2 flex justify-center">
@@ -230,7 +237,7 @@ export default function HomePage() {
               <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-primary-foreground mb-6">
                 Ready to modernize your elections?
               </h2>
-              <p className="text-primary-foreground/80 mb-10 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed">
+              <p className="font-mono text-primary-foreground/80 mb-10 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed">
                 Join student organizations using SOES for secure, transparent, and efficient elections.
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4">

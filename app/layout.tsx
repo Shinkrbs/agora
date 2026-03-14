@@ -1,15 +1,14 @@
 import type { Metadata } from "next";
 import { Arimo, Space_Mono } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "@/components/themeprovider";
 
-// Configure Arimo
-const arimo = Arimo({ 
+const arimo = Arimo({
   subsets: ["latin"],
   variable: "--font-arimo",
 });
 
-// Configure Space Mono (requires weight specification)
-const spaceMono = Space_Mono({ 
+const spaceMono = Space_Mono({
   weight: ["400", "700"],
   subsets: ["latin"],
   variable: "--font-space-mono",
@@ -26,10 +25,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      {/* Inject both font variables and set the default font to sans */}
+    // suppressHydrationWarning MUST be on this root html tag!
+    <html lang="en" suppressHydrationWarning>
       <body className={`${arimo.variable} ${spaceMono.variable} font-sans antialiased`}>
-        {children}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

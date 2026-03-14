@@ -5,9 +5,9 @@ import {
   BarChart2, Users, Archive, ShieldCheck, UserCheck, BarChart3, Smartphone, LaptopMinimalCheck
 } from "lucide-react";
 
-import {LandingPageHeader } from "./components/LandingPageHeader";
-import LandingPageFooter from "./components/LandingPageFooter";
-import { LandingCard } from "./components/LandingCard";
+import {LandingPageHeader } from "./_components/LandingPageHeader";
+import LandingPageFooter from "./_components/LandingPageFooter";
+import { LandingCard } from "./_components/LandingCard";
 
 // Data arrays
 const whySoesFeatures = [
@@ -36,7 +36,7 @@ export default function HomePage() {
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-8 items-center">
             
             <div className="max-w-2xl">
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extraboldtracking-tight">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight">
                 All Your Elections In One Place
               </h1>
               {/* text-muted-foreground automatically adapts to a readable gray in both modes */}
@@ -244,7 +244,11 @@ export default function HomePage() {
                 <Button variant="secondary" size="lg" className="font-semibold px-8 py-6 rounded-xl text-base">
                   Setup Now
                 </Button>
-                <Button variant="outline" size="lg" className="bg-transparent text-primary-foreground border-primary-foreground hover:bg-primary-foreground hover:text-primary font-semibold px-8 py-6 rounded-xl text-base">
+                <Button 
+                  variant="outline" 
+                  size="lg" 
+                  className="bg-transparent text-white border-2 border-white/80 dark:border-black/30 hover:bg-white/10 dark:hover:bg-black/20 hover:text-white font-semibold px-8 py-6 rounded-xl text-base transition-colors"
+                >
                   Vote Now
                 </Button>
               </div>

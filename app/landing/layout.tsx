@@ -4,7 +4,7 @@ import "../globals.css";
 
 // 1. Import the Theme Provider you created
 import { ThemeProvider } from "@/components/themeprovider";
-import { LandingPageHeader } from "./components/LandingPageHeader";
+import { LandingPageHeader } from "./_components/LandingPageHeader";
 
 const arimo = Arimo({ 
   subsets: ["latin"],

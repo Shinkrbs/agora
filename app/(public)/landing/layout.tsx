@@ -1,5 +1,5 @@
-import { LandingPageHeader } from "./components/LandingPageHeader"; // Updated to match your exact file name
-import LandingPageFooter from "./components/LandingPageFooter";
+import { LandingPageHeader } from "./_components/LandingPageHeader"; // Updated to match your exact file name
+import LandingPageFooter from "./_components/LandingPageFooter";
 import LandingPage from "./page";
 export default function LandingLayout({
   children,

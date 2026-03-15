@@ -3,7 +3,7 @@ import {
   Shield, CheckSquare, Eye, Star, Zap, Bell, Globe,
   BarChart2, Users, Archive, ShieldCheck, UserCheck, BarChart3, Smartphone
 } from "lucide-react";
-import { LandingCard } from "./components/LandingCard";
+import { LandingCard } from "./_components/LandingCard";
 
 // Data arrays for cleaner rendering
 const whySoesFeatures = [

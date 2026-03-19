@@ -241,6 +241,16 @@ export function SignUpForm({
                 {isPending ? "Signing up..." : "Sign up"}
               </Button>
             </div>
+
+            <div className="mt-4 text-center text-xs md:text-sm">
+              Already have an account?{" "}
+              <Link
+                href="/login"
+                className="underline underline-offset-4 text-green-700 hover:text-green-800 font-medium"
+              >
+                Sign In
+              </Link>
+            </div>
           </form>
         </CardContent>
       </Card>

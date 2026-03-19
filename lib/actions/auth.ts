@@ -1,7 +1,7 @@
 "use server";
 import { createClient } from "../supabase/server";
 import { cookies } from "next/headers";
-import { loginSchema, signUpSchema } from "../schema";
+import { loginSchema, signUpSchema } from "../schema/auth-schema";
 import { redirect } from "next/navigation";
 
 export async function loginUser(prevState: any, formData: FormData) {

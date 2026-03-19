@@ -22,7 +22,10 @@ export function LandingPageHeader() {
           </Button>
 
           {/* Get Started Button */}
-          <Button className="bg-[#2e7d32] hover:bg-[#205e24] text-white">
+          <Button
+            asChild
+            className="bg-[#2e7d32] hover:bg-[#205e24] text-white"
+          >
             <Link href="/signup">Get Started</Link>
           </Button>
         </div>

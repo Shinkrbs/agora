@@ -89,7 +89,10 @@ export default function LandingPage() {
               voters, and public transparency.
             </p>
 
-            <Button className="mt-8 bg-[#2e7d32] hover:bg-[#205e24] text-white px-8 py-6 text-base rounded-md">
+            <Button
+              asChild
+              className="mt-8 bg-[#2e7d32] hover:bg-[#205e24] text-white px-8 py-6 text-base rounded-md"
+            >
               <Link href="/signup">Get Started</Link>
             </Button>
 

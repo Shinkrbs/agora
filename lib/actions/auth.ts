@@ -1,6 +1,6 @@
 "use server";
 import { createClient } from "../supabase/server";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { loginSchema, signUpSchema } from "../schema/auth-schema";
 import { redirect } from "next/navigation";
 
@@ -58,12 +58,19 @@ export async function signUpUser(prevState: any, formData: FormData) {
   }
 
   const supabase = await createClient(await cookies());
+  const headersList = headers();
+  const origin =
+    (await headersList.get("origin")) ??
+    process.env.NEXT_PUBLIC_SITE_URL ??
+    "http://localhost:3000";
+
+  const emailRedirectTo = new URL("/login", origin).toString();
 
   const { error } = await supabase.auth.signUp({
     email: validatedField.data.email,
     password: validatedField.data.password,
     options: {
-      emailRedirectTo: "http://localhost:3000/login",
+      emailRedirectTo: emailRedirectTo,
       data: {
         first_name: validatedField.data.first_name,
         middle_name: validatedField.data.middle_name,

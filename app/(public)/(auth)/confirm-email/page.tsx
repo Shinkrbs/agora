@@ -1,3 +1,3 @@
 export default function ConfirmEmail() {
-  return <div>Please check your email to confirm you sign up!</div>;
+  return <div>Please check your email to complete you sign up.</div>;
 }

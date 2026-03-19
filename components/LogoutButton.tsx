@@ -16,11 +16,14 @@ export function LogoutButton() {
 
   return (
     <Button
+      type="button"
       className="items-center justify-center bg-primary text-primary-foreground shadow hover:bg-primary/90"
       onClick={logout}
     >
       <LogOut />
-      <span className="group-data-[state=collapsed]:hidden">Log out</span>
+      <span className="group-button-data-[state=collapsed]:hidden">
+        Log out
+      </span>
     </Button>
   );
 }

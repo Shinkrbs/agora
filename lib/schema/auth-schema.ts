@@ -11,9 +11,13 @@ export const signUpSchema = z
     middle_name: z.string(),
     last_name: z.string().min(1, "This field must not be empty."),
     suffix: z.string(),
-    username: z.string().min(8, "Usernames must be atleast 8 characters long."),
+    username: z
+      .string()
+      .min(8, "Usernames must be at least 8 characters long."),
     email: z.string().email("Invalid email address."),
-    password: z.string().min(8, "Passwords must be atleast 8 characters long."),
+    password: z
+      .string()
+      .min(8, "Passwords must be at least 8 characters long."),
     confirm_password: z.string(),
   })
   .refine((data) => data.password === data.confirm_password, {

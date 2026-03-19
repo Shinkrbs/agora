@@ -1,5 +1,6 @@
 "use client";
 
+import { loginUser } from "@/lib/actions/auth";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,7 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useActionState } from "react";
 import { Mail, Lock } from "lucide-react";
 import Image from "next/image";
 
@@ -22,7 +23,10 @@ export function LoginForm({
 }: React.ComponentPropsWithoutRef<"div">) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const error: string | null = null;
+  const [state, formAction, isPending] = useActionState(loginUser, undefined);
+  const errorMessage =
+    state?.error || state?.errors?.email?.[0] || state?.errors?.password?.[0];
+  //const error: string | null = null;
   const isLoading = false;
 
   const handleLogin = (e: React.FormEvent) => {
@@ -52,7 +56,7 @@ export function LoginForm({
           </CardDescription>
         </CardHeader>
         <CardContent className="px-4 md:px-6">
-          <form onSubmit={handleLogin}>
+          <form action={formAction}>
             <div className="flex flex-col gap-4">
               <CardTitle className="text-sm md:text-base font-semibold text-center">
                 Sign in to your account
@@ -115,10 +119,11 @@ export function LoginForm({
                   <Input
                     id="email"
                     type="email"
+                    name="email"
                     placeholder="admin@university.edu"
                     required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    //value={email}
+                    //onChange={(e) => setEmail(e.target.value)}
                     className="pl-10 text-sm h-10"
                   />
                 </div>
@@ -145,27 +150,28 @@ export function LoginForm({
                   <Input
                     id="password"
                     type="password"
+                    name="password"
                     placeholder="Enter your password"
                     required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    //value={password}
+                    //onChange={(e) => setPassword(e.target.value)}
                     className="pl-10 text-sm h-10"
                   />
                 </div>
               </div>
 
-              {error && (
+              {errorMessage && (
                 <div className="p-2 md:p-3 text-xs md:text-sm text-red-500 bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800 rounded-lg">
-                  {error}
+                  {errorMessage}
                 </div>
               )}
 
               <Button
                 type="submit"
                 className="w-full bg-green-700 hover:bg-green-800 text-white text-sm h-10"
-                disabled={isLoading}
+                disabled={isPending}
               >
-                {isLoading ? "Signing in..." : "Sign in"}
+                {isPending ? "Signing in..." : "Sign in"}
               </Button>
             </div>
             <div className="mt-4 text-center text-xs md:text-sm">

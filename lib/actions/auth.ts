@@ -58,9 +58,9 @@ export async function signUpUser(prevState: any, formData: FormData) {
   }
 
   const supabase = await createClient(await cookies());
-  const headersList = headers();
+  const headersList = await headers();
   const origin =
-    (await headersList.get("origin")) ??
+    headersList.get("origin") ??
     process.env.NEXT_PUBLIC_SITE_URL ??
     "http://localhost:3000";
 

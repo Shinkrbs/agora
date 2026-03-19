@@ -21,19 +21,9 @@ export function LoginForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [state, formAction, isPending] = useActionState(loginUser, undefined);
   const errorMessage =
     state?.error || state?.errors?.email?.[0] || state?.errors?.password?.[0];
-  //const error: string | null = null;
-  const isLoading = false;
-
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-  };
-
-  const handleGoogleSignIn = () => {};
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -70,8 +60,8 @@ export function LoginForm({
                 type="button"
                 variant="outline"
                 className="w-full text-sm"
-                onClick={handleGoogleSignIn}
-                disabled={isLoading}
+                //onClick={handleGoogleSignIn}
+                disabled={isPending}
               >
                 <svg className="w-4 h-4 md:w-5 md:h-5 mr-2" viewBox="0 0 24 24">
                   <path

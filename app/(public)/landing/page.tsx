@@ -1,24 +1,76 @@
 import { Button } from "@/components/ui/button";
-import { 
-  Shield, CheckSquare, Eye, Star, Zap, Bell, Globe,
-  BarChart2, Users, Archive, ShieldCheck, UserCheck, BarChart3, Smartphone
+import {
+  Shield,
+  CheckSquare,
+  Eye,
+  Star,
+  Zap,
+  Bell,
+  Globe,
+  BarChart2,
+  Users,
+  Archive,
+  ShieldCheck,
+  UserCheck,
+  BarChart3,
+  Smartphone,
 } from "lucide-react";
 import { LandingCard } from "./_components/LandingCard";
+import Link from "next/link";
 
 // Data arrays for cleaner rendering
 const whySoesFeatures = [
-  { icon: Zap, title: "Easy To Use", description: "Intuitive interface that makes managing elections simple for administrators and voting effortless for students." },
-  { icon: Bell, title: "Real-Time Updates", description: "Live notifications and instant updates on election progress, vote counts, and participation rates." },
-  { icon: Globe, title: "Multi-Session Support", description: "Manage multiple elections simultaneously with session-specific candidates, voters, and configurations." },
+  {
+    icon: Zap,
+    title: "Easy To Use",
+    description:
+      "Intuitive interface that makes managing elections simple for administrators and voting effortless for students.",
+  },
+  {
+    icon: Bell,
+    title: "Real-Time Updates",
+    description:
+      "Live notifications and instant updates on election progress, vote counts, and participation rates.",
+  },
+  {
+    icon: Globe,
+    title: "Multi-Session Support",
+    description:
+      "Manage multiple elections simultaneously with session-specific candidates, voters, and configurations.",
+  },
 ];
 
 const capabilities = [
-  { icon: ShieldCheck, title: "Secure Authentication", description: "One-time voting codes ensure security and anonymity" },
-  { icon: Users, title: "Candidate Management", description: "Add candidates with photos, partylists, and details" },
-  { icon: UserCheck, title: "Voter Management", description: "Manage voter lists per election session" },
-  { icon: BarChart3, title: "Live Analytics", description: "Real-time vote tracking and participation metrics" },
-  { icon: Eye, title: "Public Results", description: "Transparent results accessible to everyone" },
-  { icon: Smartphone, title: "Mobile Responsive", description: "Optimized for all devices and screen sizes" },
+  {
+    icon: ShieldCheck,
+    title: "Secure Authentication",
+    description: "One-time voting codes ensure security and anonymity",
+  },
+  {
+    icon: Users,
+    title: "Candidate Management",
+    description: "Add candidates with photos, partylists, and details",
+  },
+  {
+    icon: UserCheck,
+    title: "Voter Management",
+    description: "Manage voter lists per election session",
+  },
+  {
+    icon: BarChart3,
+    title: "Live Analytics",
+    description: "Real-time vote tracking and participation metrics",
+  },
+  {
+    icon: Eye,
+    title: "Public Results",
+    description: "Transparent results accessible to everyone",
+  },
+  {
+    icon: Smartphone,
+    title: "Mobile Responsive",
+    description: "Optimized for all devices and screen sizes",
+  },
 ];
 
 export default function LandingPage() {
@@ -27,7 +79,6 @@ export default function LandingPage() {
       {/* ================= HERO SECTION ================= */}
       <section className="container mx-auto px-4 sm:px-8 pt-16 pb-16 lg:pt-32">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-8 items-center">
-          
           <div className="max-w-2xl">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 dark:text-white tracking-tight">
               All Your Elections In One Place
@@ -37,9 +88,12 @@ export default function LandingPage() {
               transparent, and modern platform designed for administrators,
               voters, and public transparency.
             </p>
-            
-            <Button className="mt-8 bg-[#2e7d32] hover:bg-[#205e24] text-white px-8 py-6 text-base rounded-md">
-              Get Started
+
+            <Button
+              asChild
+              className="mt-8 bg-[#2e7d32] hover:bg-[#205e24] text-white px-8 py-6 text-base rounded-md"
+            >
+              <Link href="/signup">Get Started</Link>
             </Button>
 
             <div className="mt-10 flex items-center gap-4">
@@ -65,7 +119,7 @@ export default function LandingPage() {
 
           <div className="relative flex justify-center lg:justify-end">
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-green-400/20 blur-[80px] rounded-full pointer-events-none"></div>
-            
+
             <div className="relative w-full max-w-[320px] bg-white dark:bg-gray-50 border-[8px] border-gray-50 dark:border-gray-200 rounded-[2.5rem] shadow-2xl p-4 overflow-hidden">
               <div className="flex justify-between items-center mb-6 pt-2">
                 <div className="w-8 h-8 rounded bg-[#2e7d32]/10 flex items-center justify-center">
@@ -73,7 +127,7 @@ export default function LandingPage() {
                 </div>
                 <div className="w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-200"></div>
               </div>
-              
+
               <div className="space-y-4">
                 <div className="border border-gray-100 p-3 rounded-xl flex gap-3 items-center shadow-sm">
                   <div className="w-10 h-10 bg-green-50 rounded-lg"></div>
@@ -82,7 +136,7 @@ export default function LandingPage() {
                     <div className="h-2.5 bg-gray-100 rounded w-2/3"></div>
                   </div>
                 </div>
-                
+
                 <div className="border border-[#2e7d32]/20 bg-green-50/50 p-3 rounded-xl flex gap-3 items-center shadow-sm">
                   <div className="w-10 h-10 bg-[#2e7d32] rounded-lg flex items-center justify-center">
                     <CheckSquare className="h-5 w-5 text-white" />
@@ -119,8 +173,9 @@ export default function LandingPage() {
             <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
               Why SOES?
             </h2>
-            <p className= "font-mono mt-4 text-gray-500 dark:text-gray-400 text-sm sm:text-base max-w-2xl mx-auto">
-              Built specifically for student organizations with everything you need
+            <p className="font-mono mt-4 text-gray-500 dark:text-gray-400 text-sm sm:text-base max-w-2xl mx-auto">
+              Built specifically for student organizations with everything you
+              need
             </p>
           </div>
 
@@ -153,41 +208,61 @@ export default function LandingPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center max-w-5xl mx-auto">
             <div className="space-y-8">
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 rounded text-white bg-[#2e7d32] flex items-center justify-center font-bold text-sm">1</div>
+                <div className="flex-shrink-0 w-8 h-8 rounded text-white bg-[#2e7d32] flex items-center justify-center font-bold text-sm">
+                  1
+                </div>
                 <div>
-                  <h3 className="text-lg font-bold text-gray-900 dark:text-white">Set up your organization</h3>
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white">
+                    Set up your organization
+                  </h3>
                   <p className="font-monomt-1 text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
-                    Configure your organization details, create position templates, and add your branding.
+                    Configure your organization details, create position
+                    templates, and add your branding.
                   </p>
                 </div>
               </div>
 
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 rounded text-white bg-[#2e7d32] flex items-center justify-center font-bold text-sm">2</div>
+                <div className="flex-shrink-0 w-8 h-8 rounded text-white bg-[#2e7d32] flex items-center justify-center font-bold text-sm">
+                  2
+                </div>
                 <div>
-                  <h3 className="text-lg font-bold text-gray-900 dark:text-white">Create an election session</h3>
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white">
+                    Create an election session
+                  </h3>
                   <p className="font-mono mt-1 text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
-                    Set election dates, add candidates with photos, and upload your voter list for the specific election.
+                    Set election dates, add candidates with photos, and upload
+                    your voter list for the specific election.
                   </p>
                 </div>
               </div>
 
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 rounded text-white bg-[#2e7d32] flex items-center justify-center font-bold text-sm">3</div>
+                <div className="flex-shrink-0 w-8 h-8 rounded text-white bg-[#2e7d32] flex items-center justify-center font-bold text-sm">
+                  3
+                </div>
                 <div>
-                  <h3 className="text-lg font-bold text-gray-900 dark:text-white">Share voting links</h3>
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white">
+                    Share voting links
+                  </h3>
                   <p className="font-mono mt-1 text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
-                    Generate unique voting links and distribute them to your registered voters securely.
+                    Generate unique voting links and distribute them to your
+                    registered voters securely.
                   </p>
                 </div>
               </div>
 
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 rounded text-white bg-[#2e7d32] flex items-center justify-center font-bold text-sm">4</div>
+                <div className="flex-shrink-0 w-8 h-8 rounded text-white bg-[#2e7d32] flex items-center justify-center font-bold text-sm">
+                  4
+                </div>
                 <div>
-                  <h3 className="text-lg font-bold text-gray-900 dark:text-white">Monitor & publish results</h3>
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white">
+                    Monitor & publish results
+                  </h3>
                   <p className="font-mono mt-1 text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
-                    Track votes in real-time and publish transparent results for everyone to see.
+                    Track votes in real-time and publish transparent results for
+                    everyone to see.
                   </p>
                 </div>
               </div>
@@ -195,28 +270,36 @@ export default function LandingPage() {
 
             <div className="relative flex justify-center lg:justify-end">
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-green-400/20 blur-[80px] rounded-full pointer-events-none"></div>
-              
+
               <div className="relative w-full max-w-[320px] bg-white dark:bg-gray-50 border-[8px] border-gray-50 dark:border-gray-200 rounded-[2.5rem] shadow-2xl overflow-hidden">
                 <div className="bg-[#2e7d32] h-full w-full p-6 text-white rounded-[1.8rem] flex flex-col">
-                  <h3 className="font-semibold text-lg mb-6">Election Dashboard</h3>
+                  <h3 className="font-semibold text-lg mb-6">
+                    Election Dashboard
+                  </h3>
                   <div className="space-y-4 flex-1">
                     <div className="bg-white/10 rounded-xl p-4 border border-white/10 shadow-sm backdrop-blur-sm">
                       <div className="flex justify-between items-center mb-2">
-                        <span className="text-sm text-green-50">Total Votes</span>
+                        <span className="text-sm text-green-50">
+                          Total Votes
+                        </span>
                         <BarChart2 className="w-4 h-4 text-green-100" />
                       </div>
                       <div className="font-mono text-2xl font-bold">1,247</div>
                     </div>
                     <div className="bg-white/10 rounded-xl p-4 border border-white/10 shadow-sm backdrop-blur-sm">
                       <div className="flex justify-between items-center mb-2">
-                        <span className="text-sm text-green-50">Participation</span>
+                        <span className="text-sm text-green-50">
+                          Participation
+                        </span>
                         <Users className="w-4 h-4 text-green-100" />
                       </div>
                       <div className="font-mono text-2xl font-bold">82.3%</div>
                     </div>
                     <div className="bg-white/10 rounded-xl p-4 border border-white/10 shadow-sm backdrop-blur-sm">
                       <div className="flex justify-between items-center mb-2">
-                        <span className="text-sm text-green-50">Active Elections</span>
+                        <span className="text-sm text-green-50">
+                          Active Elections
+                        </span>
                         <Archive className="w-4 h-4 text-green-100" />
                       </div>
                       <div className="font-mono text-2xl font-bold">3</div>
@@ -268,7 +351,8 @@ export default function LandingPage() {
               Ready to modernize your elections?
             </h2>
             <p className="font-mono text-green-50 mb-10 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed">
-              Join student organizations using SOES for secure, transparent, and efficient elections.
+              Join student organizations using SOES for secure, transparent, and
+              efficient elections.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <Button className="bg-[#e8f5e9] hover:bg-[#c8e6c9] text-[#2e7d32] font-semibold px-8 py-6 rounded-xl text-base transition-colors">
@@ -281,7 +365,6 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
-
     </div>
   );
 }

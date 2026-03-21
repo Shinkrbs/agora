@@ -4,14 +4,28 @@
 
 | **Internal Release Code** | Date Released | 
 | --- | --- |
-AG.010.000 | 2025-02-27 |
+AG.010.001 | 2026-02-27 |
+AG.010.002 | 2026-03-22 |
 
-## AG.010.000 Release Notes 
+## AG.010.001 Release Notes 
 
 ● Add NextJS project framework
 
 ● Update README.md to reflect project vision and tracking system.
 
+## AG.010.002 Release Notes 
+
+● Initial Supabase setup and foundational configuration
+
+● SOES landing page with modular UI components
+
+● Login page frontend and secure file rerouting
+
+● Complete authentication flow using Next.js Server Actions
+
+● Centralized form validation using the Zod library
+
+● Protected routing and optimization of form states
 
 ## Important Links
 

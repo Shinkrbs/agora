@@ -36,7 +36,7 @@ export async function loginUser(prevState: any, formData: FormData) {
     return { error: error.message };
   }
 
-  redirect("/authenticated/dashboard");
+  redirect("/(authenticated)/dashboard"); 
 }
 
 export async function signUpUser(prevState: any, formData: FormData) {

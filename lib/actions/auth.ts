@@ -3,6 +3,7 @@ import { createClient } from "../supabase/server";
 import { cookies, headers } from "next/headers";
 import { loginSchema, signUpSchema } from "../schema/auth-schema";
 import { redirect } from "next/navigation";
+import { getUserRole } from "../utils/auth-utils";
 
 export async function loginUser(prevState: any, formData: FormData) {
   const validatedField = loginSchema.safeParse({
@@ -36,7 +37,15 @@ export async function loginUser(prevState: any, formData: FormData) {
     return { error: error.message };
   }
 
-  redirect("/authenticated/dashboard");
+  const role = await getUserRole();
+
+  if (role === "admin") {
+    redirect("/admin/dashboard");
+  } else if (role === "superadmin") {
+    redirect("/superadmin/dashboard");
+  } else {
+    redirect("/login");
+  }
 }
 
 export async function signUpUser(prevState: any, formData: FormData) {

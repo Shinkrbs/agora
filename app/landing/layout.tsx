@@ -5,6 +5,7 @@ import "../globals.css";
 // 1. Import the Theme Provider you created
 import { ThemeProvider } from "@/components/themeprovider";
 import { LandingPageHeader } from "./_components/LandingPageHeader";
+import LandingPageFooter from "./_components/LandingPageFooter";
 
 const arimo = Arimo({ 
   subsets: ["latin"],
@@ -42,6 +43,7 @@ export default function RootLayout({
           {children}
         </ThemeProvider>
       </body>
+      <LandingPageFooter  />
     </div>
 
   );

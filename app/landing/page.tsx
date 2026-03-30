@@ -230,6 +230,32 @@ export default function HomePage() {
           </div>
         </section>
 
+        {/* ================= CAPABILITIES SECTION ================= */}
+      <section className="w-full bg-secondary/30 py-20 border-t border-border">
+        <div className="container mx-auto px-4 sm:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
+              Everything You Need
+            </h2>
+            <p className="font-mono mt-4 text-gray-500 dark:text-gray-400 text-sm sm:text-base max-w-2xl mx-auto">
+              Comprehensive features for modern student elections
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+            {capabilities.map((capability, index) => (
+              <LandingCard
+                key={index}
+                type="capability"
+                Icon={capability.icon}
+                title={capability.title}
+                description={capability.description}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
         {/* ================= DUAL CTA SECTION ================= */}
         <section className="w-full py-20 pb-32">
           <div className="container mx-auto px-4 sm:px-8">

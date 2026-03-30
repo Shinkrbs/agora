@@ -33,19 +33,19 @@ const WhySoesCard = ({ Icon, title, description }: Omit<LandingCardProps, "type"
   );
 };
 
-// 2. The left-aligned card used in the "Everything You Need" section
 const CapabilityCard = ({ Icon, title, description }: Omit<LandingCardProps, "type">) => {
   return (
-    <div className="bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow h-full">
+    // Replaced hardcoded black/gray with bg-card and border-border to perfectly match your theme's other cards
+    <div className="bg-card border border-border rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow h-full">
       <div className="flex items-center gap-4 mb-3">
         <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-green-50 dark:bg-[#2e7d32]/20">
           <Icon className="h-6 w-6 text-[#2e7d32]" />
         </div>
-        <h3 className="text-base font-semibold text-gray-900 dark:text-white">
+        <h3 className="text-base font-semibold text-foreground">
           {title}
         </h3>
       </div>
-      <p className="font-mono text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
+      <p className="font-mono text-muted-foreground text-sm leading-relaxed">
         {description}
       </p>
     </div>

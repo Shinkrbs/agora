@@ -123,4 +123,17 @@ export function DashboardPhoneMockup() {
       </Tilt>
     </div>
   );
+// Add this interface and default export to the very bottom of your Phone.tsx file!
+}
+
+interface PhoneProps {
+  phoneState: boolean;
+}
+
+export default function Phone({ phoneState }: PhoneProps) {
+  return (
+    <>
+      {phoneState ? <HeroPhoneMockup /> : <DashboardPhoneMockup />}
+    </>
+  );
 }

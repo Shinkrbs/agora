@@ -1,3 +1,5 @@
+"use client";
+
 import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { 
@@ -9,8 +11,9 @@ import { LandingPageHeader } from "./_components/LandingPageHeader";
 import LandingPageFooter from "./_components/LandingPageFooter";
 import { LandingCard } from "./_components/LandingCard";
 
-// Import your newly created mockups
+// Import your mockups and BlurText
 import { HeroPhoneMockup, DashboardPhoneMockup } from "./_components/Phone";
+import BlurText from "@/components/BlurText";
 
 // Data arrays
 const whySoesFeatures = [
@@ -38,7 +41,12 @@ export default function HomePage() {
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-8 items-center">
             <div className="max-w-2xl">
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight">
-                All Your Elections In One Place
+                <BlurText 
+                  text="All Your Elections In One Place" 
+                  delay={150} 
+                  animateBy="words" 
+                  direction="top" 
+                />
               </h1>
               <p className="font-mono mt-6 text-lg text-muted-foreground">
                 Streamline your student organization elections with a secure,
@@ -71,7 +79,6 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Replaced massive block of code with the extracted component */}
             <HeroPhoneMockup />
             
           </div>
@@ -81,8 +88,14 @@ export default function HomePage() {
         <section className="w-full bg-secondary/30 py-20 border-t border-border">
           <div className="container mx-auto px-4 sm:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-2xl sm:text-3xl font-bold">
-                Why SOES?
+              <h2 className="text-2xl sm:text-3xl font-bold flex justify-center">
+                <BlurText 
+                  text="Why SOES?" 
+                  delay={150} 
+                  animateBy="words" 
+                  direction="top" 
+                  className="flex justify-center"
+                />
               </h2>
               <p className=" font-mono mt-4 text-muted-foreground text-sm sm:text-base max-w-2xl mx-auto">
                 Built specifically for student organizations with everything you need
@@ -107,8 +120,14 @@ export default function HomePage() {
         <section className="w-full py-20">
           <div className="container mx-auto px-4 sm:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-2xl sm:text-3xl font-bold">
-                Get Started in Minutes
+              <h2 className="text-2xl sm:text-3xl font-bold flex justify-center">
+                <BlurText 
+                  text="Get Started in Minutes" 
+                  delay={150} 
+                  animateBy="words" 
+                  direction="top" 
+                  className="flex justify-center"
+                />
               </h2>
               <p className=" font-mono mt-4 text-muted-foreground text-sm sm:text-base max-w-2xl mx-auto">
                 Simple steps to launch your first election
@@ -135,7 +154,6 @@ export default function HomePage() {
                 ))}
               </div>
 
-              {/* Replaced massive block of code with the extracted component */}
               <DashboardPhoneMockup />
               
             </div>
@@ -146,8 +164,14 @@ export default function HomePage() {
         <section className="w-full bg-secondary/30 py-20 border-t border-border">
           <div className="container mx-auto px-4 sm:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-2xl sm:text-3xl font-bold text-foreground">
-                Everything You Need
+              <h2 className="text-2xl sm:text-3xl font-bold text-foreground flex justify-center">
+                <BlurText 
+                  text="Everything You Need" 
+                  delay={150} 
+                  animateBy="words" 
+                  direction="top" 
+                  className="flex justify-center"
+                />
               </h2>
               <p className="font-mono mt-4 text-muted-foreground text-sm sm:text-base max-w-2xl mx-auto">
                 Comprehensive features for modern student elections
@@ -172,8 +196,14 @@ export default function HomePage() {
         <section className="w-full py-20 pb-32">
           <div className="container mx-auto px-4 sm:px-8">
             <div className="bg-primary rounded-[2.5rem] p-10 md:p-16 text-center max-w-5xl mx-auto shadow-xl">
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-primary-foreground mb-6">
-                Ready to modernize your elections?
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-primary-foreground mb-6 flex justify-center text-center">
+                <BlurText 
+                  text="Ready to modernize your elections?" 
+                  delay={150} 
+                  animateBy="words" 
+                  direction="top" 
+                  className="flex justify-center text-center"
+                />
               </h2>
               <p className="font-mono text-primary-foreground/80 mb-10 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed">
                 Join student organizations using SOES for secure, transparent, and efficient elections.

@@ -10,22 +10,16 @@ interface LandingCardProps {
 // 1. The centered card used in the "Why SOES?" section
 const WhySoesCard = ({ Icon, title, description }: Omit<LandingCardProps, "type">) => {
   return (
-    // 1. Removed all dark: prefixes and hardcoded grays. 
-    // bg-card and border-border handle light/dark mode automatically!
-    <div className="bg-card text-card-foreground border border-border rounded-2xl p-8 text-center shadow-sm hover:shadow-md transition-shadow h-full">
+    <div className="bg-card text-card-foreground border border-border rounded-2xl p-8 text-center h-full transition-all duration-300 ease-out hover:-translate-y-1 hover:border-primary/50 hover:shadow-[0_0_40px_-10px] hover:shadow-primary/20">
       
-      {/* 2. Replaced hardcoded greens with bg-primary/10 (adds 10% opacity) */}
-      <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 mb-6">
-        {/* 3. Icon now automatically uses your SOES Green */}
+      <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 mb-6 transition-colors duration-300">
         <Icon className="h-6 w-6 text-primary" />
       </div>
       
-      {/* 4. Removed hardcoded text colors; it inherits text-card-foreground */}
       <h3 className="text-lg font-semibold mb-3">
         {title}
       </h3>
       
-      {/* 5. text-muted-foreground gives you that perfect accessible gray in both modes */}
       <p className="font-mono text-muted-foreground text-sm leading-relaxed">
         {description}
       </p>
@@ -33,13 +27,13 @@ const WhySoesCard = ({ Icon, title, description }: Omit<LandingCardProps, "type"
   );
 };
 
+// 2. The left-aligned card used in the "Capabilities" section
 const CapabilityCard = ({ Icon, title, description }: Omit<LandingCardProps, "type">) => {
   return (
-    // Replaced hardcoded black/gray with bg-card and border-border to perfectly match your theme's other cards
-    <div className="bg-card border border-border rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow h-full">
+    <div className="bg-card border border-border rounded-2xl p-6 h-full transition-all duration-300 ease-out hover:-translate-y-1 hover:border-primary/50 hover:shadow-[0_0_40px_-10px] hover:shadow-primary/20">
       <div className="flex items-center gap-4 mb-3">
-        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-green-50 dark:bg-[#2e7d32]/20">
-          <Icon className="h-6 w-6 text-[#2e7d32]" />
+        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 transition-colors duration-300">
+          <Icon className="h-6 w-6 text-primary" />
         </div>
         <h3 className="text-base font-semibold text-foreground">
           {title}

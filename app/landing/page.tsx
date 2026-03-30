@@ -2,12 +2,15 @@ import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { 
   Shield, CheckSquare, Eye, Star, Zap, Bell, Globe,
-  BarChart2, Users, Archive, ShieldCheck, UserCheck, BarChart3, Smartphone, LaptopMinimalCheck
+  ShieldCheck, UserCheck, BarChart3, Smartphone, Users 
 } from "lucide-react";
 
-import {LandingPageHeader } from "./_components/LandingPageHeader";
+import { LandingPageHeader } from "./_components/LandingPageHeader";
 import LandingPageFooter from "./_components/LandingPageFooter";
 import { LandingCard } from "./_components/LandingCard";
+
+// Import your newly created mockups
+import { HeroPhoneMockup, DashboardPhoneMockup } from "./_components/Phone";
 
 // Data arrays
 const whySoesFeatures = [
@@ -27,26 +30,22 @@ const capabilities = [
 
 export default function HomePage() {
   return (
-    // bg-background and text-foreground automatically handle light/dark mode!
     <div className="flex min-h-screen flex-col bg-background text-foreground transition-colors duration-300">
-
       <main className="flex-1 flex flex-col w-full">
+        
         {/* ================= HERO SECTION ================= */}
         <section className="container mx-auto px-4 sm:px-8 pt-16 pb-16 lg:pt-32">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-8 items-center">
-            
             <div className="max-w-2xl">
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight">
                 All Your Elections In One Place
               </h1>
-              {/* text-muted-foreground automatically adapts to a readable gray in both modes */}
               <p className="font-mono mt-6 text-lg text-muted-foreground">
                 Streamline your student organization elections with a secure,
                 transparent, and modern platform designed for administrators,
                 voters, and public transparency.
               </p>
               
-              {/* Default Shadcn Button uses your primary Green automatically! */}
               <Button size="lg" className="mt-8 px-8 py-6 text-base rounded-md font-semibold">
                 Get Started
               </Button>
@@ -72,62 +71,9 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="relative flex justify-center lg:justify-end">
-              {/* Stretched the background glow to match the taller phone */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[500px] bg-primary/20 blur-[80px] rounded-full pointer-events-none"></div>
-              
-              {/* Added h-[600px] and flex flex-col to force the phone shape */}
-              <div className="relative w-full max-w-[300px] h-[600px] flex flex-col bg-card text-card-foreground border-[8px] border-border rounded-[2.5rem] shadow-2xl p-4 overflow-hidden">
-                
-                {/* Top Header / App Bar */}
-                <div className="flex justify-between items-center mb-6 pt-2">
-                  <div className="w-8 h-8 rounded bg-primary/10 flex items-center justify-center">
-                    <div className="w-4 h-4 bg-primary rounded-sm transform rotate-45"></div>
-                  </div>
-                  <div className="w-8 h-8 rounded-lg bg-muted"></div>
-                </div>
-                
-                {/* Content Area - added flex-1 so it takes up the middle space */}
-                <div className="space-y-4 flex-1">
-                  <div className="border border-border p-3 rounded-xl flex gap-3 items-center shadow-sm">
-                    <div className="w-10 h-10 bg-secondary rounded-lg"></div>
-                    <div className="space-y-2 flex-1">
-                      <div className="h-2.5 bg-muted rounded w-full"></div>
-                      <div className="h-2.5 bg-muted-foreground/30 rounded w-2/3"></div>
-                    </div>
-                  </div>
-                  
-                  <div className="border border-primary/30 bg-primary/5 p-3 rounded-xl flex gap-3 items-center shadow-sm relative overflow-hidden">
-                    <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center shadow-md">
-                      <CheckSquare className="h-5 w-5 text-primary-foreground" />
-                    </div>
-                    <div className="space-y-2 flex-1">
-                      <div className="h-2.5 bg-muted rounded w-full"></div>
-                      <div className="h-2.5 bg-muted-foreground/30 rounded w-2/3"></div>
-                    </div>
-                  </div>
-
-                  {/* Added a third ghost item to fill the taller screen nicely */}
-                  <div className="border border-border p-3 rounded-xl flex gap-3 items-center shadow-sm opacity-60">
-                    <div className="w-10 h-10 bg-secondary rounded-lg"></div>
-                    <div className="space-y-2 flex-1">
-                      <div className="h-2.5 bg-muted rounded w-full"></div>
-                      <div className="h-2.5 bg-muted-foreground/30 rounded w-1/2"></div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Bottom Area - mt-auto pushes this to the bottom of the phone */}
-                <div className="mt-auto pt-6 pb-2">
-                  <div className="w-full py-4 bg-primary rounded-xl flex justify-center shadow-lg">
-                    <div className="w-12 h-1.5 bg-primary-foreground/30 rounded-full"></div>
-                  </div>
-                  
-                  {/* Phone Home Indicator Bar */}
-                  <div className="w-24 h-1.5 bg-border rounded-full mx-auto mt-6"></div>
-                </div>
-              </div>
-            </div>
+            {/* Replaced massive block of code with the extracted component */}
+            <HeroPhoneMockup />
+            
           </div>
         </section>
 
@@ -189,72 +135,38 @@ export default function HomePage() {
                 ))}
               </div>
 
-              <div className="relative flex justify-center lg:justify-end">
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-primary/20 blur-[80px] rounded-full pointer-events-none"></div>
-                
-                <div className="relative w-full max-w-[320px] bg-card border-[8px] border-border rounded-[2.5rem] shadow-2xl overflow-hidden">
-                  <div className="bg-primary h-full w-full p-6 text-primary-foreground rounded-[1.8rem] flex flex-col">
-                    <h3 className="font-semibold text-lg mb-6">Election Dashboard</h3>
-                    <div className="space-y-4 flex-1">
-                      <div className="bg-background/10 rounded-xl p-4 border border-background/20 shadow-sm backdrop-blur-sm">
-                        <div className="flex justify-between items-center mb-2">
-                          <span className="text-sm opacity-80">Total Votes</span>
-                          <BarChart2 className="w-4 h-4" />
-                        </div>
-                        <div className="font-mono text-2xl font-bold">1,247</div>
-                      </div>
-                      <div className="bg-background/10 rounded-xl p-4 border border-background/20 shadow-sm backdrop-blur-sm">
-                        <div className="flex justify-between items-center mb-2">
-                          <span className="text-sm opacity-80">Participation</span>
-                          <Users className="w-4 h-4" />
-                        </div>
-                        <div className="font-mono text-2xl font-bold">82.3%</div>
-                      </div>
-                      <div className="bg-background/10 rounded-xl p-4 border border-background/20 shadow-sm backdrop-blur-sm">
-                        <div className="flex justify-between items-center mb-2">
-                          <span className="text-sm opacity-80">Active Elections</span>
-                          <LaptopMinimalCheck className="w-4 h-4" />
-                        </div>
-                        <div className="font-mono text-2xl font-bold">3</div>
-                      </div>
-                    </div>
-                    <div className="mt-8 mb-2 flex justify-center">
-                      <button className="bg-background text-foreground text-xs font-bold py-2.5 px-6 rounded-full hover:bg-secondary transition-colors w-3/4 shadow-sm">
-                        View Full Report
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              {/* Replaced massive block of code with the extracted component */}
+              <DashboardPhoneMockup />
+              
             </div>
           </div>
         </section>
 
         {/* ================= CAPABILITIES SECTION ================= */}
-      <section className="w-full bg-secondary/30 py-20 border-t border-border">
-        <div className="container mx-auto px-4 sm:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
-              Everything You Need
-            </h2>
-            <p className="font-mono mt-4 text-gray-500 dark:text-gray-400 text-sm sm:text-base max-w-2xl mx-auto">
-              Comprehensive features for modern student elections
-            </p>
-          </div>
+        <section className="w-full bg-secondary/30 py-20 border-t border-border">
+          <div className="container mx-auto px-4 sm:px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-2xl sm:text-3xl font-bold text-foreground">
+                Everything You Need
+              </h2>
+              <p className="font-mono mt-4 text-muted-foreground text-sm sm:text-base max-w-2xl mx-auto">
+                Comprehensive features for modern student elections
+              </p>
+            </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-            {capabilities.map((capability, index) => (
-              <LandingCard
-                key={index}
-                type="capability"
-                Icon={capability.icon}
-                title={capability.title}
-                description={capability.description}
-              />
-            ))}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+              {capabilities.map((capability, index) => (
+                <LandingCard
+                  key={index}
+                  type="capability"
+                  Icon={capability.icon}
+                  title={capability.title}
+                  description={capability.description}
+                />
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
         {/* ================= DUAL CTA SECTION ================= */}
         <section className="w-full py-20 pb-32">

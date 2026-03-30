@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Arimo, Space_Mono } from "next/font/google";
-import "../globals.css";
+import "../../globals.css";
 
 // 1. Import the Theme Provider you created
 import { ThemeProvider } from "@/components/themeprovider";

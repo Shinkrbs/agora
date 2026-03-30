@@ -5,9 +5,9 @@ import { Button } from "@/components/ui/button";
 import { LandingPageHeader } from "./_components/LandingPageHeader";
 import LandingPageFooter from "./_components/LandingPageFooter";
 import { LandingCard } from "./_components/LandingCard";
-import { HeroPhoneMockup, DashboardPhoneMockup } from "./_components/Phone";
+import { HeroPhoneMockup, DashboardPhoneMockup } from "../../landing/_components/Phone";
 import BlurText from "@/components/BlurText";
-import { whySoesFeatures, capabilities } from "./_components/constants";
+import { whySoesFeatures, capabilities } from "../../landing/_components/constants";
 import { Shield, CheckSquare, Eye, Star, Vote } from "lucide-react";
 
 export default function HomePage() {

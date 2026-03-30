@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
 import { Arimo, Space_Mono } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/components/themeprovider";
+import { ThemeProvider as NextThemeProvider } from "next-themes";
 
+// Configure Arimo
 const arimo = Arimo({
   subsets: ["latin"],
   variable: "--font-arimo",
 });
 
+// Configure Space Mono (requires weight specification)
 const spaceMono = Space_Mono({
   weight: ["400", "700"],
   subsets: ["latin"],
@@ -25,17 +27,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    // suppressHydrationWarning MUST be on this root html tag!
     <html lang="en" suppressHydrationWarning>
-      <body className={`${arimo.variable} ${spaceMono.variable} font-sans antialiased`}>
-        <ThemeProvider
+      {/* Add this warning fix too */}
+      <head />
+      <body
+        className={`${arimo.variable} ${spaceMono.variable} font-sans antialiased`}
+      >
+        <NextThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
           {children}
-        </ThemeProvider>
+        </NextThemeProvider>
       </body>
     </html>
   );

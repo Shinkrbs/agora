@@ -21,6 +21,7 @@ export interface User {
   created_at: string;
   updated_at: string;
   is_deleted: boolean;
+  avatar_url?: string | null;
 }
 
 export interface Organization {
@@ -117,7 +118,7 @@ export interface Candidate {
   middle_name: string | null;
   suffix: string | null;
   image_url: string;
-  platform: Record<string, any> | null; // For the JSON column
+  platform: Record<string, unknown> | null; // For the JSON column
   created_at: string;
   updated_at: string;
   is_deleted: boolean;

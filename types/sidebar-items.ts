@@ -45,7 +45,7 @@ export const sidebarItems: SidebarItem[] = [
 ];
 
 export interface SidebarProfile {
-  first_name: string;
-  last_name: string;
-  avatar_url?: string | null;
+  name: string;
+  email: string;
+  avatar_url?: string;
 }

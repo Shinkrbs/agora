@@ -12,7 +12,7 @@ import {
 import { adminSidebarItems, superAdminSidebarItems } from "@/types/sidebar-items";
 import Image from "next/image";
 import logo from "@/public/logo.svg";
-import { NavUser } from "./nav-user";
+import { NavUserWrapper } from "./NavUserWrapper";
 import type { SidebarItem, SidebarProfile } from "@/types/sidebar-items";
 import { getCurrentUser } from "@/lib/queries/users-queries";
 
@@ -77,7 +77,7 @@ export async function AppSidebar() {
         <SidebarSeparator className="mx-0" />
       </div>
       <SidebarFooter>
-        <NavUser
+        <NavUserWrapper
           user={{
             name: sidebarProfile.name ?? "Guest",
             email: sidebarProfile.email ?? "guest@example.com",

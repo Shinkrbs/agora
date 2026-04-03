@@ -5,12 +5,12 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import { LandingPageHeader } from "./_components/LandingPageHeader";
 import LandingPageFooter from "./_components/LandingPageFooter";
 
-const arimo = Arimo({ 
+const arimo = Arimo({
   subsets: ["latin"],
   variable: "--font-arimo",
 });
 
-const spaceMono = Space_Mono({ 
+const spaceMono = Space_Mono({
   weight: ["400", "700"],
   subsets: ["latin"],
   variable: "--font-space-mono",
@@ -28,9 +28,10 @@ export default function RootLayout({
 }>) {
   return (
     <div>
-      <LandingPageHeader  />
-      <body className={`${arimo.variable} ${spaceMono.variable} font-sans antialiased`}>
-        
+      <body
+        className={`${arimo.variable} ${spaceMono.variable} font-sans antialiased`}
+      >
+        <LandingPageHeader />
         {/* 3. Wrap your entire app in the ThemeProvider */}
         <ThemeProvider
           attribute="class"
@@ -41,8 +42,7 @@ export default function RootLayout({
           {children}
         </ThemeProvider>
       </body>
-      <LandingPageFooter  />
+      <LandingPageFooter />
     </div>
-
   );
 }

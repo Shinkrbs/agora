@@ -9,7 +9,7 @@ import Phone from "./_components/Phone";
 import { HeroPhoneMockup } from "./_components/Phone/HeroPhoneMockup";
 import { DashboardPhoneMockup } from "./_components/Phone/DashboardPhoneMockup";
 import BlurText from "@/components/BlurText";
-import { whySoesFeatures, capabilities } from "../../landing/_components/constants";
+import { whySoesFeatures, capabilities } from "./_components/constants";
 import { Shield, CheckSquare, Eye, Star, Vote} from "lucide-react";
 import Link from "next/link";
 

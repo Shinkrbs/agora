@@ -2,6 +2,7 @@
 
 import Tilt from "react-parallax-tilt";
 import { CheckSquare, BarChart2, Users, LaptopMinimalCheck } from "lucide-react";
+import Image from "next/image"
 
 export function HeroPhoneMockup() {
   return (
@@ -22,9 +23,20 @@ export function HeroPhoneMockup() {
           
           {/* Top Header / App Bar */}
           <div className="flex justify-between items-center mb-6 pt-2">
-            <div className="w-8 h-8 rounded bg-primary/10 flex items-center justify-center">
-              <div className="w-4 h-4 bg-primary rounded-sm transform rotate-45"></div>
+            
+            {/* --- LOGO UPDATED HERE --- */}
+            {/* Replaced the green rotated square with your logo.svg */}
+            <div className="flex items-center justify-center">
+              <Image 
+                src="/logo.svg" 
+                alt="SOES App Logo" 
+                width={32} 
+                height={32} 
+                className="h-8 w-8 object-contain"
+              />
             </div>
+            {/* ------------------------- */}
+
             <div className="w-8 h-8 rounded-lg bg-muted"></div>
           </div>
           

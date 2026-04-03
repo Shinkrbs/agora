@@ -3,6 +3,7 @@ import { Moon, Sun } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { useTheme } from "next-themes"
+import Image from "next/image"
 
 export function LandingPageHeader() {
   const { theme, setTheme } = useTheme()
@@ -11,8 +12,14 @@ export function LandingPageHeader() {
       <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-8">
         {/* Left Side: Logo and Title */}
         <div className="flex items-center gap-3">
-          {/* Green Square Logo Placeholder */}
-          <div className="h-8 w-8 rounded-md bg-[#2e7d32]" aria-hidden="true" />
+          <Image 
+            src="/logo.svg" 
+            alt="SOES Logo" 
+            width={32} 
+            height={32} 
+            className="h-8 w-8 object-contain" 
+            priority // Tells Next.js to load this instantly since it's above the fold
+          />
           <span className="font-bold text-sm sm:text-base">
             Student Organization Election System
           </span>

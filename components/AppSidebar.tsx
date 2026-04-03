@@ -12,8 +12,19 @@ import {
 import { sidebarItems } from "@/types/sidebar-items";
 import Image from "next/image";
 import logo from "@/public/logo.svg";
+import { NavUser } from "./nav-user";
+import type { SidebarProfile } from "@/types/sidebar-items";
+import { getCurrentUser } from "@/lib/queries/users-queries";
 
-export function AppSidebar() {
+export async function AppSidebar() {
+  // Fetch the current user data
+  const user = await getCurrentUser();
+  // Map user data to match SideProfile structure
+  const sidebarProfile: SidebarProfile = {
+    name: user?.first_name + " " + user?.last_name,
+    email: user?.email || "",
+    avatar_url: user?.avatar_url || "/default-avatar.png", // Fallback avatar
+  };
   return (
     <Sidebar className="flex flex-col h-full" collapsible="icon">
       <SidebarHeader className="shrink-0">
@@ -60,8 +71,17 @@ export function AppSidebar() {
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
+      <div className="px-2">
+        <SidebarSeparator className="mx-0" />
+      </div>
       <SidebarFooter>
-        <div>Profile Here</div>
+        <NavUser
+          user={{
+            name: sidebarProfile.name ?? "Guest",
+            email: sidebarProfile.email ?? "guest@example.com",
+            avatar_url: sidebarProfile.avatar_url ?? "/avatars/default.png",
+          }}
+        />
       </SidebarFooter>
     </Sidebar>
   );

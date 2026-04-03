@@ -7,7 +7,7 @@ import { ModeToggle } from "@/components/ModeToggle";
 
 export function LandingPageHeader() {
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
       <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-8">
         
         <div className="flex items-center gap-3">
@@ -27,7 +27,6 @@ export function LandingPageHeader() {
         <div className="flex items-center gap-2 sm:gap-4 ">
           
           <ModeToggle />
-
           <Button
             asChild
             className="bg-[#2e7d32] hover:bg-[#205e24] text-white px-3 py-1 sm:px-4 sm:py-2 rounded-md text-sm sm:text-base"

@@ -1,16 +1,12 @@
 "use client";
 
-import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { LandingPageHeader } from "./_components/LandingPageHeader";
-import LandingPageFooter from "./_components/LandingPageFooter";
 import { LandingCard } from "./_components/LandingCard";
-import Phone from "./_components/Phone";
 import { HeroPhoneMockup } from "./_components/Phone/HeroPhoneMockup";
 import { DashboardPhoneMockup } from "./_components/Phone/DashboardPhoneMockup";
 import BlurText from "@/components/BlurText";
 import { whySoesFeatures, capabilities } from "./_components/constants";
-import { Shield, CheckSquare, Eye, Star, Vote} from "lucide-react";
+import { Shield, CheckSquare, Eye, Star} from "lucide-react";
 import Link from "next/link";
 
 export default function HomePage() {
@@ -120,7 +116,7 @@ export default function HomePage() {
               <div className="space-y-8">
                 {["Set up your organization", "Create an election session", "Share voting links", "Monitor & publish results"].map((step, idx) => (
                   <div key={idx} className="flex gap-4">
-                    <div className="flex-shrink-0 w-8 h-8 rounded text-primary-foreground bg-primary flex items-center justify-center font-bold text-sm font-mono">
+                    <div className="shrink-0 w-8 h-8 rounded text-primary-foreground bg-primary flex items-center justify-center font-bold text-sm font-mono">
                       {idx + 1}
                     </div>
                     <div>

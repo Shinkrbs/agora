@@ -2,12 +2,14 @@ import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import { QueryData } from "@supabase/supabase-js";
 
+type AppSupabaseClient = Awaited<ReturnType<typeof createClient>>;
+
 // ============================================================================
 // SUPERADMIN QUERIES (The Verification Queue)
 // ============================================================================
 
 // 1. Pending Organization Payments
-export function pendingOrgPaymentsQuery(supabase: any) {
+export function pendingOrgPaymentsQuery(supabase: AppSupabaseClient) {
     return supabase
         .from("organization_payments")
         .select(`
@@ -38,7 +40,7 @@ export async function getPendingOrganizationPayments() {
 }
 
 // 2. Pending Election Payments
-export function pendingElectionPaymentsQuery(supabase: any) {
+export function pendingElectionPaymentsQuery(supabase: AppSupabaseClient) {
     return supabase
         .from("election_payments")
         .select(`
@@ -74,7 +76,7 @@ export async function getPendingElectionPayments() {
 // ============================================================================
 
 // 3. Organization Payment History
-export function orgPaymentHistoryQuery(supabase: any, orgId: string) {
+export function orgPaymentHistoryQuery(supabase: AppSupabaseClient, orgId: string) {
     return supabase
         .from("organization_payments")
         .select(`
@@ -104,7 +106,7 @@ export async function getOrganizationPaymentHistory(orgId: string) {
 }
 
 // 4. Election Payment History
-export function electionPaymentHistoryQuery(supabase: any, orgId: string) {
+export function electionPaymentHistoryQuery(supabase: AppSupabaseClient, orgId: string) {
     return supabase
         .from("election_payments")
         .select(`

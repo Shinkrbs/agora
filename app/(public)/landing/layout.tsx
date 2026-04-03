@@ -28,9 +28,6 @@ export default function RootLayout({
 }>) {
   return (
     <div>
-      <body
-        className={`${arimo.variable} ${spaceMono.variable} font-sans antialiased`}
-      >
         <LandingPageHeader />
         {/* 3. Wrap your entire app in the ThemeProvider */}
         <ThemeProvider
@@ -41,7 +38,6 @@ export default function RootLayout({
         >
           {children}
         </ThemeProvider>
-      </body>
       <LandingPageFooter />
     </div>
   );

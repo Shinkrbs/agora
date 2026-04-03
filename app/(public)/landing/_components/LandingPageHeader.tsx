@@ -1,15 +1,15 @@
 "use client";
-import { Moon, Sun } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import Link from "next/link"
-import { useTheme } from "next-themes"
-import Image from "next/image"
+
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import Image from "next/image";
+import { ModeToggle } from "@/components/ModeToggle"; // 1. Import your new component
 
 export function LandingPageHeader() {
-  const { theme, setTheme } = useTheme()
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-8">
+        
         {/* Left Side: Logo and Title */}
         <div className="flex items-center gap-3">
           <Image 
@@ -27,17 +27,9 @@ export function LandingPageHeader() {
 
         {/* Right Side: Theme Toggle and CTA */}
         <div className="flex items-center gap-2 sm:gap-4 ">
-          <Button 
-            variant="ghost"
-            size="icon"
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className= "cursor-pointer"
-          >
-            {/* Sun icon shows in dark mode, Moon shows in light mode */}
-            <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-            <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-            <span className="sr-only">Toggle theme</span>
-          </Button>
+          
+          {/* 2. Drop in the reusable toggle! */}
+          <ModeToggle />
 
           {/* Get Started Button */}
           <Button
@@ -47,6 +39,7 @@ export function LandingPageHeader() {
             <Link href="/signup">Get Started</Link>
           </Button>
         </div>
+        
       </div>
     </header>
   );

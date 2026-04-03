@@ -47,8 +47,7 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-@layer base {
-  :root {
+:root {
     /* BACKGROUNDS: White */
     --background: oklch(1 0 0);
     --foreground: oklch(0.145 0 0);
@@ -137,6 +136,7 @@
     --sidebar-ring: oklch(0.53 0.16 146);
   }
 
+@layer base {
   * {
     @apply border-border outline-ring/50;
   }

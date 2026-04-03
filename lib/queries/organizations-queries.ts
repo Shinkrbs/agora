@@ -1,6 +1,6 @@
 import { createClient } from "../supabase/server";
 import { cookies } from "next/headers";
-import { Organization, OrganizationMember } from "@/types/database";
+import { Organization, OrganizationMember, ApprovalStatus } from "@/types/database";
 
 // ------------------------------------------
 // ADMIN DASHBOARD QUERIES
@@ -85,59 +85,21 @@ export async function getOrganizationMembers(orgId: string): Promise<Organizatio
 // SUPERADMIN DASHBOARD QUERIES
 // ------------------------------------------
 
-export async function getPendingOrganizations(): Promise<Organization[] | null> {
+export async function getOrganizationsByApprovalStatus(status: ApprovalStatus): Promise<Organization[] | null> {
     try {
         const supabase = await createClient(await cookies());
         const { data: organizations, error } = await supabase
             .from("organizations")
             .select("*")
-            .eq("approval_status", "pending")
+            .eq("approval_status", status)
             .eq("is_deleted", false);
         if (error) {
-            console.error("Error fetching pending organizations:", error);
+            console.error("Error fetching organizations by approval status:", error);
             return null; 
         }
         return organizations as Organization[];
     } catch (error) {
-        console.error("Unexpected error in getPendingOrganizations:", error);
-        return null;
-    }
-}
-
-export async function getApprovedOrganizations(): Promise<Organization[] | null> {
-    try {
-        const supabase = await createClient(await cookies());
-        const { data: organizations, error } = await supabase
-            .from("organizations")
-            .select("*")
-            .eq("approval_status", "approved")
-            .eq("is_deleted", false);
-        if (error) {
-            console.error("Error fetching approved organizations:", error);
-            return null;
-        }
-        return organizations as Organization[];
-    } catch (error) {
-        console.error("Unexpected error in getApprovedOrganizations:", error);
-        return null;
-    }
-}
-
-export async function getRejectedOrganizations(): Promise<Organization[] | null> {
-    try {
-        const supabase = await createClient(await cookies());
-        const { data: organizations, error } = await supabase
-            .from("organizations")
-            .select("*")
-            .eq("approval_status", "rejected")
-            .eq("is_deleted", false);
-        if (error) {
-            console.error("Error fetching rejected organizations:", error);
-            return null;
-        }
-        return organizations as Organization[];
-    } catch (error) {
-        console.error("Unexpected error in getRejectedOrganizations:", error);
+        console.error("Unexpected error in getOrganizationsByApprovalStatus:", error);
         return null;
     }
 }

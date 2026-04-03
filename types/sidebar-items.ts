@@ -6,7 +6,7 @@ export type SidebarItem = {
   icon: LucideIcon;
 };
 
-export const sidebarItems: SidebarItem[] = [
+export const adminSidebarItems: SidebarItem[] = [
   {
     title: "Dashboard",
     href: "/admin/dashboard",
@@ -42,6 +42,24 @@ export const sidebarItems: SidebarItem[] = [
     href: "/settings",
     icon: Settings,
   },
+];
+
+export const superAdminSidebarItems: SidebarItem[] = [
+  {
+    title: "Dashboard",
+    href: "/superadmin/dashboard",
+    icon: LayoutDashboard,
+  },
+  {
+    title: "Payments Management",
+    href: "/payments-management",
+    icon: UserCog,
+  },
+  {
+    title: "Reports Management",
+    href: "/reports-management",
+    icon: FileUser,
+  }
 ];
 
 export interface SidebarProfile {

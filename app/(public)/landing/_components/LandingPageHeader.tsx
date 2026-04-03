@@ -30,9 +30,9 @@ export function LandingPageHeader() {
 
           <Button
             asChild
-            className="bg-[#2e7d32] hover:bg-[#205e24] text-white"
+            className="bg-[#2e7d32] hover:bg-[#205e24] text-white px-3 py-1 sm:px-4 sm:py-2 rounded-md text-sm sm:text-base"
           >
-            <Link href="/signup">Get Started</Link>
+            <Link href="/login">Log in</Link>
           </Button>
         </div>
         

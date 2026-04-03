@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/sidebar";
 import type { SidebarProfile } from "@/types/sidebar-items";
 import { logoutUser } from "@/lib/auth/logout";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 type NavUserProps = {
   user: SidebarProfile;
@@ -81,7 +81,7 @@ export function NavUser({ user }: NavUserProps) {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem onClick={() => redirect("/profile")}>
+              <DropdownMenuItem onClick={() => router.push("/profile")}>
                 <UserRoundPen />
                 Profile
               </DropdownMenuItem>

@@ -9,11 +9,11 @@ import {
   SidebarMenuItem,
   SidebarSeparator,
 } from "@/components/ui/sidebar";
-import { sidebarItems } from "@/types/sidebar-items";
+import { adminSidebarItems, superAdminSidebarItems } from "@/types/sidebar-items";
 import Image from "next/image";
 import logo from "@/public/logo.svg";
 import { NavUser } from "./nav-user";
-import type { SidebarProfile } from "@/types/sidebar-items";
+import type { SidebarItem, SidebarProfile } from "@/types/sidebar-items";
 import { getCurrentUser } from "@/lib/queries/users-queries";
 
 export async function AppSidebar() {
@@ -25,12 +25,14 @@ export async function AppSidebar() {
     email: user?.email || "",
     avatar_url: user?.avatar_url || "/default-avatar.png", // Fallback avatar
   };
+
+  const sidebarItems: SidebarItem[] = user?.role === "superadmin" ? superAdminSidebarItems : adminSidebarItems;
   return (
     <Sidebar className="flex flex-col h-full" collapsible="icon">
       <SidebarHeader className="shrink-0">
         <SidebarMenuItem>
           <SidebarMenuButton size="lg" asChild>
-            <a href="/admin/dashboard" className="flex items-center gap-2">
+            <a href={`/${user?.role}/dashboard`} className="flex items-center gap-2">
               <div className="flex aspect-square size-8 items-center justify-center rounded-lg">
                 <Image
                   src={logo}

@@ -1,0 +1,51 @@
+import { LayoutDashboard, UserCog, FileUser, Vote, Building2, BookUser, Settings, type LucideIcon} from "lucide-react";
+
+export type SidebarItem = {
+  title: string;
+  href: string;
+  icon: LucideIcon;
+};
+
+export const sidebarItems: SidebarItem[] = [
+  {
+    title: "Dashboard",
+    href: "/admin/dashboard",
+    icon: LayoutDashboard,
+  },
+  {
+    title: "Voter Management",
+    href: "/voter-management",
+    icon: UserCog,
+  },
+  {
+    title: "Candidate Management",
+    href: "/candidate-management",
+    icon: FileUser,
+  },
+  {
+    title: "Election Session Management",
+    href: "/election-session",
+    icon: Vote,
+  },
+  {
+    title: "Organization Management",
+    href: "/organization-management",
+    icon: Building2,
+  },
+  {
+    title: "Partylist Management",
+    href: "/partylist-management",
+    icon: BookUser,
+  },
+  {
+    title: "Settings",
+    href: "/settings",
+    icon: Settings,
+  },
+];
+
+export interface SidebarProfile {
+  first_name: string;
+  last_name: string;
+  avatar_url?: string | null;
+}

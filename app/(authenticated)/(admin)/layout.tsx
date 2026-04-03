@@ -1,6 +1,8 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/AppSidebar";
 
 export default async function AdminLayout({
   children,
@@ -17,5 +19,16 @@ export default async function AdminLayout({
     .single();
 
   if (user?.role !== "admin") redirect("/unauthorized");
-  return <>{children}</>;
+  return (
+    <>
+      {" "}
+      <SidebarProvider>
+        <AppSidebar />
+        <main>
+          <SidebarTrigger />
+          {children}
+        </main>
+      </SidebarProvider>
+    </>
+  );
 }

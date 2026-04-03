@@ -1,3 +1,9 @@
-export default function page() {
-  return <div>This is candidate management page.</div>;
+import React from 'react'
+
+const CandidateManagementPage = () => {
+  return (
+    <div>CandidateManagementPage</div>
+  )
 }
+
+export default CandidateManagementPage

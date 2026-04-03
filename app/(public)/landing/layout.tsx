@@ -1,17 +1,47 @@
-import { LandingPageHeader } from "./_components/LandingPageHeader"; // Updated to match your exact file name
+import type { Metadata } from "next";
+import { Arimo, Space_Mono } from "next/font/google";
+// 1. Import the Theme Provider you created
+import { ThemeProvider } from "@/components/themeprovider";
+import { LandingPageHeader } from "./_components/LandingPageHeader";
 import LandingPageFooter from "./_components/LandingPageFooter";
-import LandingPage from "./page";
-export default function LandingLayout({
+
+const arimo = Arimo({
+  subsets: ["latin"],
+  variable: "--font-arimo",
+});
+
+const spaceMono = Space_Mono({
+  weight: ["400", "700"],
+  subsets: ["latin"],
+  variable: "--font-space-mono",
+});
+
+export const metadata: Metadata = {
+  title: "SOES",
+  description: "Student Organization Election System",
+};
+
+export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
-    <div className="flex min-h-screen flex-col">
-      <LandingPageHeader /> 
-      <main className="flex-1">
-        {children}
-      </main>
+    <div>
+      <body
+        className={`${arimo.variable} ${spaceMono.variable} font-sans antialiased`}
+      >
+        <LandingPageHeader />
+        {/* 3. Wrap your entire app in the ThemeProvider */}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
+      </body>
       <LandingPageFooter />
     </div>
   );

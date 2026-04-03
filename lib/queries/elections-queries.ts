@@ -1,6 +1,6 @@
 import { createClient } from "../supabase/server";
 import { cookies } from "next/headers";
-import { Organization, ElectionSession, ElectionStatus, Posi, Position, Partylist, Candidate } from "@/types/database";
+import { ElectionSession, ElectionStatus, Position, Partylist, Candidate } from "@/types/database";
 
 
 export async function getElectionSessionById(sessionId: string): Promise<ElectionSession | null> {

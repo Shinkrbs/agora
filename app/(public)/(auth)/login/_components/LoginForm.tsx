@@ -30,6 +30,7 @@ export function LoginForm({
       <Card className="border-0 shadow-xl">
         <CardHeader className="text-center space-y-2 pb-4">
           <div className="flex justify-center mb-1">
+            <Link href="/">
             <Image
               src="/logo.svg"
               alt="Logo"
@@ -37,6 +38,7 @@ export function LoginForm({
               height={60}
               className="w-12 h-12 md:w-16 md:h-16"
             />
+            </Link>
           </div>
           <CardTitle className="text-xl md:text-2xl font-bold">
             Welcome back Admin!

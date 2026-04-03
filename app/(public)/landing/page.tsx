@@ -8,7 +8,8 @@ import { LandingCard } from "./_components/LandingCard";
 import { HeroPhoneMockup, DashboardPhoneMockup } from "../../landing/_components/Phone";
 import BlurText from "@/components/BlurText";
 import { whySoesFeatures, capabilities } from "../../landing/_components/constants";
-import { Shield, CheckSquare, Eye, Star, Vote } from "lucide-react";
+import { Shield, CheckSquare, Eye, Star, Vote} from "lucide-react";
+import Link from "next/link";
 
 export default function HomePage() {
   return (
@@ -34,7 +35,7 @@ export default function HomePage() {
               </p>
               
               <Button size="lg" className="mt-8 px-8 py-6 text-base rounded-md font-semibold">
-                Get Started
+                <Link href="/signup">Get Started</Link>
               </Button>
 
               <div className="mt-10 flex items-center gap-4">
@@ -189,14 +190,14 @@ export default function HomePage() {
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4">
                 <Button variant="secondary" size="lg" className="font-semibold px-8 py-6 rounded-xl text-base">
-                  Setup Now
+                  <Link href="/signup">Setup Now</Link>
                 </Button>
                 <Button 
                   variant="outline" 
                   size="lg" 
                   className="bg-transparent text-white border-2 border-white/80 dark:border-black/30 hover:bg-white/10 dark:hover:bg-black/20 hover:text-white font-semibold px-8 py-6 rounded-xl text-base transition-colors"
                 >
-                  Vote Now
+                  <Link href="/signup">Vote Now</Link>
                 </Button>
               </div>
             </div>

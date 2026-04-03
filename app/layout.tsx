@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Arimo, Space_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider as NextThemeProvider } from "next-themes";
+import NextTopLoader from "nextjs-toploader";
 
 // Configure Arimo
 const arimo = Arimo({
@@ -39,6 +40,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <NextTopLoader color="#61e267"/>
           {children}
         </NextThemeProvider>
       </body>

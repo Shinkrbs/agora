@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Arimo, Space_Mono } from "next/font/google";
 // 1. Import the Theme Provider you created
-import { ThemeProvider } from "@/components/ThemeProvider";
+import { ThemeProvider } from "@/components/themeprovider";
 import { LandingPageHeader } from "./_components/LandingPageHeader";
 import LandingPageFooter from "./_components/LandingPageFooter";
 

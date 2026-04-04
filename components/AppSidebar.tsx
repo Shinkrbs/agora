@@ -4,17 +4,16 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarHeader,
-  SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarSeparator,
 } from "@/components/ui/sidebar";
-import { adminSidebarItems, superAdminSidebarItems } from "@/types/sidebar-items";
 import Image from "next/image";
 import logo from "@/public/logo.svg";
 import { NavUserWrapper } from "./NavUserWrapper";
-import type { SidebarItem, SidebarProfile } from "@/types/sidebar-items";
+import type { SidebarProfile } from "@/types/sidebar-items";
 import { getCurrentUser } from "@/lib/queries/users-queries";
+import { SidebarNavItems } from "./SidebarNavItems";
 
 export async function AppSidebar() {
   // Fetch the current user data
@@ -26,13 +25,16 @@ export async function AppSidebar() {
     avatar_url: user?.avatar_url || "/default-avatar.png", // Fallback avatar
   };
 
-  const sidebarItems: SidebarItem[] = user?.role === "superadmin" ? superAdminSidebarItems : adminSidebarItems;
+  const role = user?.role === "superadmin" ? "superadmin" : "admin";
   return (
     <Sidebar className="flex flex-col h-full" collapsible="icon">
       <SidebarHeader className="shrink-0">
         <SidebarMenuItem>
           <SidebarMenuButton size="lg" asChild>
-            <a href={`/${user?.role}/dashboard`} className="flex items-center gap-2">
+            <a
+              href={`/${user?.role}/dashboard`}
+              className="flex items-center gap-2"
+            >
               <div className="flex aspect-square size-8 items-center justify-center rounded-lg">
                 <Image
                   src={logo}
@@ -59,18 +61,7 @@ export async function AppSidebar() {
       </div>
       <SidebarContent className="flex-1 overflow-y-auto">
         <SidebarGroup>
-          <SidebarMenu>
-            {sidebarItems.map((item) => (
-              <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton asChild>
-                  <a href={item.href}>
-                    <item.icon />
-                    <span>{item.title}</span>
-                  </a>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            ))}
-          </SidebarMenu>
+          <SidebarNavItems role={role} />
         </SidebarGroup>
       </SidebarContent>
       <div className="px-2">
@@ -83,7 +74,7 @@ export async function AppSidebar() {
             email: sidebarProfile.email ?? "guest@example.com",
             avatar_url: sidebarProfile.avatar_url ?? "/avatars/default.png",
           }}
-          role={user?.role === "superadmin" ? "superadmin" : "admin"}
+          role={role}
         />
       </SidebarFooter>
     </Sidebar>

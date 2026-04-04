@@ -20,13 +20,14 @@ import {
 } from "@/components/ui/sidebar";
 import type { SidebarProfile } from "@/types/sidebar-items";
 import { logoutUser } from "@/lib/auth/logout";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 type NavUserProps = {
   user: SidebarProfile;
+  role: "admin" | "superadmin";
 };
 
-export function NavUser({ user }: NavUserProps) {
+export function NavUser({ user, role }: NavUserProps) {
   const { isMobile } = useSidebar();
   const router = useRouter();
 
@@ -81,7 +82,7 @@ export function NavUser({ user }: NavUserProps) {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem onClick={() => redirect("/profile")}>
+              <DropdownMenuItem onClick={() => router.push(`/${role}/profile`)}>
                 <UserRoundPen />
                 Profile
               </DropdownMenuItem>

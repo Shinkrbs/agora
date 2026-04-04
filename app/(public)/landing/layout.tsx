@@ -1,20 +1,7 @@
 import type { Metadata } from "next";
-import { Arimo, Space_Mono } from "next/font/google";
-// 1. Import the Theme Provider you created
 import { ThemeProvider } from "@/components/themeprovider";
 import { LandingPageHeader } from "./_components/LandingPageHeader";
 import LandingPageFooter from "./_components/LandingPageFooter";
-
-const arimo = Arimo({
-  subsets: ["latin"],
-  variable: "--font-arimo",
-});
-
-const spaceMono = Space_Mono({
-  weight: ["400", "700"],
-  subsets: ["latin"],
-  variable: "--font-space-mono",
-});
 
 export const metadata: Metadata = {
   title: "SOES",
@@ -28,9 +15,6 @@ export default function RootLayout({
 }>) {
   return (
     <div>
-      <body
-        className={`${arimo.variable} ${spaceMono.variable} font-sans antialiased`}
-      >
         <LandingPageHeader />
         {/* 3. Wrap your entire app in the ThemeProvider */}
         <ThemeProvider
@@ -41,7 +25,6 @@ export default function RootLayout({
         >
           {children}
         </ThemeProvider>
-      </body>
       <LandingPageFooter />
     </div>
   );

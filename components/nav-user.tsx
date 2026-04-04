@@ -27,7 +27,7 @@ type NavUserProps = {
   role: "admin" | "superadmin";
 };
 
-export function NavUser({ user, role }: NavUserProps) {
+export function NavUser({ user }: NavUserProps) {
   const { isMobile } = useSidebar();
   const router = useRouter();
 

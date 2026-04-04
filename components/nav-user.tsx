@@ -27,7 +27,7 @@ type NavUserProps = {
   role: "admin" | "superadmin";
 };
 
-export function NavUser({ user, role }: NavUserProps) {
+export function NavUser({ user }: NavUserProps) {
   const { isMobile } = useSidebar();
   const router = useRouter();
 
@@ -82,7 +82,7 @@ export function NavUser({ user, role }: NavUserProps) {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem onClick={() => router.push(`/${role}/profile`)}>
+              <DropdownMenuItem onClick={() => router.push(`/profile`)}>
                 <UserRoundPen />
                 Profile
               </DropdownMenuItem>

@@ -33,6 +33,7 @@ export interface Organization {
   created_at: string;
   updated_at: string;
   is_deleted: boolean;
+  logo_url: string | null;
 }
 
 export interface OrganizationMember {

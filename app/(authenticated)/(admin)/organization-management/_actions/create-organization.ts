@@ -6,6 +6,7 @@ import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache"; 
 import { AGORA_PRICING } from "@/lib/constants";
 import { randomUUID } from "crypto"; // <-- Import this natively from Node
+import { AppSupabaseClient } from "@/lib/queries/billing-queries";
 
 // ------------------------------------------------------------------
 // HELPER FUNCTIONS
@@ -20,7 +21,7 @@ function generateInviteCode(prefix: string) {
     return `${prefix.toUpperCase()}-${result}`; 
 }
 
-export async function uploadFile(supabase: any, bucket: string, file: File, folderPath?: string) {
+export async function uploadFile(supabase: AppSupabaseClient, bucket: string, file: File, folderPath?: string) {
     const safeFileName = file.name.replace(/[^a-zA-Z0-9.\-_]/g, "");
     
     const filePath = folderPath 

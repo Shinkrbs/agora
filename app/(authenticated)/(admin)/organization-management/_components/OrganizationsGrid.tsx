@@ -29,6 +29,7 @@ export function OrganizationsGrid({ organizations }: OrganizationsGridProps) {
           name={org.name}
           shorthandName={org.shorthand_name}
           logoUrl={org.logo_url}
+          approvalStatus={org.approval_status}
         />
       ))}
     </div>

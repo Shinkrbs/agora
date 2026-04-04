@@ -2,7 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import { QueryData } from "@supabase/supabase-js";
 
-type AppSupabaseClient = Awaited<ReturnType<typeof createClient>>;
+export type AppSupabaseClient = Awaited<ReturnType<typeof createClient>>;
 
 // ============================================================================
 // SUPERADMIN QUERIES (The Verification Queue)

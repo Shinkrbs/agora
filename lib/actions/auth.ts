@@ -5,7 +5,7 @@ import { loginSchema, signUpSchema } from "../schema/auth-schema";
 import { redirect } from "next/navigation";
 import { getUserRole } from "../utils/auth-utils";
 
-export async function loginUser(prevState: any, formData: FormData) {
+export async function loginUser(_prevState: unknown, formData: FormData) {
   const validatedField = loginSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
@@ -48,7 +48,7 @@ export async function loginUser(prevState: any, formData: FormData) {
   }
 }
 
-export async function signUpUser(prevState: any, formData: FormData) {
+export async function signUpUser(_prevState: unknown, formData: FormData) {
   const validatedField = signUpSchema.safeParse({
     first_name: formData.get("first-name"),
     middle_name: formData.get("middle-name"),

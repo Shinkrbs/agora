@@ -39,7 +39,7 @@ export const adminSidebarItems: SidebarItem[] = [
   },
   {
     title: "Settings",
-    href: "/admin/settings",
+    href: "/settings",
     icon: Settings,
   },
 ];

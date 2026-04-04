@@ -144,3 +144,14 @@ export interface Vote {
   created_at: string;
   is_deleted: boolean;
 }
+
+// Profile attributes
+export type UserProfileEditable = Pick<
+  User,
+  "avatar_url" | "username" | "first_name" | "last_name" | "middle_name" | "suffix" | "email"
+>;
+
+export type UserProfileReadonly = Pick<
+  User,
+  "role" | "created_at" | "updated_at"
+>;

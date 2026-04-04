@@ -14,19 +14,11 @@ import { STATIC_LABELS } from "@/types/header-breadcrumb";
 import { toTitleCase } from "@/lib/utils/to-title-case";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
-type BreadcrumNavItem = {
-  title: string;
-  href: string;
-};
-
-interface HeaderBreadcrumbProps {
-  sidebarItems: BreadcrumNavItem[];
-}
+import type { HeaderBreadcrumbProps } from "@/types/header-breadcrumb";
+import { nonNavigableSegments } from "@/types/header-breadcrumb";
 
 export function HeaderBreadcrumb({ sidebarItems }: HeaderBreadcrumbProps) {
   const pathname = usePathname();
-
   const segments = pathname.split("/").filter(Boolean);
 
   const crumbs = segments.map((segment, index) => {
@@ -50,6 +42,9 @@ export function HeaderBreadcrumb({ sidebarItems }: HeaderBreadcrumbProps) {
         <BreadcrumbList>
           {crumbs.map((crumb, index) => {
             const isLast = index === crumbs.length - 1;
+            const segment = segments[index];
+            const isRoleSegment = nonNavigableSegments.has(segment);
+            const shouldLink = !isLast && !isRoleSegment;
 
             return (
               <div
@@ -61,12 +56,20 @@ export function HeaderBreadcrumb({ sidebarItems }: HeaderBreadcrumbProps) {
                     index < crumbs.length - 1 ? "hidden md:inline-flex" : ""
                   }
                 >
-                  {isLast ? (
-                    <BreadcrumbPage>{crumb.label}</BreadcrumbPage>
-                  ) : (
+                  {shouldLink ? (
                     <BreadcrumbLink asChild>
                       <Link href={crumb.href}>{crumb.label}</Link>
                     </BreadcrumbLink>
+                  ) : (
+                    <BreadcrumbPage
+                      className={
+                        isRoleSegment
+                          ? "text-muted-foreground font-normal"
+                          : undefined
+                      }
+                    >
+                      {crumb.label}
+                    </BreadcrumbPage>
                   )}
                 </BreadcrumbItem>
                 {!isLast && (

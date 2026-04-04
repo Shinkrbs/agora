@@ -5,3 +5,13 @@ export const STATIC_LABELS: Record<string, string> = {
     settings: "Settings",
 };
 
+export type BreadcrumbNavItem = {
+  title: string;
+  href: string;
+};
+
+export interface HeaderBreadcrumbProps {
+  sidebarItems: BreadcrumbNavItem[];
+}
+
+export const nonNavigableSegments = new Set(["admin", "superadmin"]);

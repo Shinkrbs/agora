@@ -30,7 +30,6 @@ export async function updateOrganization(
   try {
     const supabase = await createClient(await cookies());
 
-    // 1. Authenticate
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
       return { message: "Unauthorized. Please log in.", success: false };
@@ -38,7 +37,6 @@ export async function updateOrganization(
 
     const { organizationId, name, shorthandName, logo } = validatedFields.data;
 
-    // 2. Verify organization exists
     const { data: org, error: orgError } = await supabase
       .from("organizations")
       .select("id")
@@ -49,7 +47,6 @@ export async function updateOrganization(
       return { message: "Organization not found.", success: false };
     }
 
-    // 3. Verify user is owner of the organization
     const { data: member, error: memberError } = await supabase
       .from("organization_members")
       .select("role")
@@ -61,17 +58,13 @@ export async function updateOrganization(
       return { message: "You don't have permission to edit this organization.", success: false };
     }
 
-    // 4. Prepare update data
     const updateData: any = {};
 
     if (name) updateData.name = name;
     if (shorthandName) updateData.shorthand_name = shorthandName;
 
-    // 5. Handle logo upload if provided
-    // We check instanceof File to avoid Next.js "Ghost Files"
     if (logo instanceof File && logo.size > 0) {
         
-      // FIX: Added organizationId as the 4th parameter to satisfy your Storage RLS!
       const logoUpload = await uploadFile(supabase, "organizations", logo, organizationId);
       
       if (logoUpload.error) {
@@ -80,7 +73,6 @@ export async function updateOrganization(
       updateData.logo_url = logoUpload.url;
     }
 
-    // 6. Update organization
     if (Object.keys(updateData).length > 0) {
       const { error: updateError } = await supabase
         .from("organizations")

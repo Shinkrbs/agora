@@ -14,27 +14,27 @@ export const adminSidebarItems: SidebarItem[] = [
   },
   {
     title: "Voter Management",
-    href: "/admin/voter-management",
+    href: "/voter-management",
     icon: UserCog,
   },
   {
     title: "Candidate Management",
-    href: "/admin/candidate-management",
+    href: "/candidate-management",
     icon: FileUser,
   },
   {
     title: "Election Session Management",
-    href: "/admin/election-session",
+    href: "/election-session",
     icon: Vote,
   },
   {
     title: "Organization Management",
-    href: "/admin/organization-management",
+    href: "/organization-management",
     icon: Building2,
   },
   {
     title: "Partylist Management",
-    href: "/admin/partylist-management",
+    href: "/partylist-management",
     icon: BookUser,
   },
   {

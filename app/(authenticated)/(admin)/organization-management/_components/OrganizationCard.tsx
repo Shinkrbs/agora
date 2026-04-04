@@ -66,11 +66,9 @@ export function OrganizationCard({
   return (
     <>
       <Card className="relative p-6 h-full hover:shadow-lg transition-shadow flex flex-col">
-        {/* Top Section: Logo and Options */}
         <div className="flex gap-4 mb-4">
-          {/* Circular Profile Image */}
           <div className="shrink-0">
-            <div className="w-14 h-14 rounded-full bg-gradient-to-br from-slate-200 to-slate-300 dark:from-slate-700 dark:to-slate-600 overflow-hidden flex items-center justify-center ring-2 ring-slate-100 dark:ring-slate-800">
+            <div className="w-14 h-14 rounded-full bg-linear-to-br from-slate-200 to-slate-300 dark:from-slate-700 dark:to-slate-600 overflow-hidden flex items-center justify-center ring-2 ring-slate-100 dark:ring-slate-800">
               <Image
                 src={logoUrl || "/logo.svg"}
                 alt={`${name} logo`}
@@ -81,7 +79,6 @@ export function OrganizationCard({
             </div>
           </div>
 
-          {/* Ellipsis Menu Button */}
           <div className="ml-auto">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -110,7 +107,6 @@ export function OrganizationCard({
           </div>
         </div>
 
-        {/* Organization Details */}
         <div className="flex-1 space-y-3">
           <div>
             <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-50 line-clamp-2">
@@ -123,7 +119,6 @@ export function OrganizationCard({
             )}
           </div>
 
-          {/* Status Badge */}
           <div
             className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full border ${statusConfig.bgColor} ${statusConfig.borderColor} w-fit`}
           >
@@ -141,7 +136,6 @@ export function OrganizationCard({
         </div>
       </Card>
 
-      {/* Edit Dialog */}
       <EditOrganizationDialog
         isOpen={isEditDialogOpen}
         onClose={() => setIsEditDialogOpen(false)}

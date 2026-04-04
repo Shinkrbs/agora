@@ -46,7 +46,6 @@ export function EditOrganizationDialog({
     onClose();
   };
 
-  // If submission is successful, close the dialog
   useEffect(() => {
     if (state.success) {
       handleClose();
@@ -97,7 +96,6 @@ export function EditOrganizationDialog({
         <form action={formAction} className="space-y-4">
           <input type="hidden" name="organizationId" value={organizationId} />
 
-          {/* Organization Name */}
           <div className="space-y-2">
             <Label htmlFor="name">Organization Name (Optional)</Label>
             <Input
@@ -114,7 +112,6 @@ export function EditOrganizationDialog({
             )}
           </div>
 
-          {/* Shorthand Name */}
           <div className="space-y-2">
             <Label htmlFor="shorthandName">Shorthand Name (Optional)</Label>
             <Input
@@ -132,7 +129,6 @@ export function EditOrganizationDialog({
             )}
           </div>
 
-          {/* Logo */}
           <div className="space-y-2">
             <Label htmlFor="logo">Organization Logo (Optional)</Label>
             <div className="border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-lg p-6">

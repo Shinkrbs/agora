@@ -17,15 +17,22 @@ export default async function updateOrganizationPayments(
     if (!user) {
       return { success: false, message: "Unauthorized" };
     }
+    if(user.role !== "superadmin"){
+      return { success: false, message: "Forbidden" };
+    }
 
     const { data: paymentData, error: fetchError } = await supabase
       .from("organization_payments")
-      .select("organization_id")
+      .select("organization_id, status")
       .eq("id", paymentId)
       .single();
 
     if (fetchError || !paymentData) {
       return { success: false, message: "Payment not found" };
+    }
+
+    if(paymentData.status !== 'pending'){
+      return { success: false, message: "Only pending payments can be updated" };
     }
 
     const organizationId = paymentData.organization_id;

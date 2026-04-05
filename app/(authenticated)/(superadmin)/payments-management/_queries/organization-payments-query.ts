@@ -3,12 +3,21 @@
 import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import { OrganizationPaymentRowData } from "../_types/payment-types";
+import { getCurrentUser } from "@/lib/queries/users-queries";
 
 export async function getOrganizationPayments(): Promise<{ data: OrganizationPaymentRowData[], message: string | null, error: string | null }> {
   try {
     const cookieStore = await cookies();
     const supabase = await createClient(cookieStore);
-    
+    const user = await getCurrentUser();
+
+    if (!user) {
+      return { data: [], message: null, error: "Unauthorized" };
+    }
+    if(user.role !== "superadmin"){
+      return { data: [], message: null, error: "Forbidden" };
+    }
+
     const { data, error } = await supabase
       .from("organization_payments")
       .select("*, users!organization_payments_user_id_fkey(first_name, last_name, email), organizations!organization_payments_organization_id_fkey(name, shorthand_name)")

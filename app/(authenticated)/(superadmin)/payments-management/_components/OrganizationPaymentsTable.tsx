@@ -302,12 +302,17 @@ export function OrganizationPaymentsTable({
         )}
       </div>
 
-      {selectedReceipt && (
+      {isReceiptModalOpen && selectedReceipt && (
         <ReceiptModal
           receiptUrl={selectedReceipt.url}
           orgName={selectedReceipt.orgName}
           isOpen={isReceiptModalOpen}
-          onOpenChange={setIsReceiptModalOpen}
+          onOpenChange={(open) => {
+            if (!open) {
+              setSelectedReceipt(null);
+            }
+            setIsReceiptModalOpen(open);
+          }}
         />
       )}
     </>

@@ -6,93 +6,11 @@ import { useEffect, useState } from "react";
 import { getOrganizationPayments } from "./_queries/organization-payments-query";
 import { toast } from "sonner";
 
-// Mock data for UI development
-const MOCK_PAYMENTS: OrganizationPaymentRowData[] = [
-  {
-    id: "1",
-    amount: 5000,
-    receipt_url: "/gcash.jpg",
-    status: "pending",
-    created_at: "2026-04-03T14:30:00Z",
-    users: {
-      first_name: "John",
-      last_name: "Doe",
-      email: "john.doe@example.com",
-    },
-    organizations: {
-      name: "Student Government Association",
-      shorthand_name: "SGA",
-    },
-  },
-  {
-    id: "2",
-    amount: 3500,
-    receipt_url: "/gcash.jpg",
-    status: "verified",
-    created_at: "2026-04-02T10:15:00Z",
-    users: {
-      first_name: "Jane",
-      last_name: "Smith",
-      email: "jane.smith@example.com",
-    },
-    organizations: {
-      name: "Engineering Society",
-      shorthand_name: "ENGSOC",
-    },
-  },
-  {
-    id: "3",
-    amount: 2000,
-    receipt_url: "/gcash.jpg",
-    status: "rejected",
-    created_at: "2026-04-01T09:45:00Z",
-    users: {
-      first_name: "Michael",
-      last_name: "Johnson",
-      email: "michael.j@example.com",
-    },
-    organizations: {
-      name: "Arts and Culture Club",
-      shorthand_name: "ACC",
-    },
-  },
-  {
-    id: "4",
-    amount: 7500,
-    receipt_url: "/gcash.jpg",
-    status: "pending",
-    created_at: "2026-03-31T16:20:00Z",
-    users: {
-      first_name: "Sarah",
-      last_name: "Williams",
-      email: "sarah.w@example.com",
-    },
-    organizations: {
-      name: "Business Club",
-      shorthand_name: "BIZCLUB",
-    },
-  },
-  {
-    id: "5",
-    amount: 4200,
-    receipt_url: "/gcash.jpg",
-    status: "verified",
-    created_at: "2026-03-30T13:10:00Z",
-    users: {
-      first_name: "David",
-      last_name: "Brown",
-      email: "david.brown@example.com",
-    },
-    organizations: {
-      name: "Sports Committee",
-      shorthand_name: "SPORTS",
-    },
-  },
-];
+
 
 export default function PaymentsManagementPage() {
   const [organizationPayments, setOrganizationPayments] =
-    useState<OrganizationPaymentRowData[]>(MOCK_PAYMENTS);
+    useState<OrganizationPaymentRowData[]>([]);
 
   const fetchPayments = async () => {
     const response = await getOrganizationPayments();

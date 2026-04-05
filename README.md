@@ -27,6 +27,22 @@ AG.010.002 | 2026-03-22 |
 
 ● Protected routing and optimization of form states
 
+## AG.010.003 Release Notes 
+
+● Implemented secure route protection for Admin and Superadmin.
+
+● Organization Management: Full end-to-end flow for creating, editing, and joining organizations.
+
+● Core Data Access Layer: Server-side fetch queries for Users, Organizations, and Elections.
+
+● Finalized Landing Page: Integrated scroll animations, dark mode, and interactive UI states.
+
+● Navigation System: Added dynamic Sidebar, breadcrumb navigation, and page progress bar.
+
+● Database Type Safety: Established foundational enums and interfaces for Supabase interactions.
+
+● Profile Management: Initial CRUD functionality for user profile pages.
+
 ## Important Links
 
 ● Design Specs: [Agora Design Specification Documentation](https://github.com/Shinkrbs/agora-docportal.git)

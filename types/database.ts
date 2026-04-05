@@ -1,5 +1,5 @@
 export type UserRole = "admin" | "superadmin";
-export type OrgMemberRole = "owner" | "editor" | "viewer";
+export type OrgMemberRole = "owner" | "editor" | "viewer" | "member";
 
 export type ApprovalStatus = "pending" | "approved" | "rejected";
 export type PaymentStatus = "pending" | "verified" | "rejected";
@@ -33,6 +33,7 @@ export interface Organization {
   created_at: string;
   updated_at: string;
   is_deleted: boolean;
+  logo_url: string | null;
 }
 
 export interface OrganizationMember {

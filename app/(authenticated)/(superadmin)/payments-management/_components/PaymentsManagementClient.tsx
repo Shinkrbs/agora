@@ -1,20 +1,20 @@
 "use client";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { PaymentRowData } from "@/types/database";
+import { OrganizationPaymentRowData } from "../_types/payment-types";
 import { OrganizationPaymentsTable } from "./OrganizationPaymentsTable";
 import { ElectionsPaymentsTable } from "./ElectionsPaymentsTable";
 
 interface PaymentsManagementClientProps {
-  organizationPayments: PaymentRowData[];
+  organizationPayments: OrganizationPaymentRowData[];
+  onPaymentUpdated?: () => void;
   onVerifyPayment?: (paymentId: string) => void;
   onRejectPayment?: (paymentId: string) => void;
 }
 
 export function PaymentsManagementClient({
   organizationPayments,
-  onVerifyPayment,
-  onRejectPayment,
+  onPaymentUpdated,
 }: PaymentsManagementClientProps) {
   return (
     <div className="min-h-screen bg-background">
@@ -52,8 +52,7 @@ export function PaymentsManagementClient({
           <TabsContent value="organizations" className="mt-6">
             <OrganizationPaymentsTable
               payments={organizationPayments}
-              onVerify={onVerifyPayment}
-              onReject={onRejectPayment}
+              onPaymentUpdated={onPaymentUpdated}
             />
           </TabsContent>
 

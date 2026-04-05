@@ -1,10 +1,13 @@
 "use client";
 
-import { PaymentRowData } from "@/types/database";
+import { OrganizationPaymentRowData } from "./_types/payment-types";
 import { PaymentsManagementClient } from "./_components";
+import { useEffect, useState } from "react";
+import { getOrganizationPayments } from "./_queries/organization-payments-query";
+import { toast } from "sonner";
 
 // Mock data for UI development
-const MOCK_PAYMENTS: PaymentRowData[] = [
+const MOCK_PAYMENTS: OrganizationPaymentRowData[] = [
   {
     id: "1",
     amount: 5000,
@@ -88,21 +91,27 @@ const MOCK_PAYMENTS: PaymentRowData[] = [
 ];
 
 export default function PaymentsManagementPage() {
-  const handleVerifyPayment = (paymentId: string) => {
-    console.log("Verify payment:", paymentId);
-    // TODO: Implement server action to verify payment
+  const [organizationPayments, setOrganizationPayments] =
+    useState<OrganizationPaymentRowData[]>(MOCK_PAYMENTS);
+
+  const fetchPayments = async () => {
+    const response = await getOrganizationPayments();
+    if (response.error) {
+      console.error("Failed to fetch payments:", response.error);
+      toast.error("Failed to load payments. Please try again later.");
+    } else {
+      setOrganizationPayments(response.data);
+    }
   };
 
-  const handleRejectPayment = (paymentId: string) => {
-    console.log("Reject payment:", paymentId);
-    // TODO: Implement server action to reject payment
-  };
+  useEffect(() => {
+    fetchPayments();
+  }, []);
 
   return (
     <PaymentsManagementClient
-      organizationPayments={MOCK_PAYMENTS}
-      onVerifyPayment={handleVerifyPayment}
-      onRejectPayment={handleRejectPayment}
+      organizationPayments={organizationPayments}
+      onPaymentUpdated={fetchPayments}
     />
   );
 }

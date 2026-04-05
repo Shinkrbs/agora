@@ -74,26 +74,6 @@ export interface ElectionPayment {
 }
 
 // ==========================================
-// PAYMENT ROW DATA (Flattened/Joined)
-// ==========================================
-export interface PaymentRowData {
-  id: string;
-  amount: number;
-  receipt_url: string;
-  status: PaymentStatus;
-  created_at: string;
-  users: {
-    first_name: string;
-    last_name: string;
-    email: string;
-  };
-  organizations: {
-    name: string;
-    shorthand_name: string;
-  };
-}
-
-// ==========================================
 // ELECTIONS & VOTING
 // ==========================================
 export interface ElectionSession {

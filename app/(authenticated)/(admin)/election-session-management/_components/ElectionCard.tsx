@@ -66,14 +66,10 @@ export function ElectionCard({ election }: ElectionCardProps) {
         {/* Metrics */}
         <div className="bg-secondary rounded p-2 text-xs space-y-1">
           <div className="flex justify-between">
-            <span className="text-secondary-foreground">Positions:</span>
-            <span className="font-medium">{election.metrics.positions_count}</span>
-          </div>
-          <div className="flex justify-between">
             <span className="text-secondary-foreground">Turnout:</span>
             <span className="font-medium">
-              {election.metrics.turnout_percentage !== null
-                ? `${election.metrics.turnout_percentage}%`
+              {election.turnout_percentage !== null
+                ? `${election.turnout_percentage}%`
                 : "—"}
             </span>
           </div>

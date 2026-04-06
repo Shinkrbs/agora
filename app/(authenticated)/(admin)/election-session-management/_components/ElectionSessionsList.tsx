@@ -36,7 +36,6 @@ export function ElectionSessionsList({ initialElections }: ElectionSessionsListP
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div className="space-y-1">
         <h1 className="text-3xl font-bold text-foreground">Election Session Management</h1>
         <p className="text-muted-foreground text-sm">
@@ -44,13 +43,10 @@ export function ElectionSessionsList({ initialElections }: ElectionSessionsListP
         </p>
       </div>
 
-      {/* Search and Filter */}
       <SearchAndFilter onSearch={setSearchQuery} />
 
-      {/* Status Tabs */}
       <ElectionStatusTabs activeStatus={activeStatus} onStatusChange={setActiveStatus} />
 
-      {/* Elections List */}
       <div>
         {filteredElections.length === 0 ? (
           <div className="text-center py-12">

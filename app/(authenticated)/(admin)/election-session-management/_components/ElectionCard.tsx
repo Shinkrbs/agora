@@ -39,7 +39,7 @@ export function ElectionCard({ election }: ElectionCardProps) {
   };
 
   return (
-    <Card className="min-w-80 flex-shrink-0 p-4 hover:shadow-lg transition-shadow">
+    <Card className="min-w-80 shrink-0 p-4  hover:shadow-lg transition-shadow">
       <div className="space-y-3">
         {/* Header with title and status */}
         <div className="flex items-start justify-between gap-2">

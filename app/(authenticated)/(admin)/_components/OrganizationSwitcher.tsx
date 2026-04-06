@@ -67,7 +67,7 @@ export function OrganizationSwitcher({ organizations }: OrganizationSwitcherProp
             className="gap-2 px-3 h-9"
             disabled={isLoading}
           >
-            <div className="w-6 h-6 rounded-full bg-gradient-to-br from-slate-200 to-slate-300 dark:from-slate-700 dark:to-slate-600 overflow-hidden flex items-center justify-center">
+            <div className="w-6 h-6 rounded-full bg-linear-to-br from-slate-200 to-slate-300 dark:from-slate-700 dark:to-slate-600 overflow-hidden flex items-center justify-center">
               <Image
                 src={currentOrganization.logo_url || "/logo.svg"}
                 alt={`${currentOrganization.name} logo`}
@@ -98,7 +98,7 @@ export function OrganizationSwitcher({ organizations }: OrganizationSwitcherProp
                 onClick={() => handleSelectOrganization(org)}
                 className="flex items-center gap-2 py-2 px-2"
               >
-                <div className="w-6 h-6 rounded-full bg-gradient-to-br from-slate-200 to-slate-300 dark:from-slate-700 dark:to-slate-600 overflow-hidden flex items-center justify-center flex-shrink-0">
+                <div className="w-6 h-6 rounded-full bg-linear-to-br from-slate-200 to-slate-300 dark:from-slate-700 dark:to-slate-600 overflow-hidden flex items-center justify-center shrink-0">
                   <Image
                     src={org.logo_url || "/logo.svg"}
                     alt={`${org.name} logo`}
@@ -116,7 +116,7 @@ export function OrganizationSwitcher({ organizations }: OrganizationSwitcherProp
                   </p>
                 </div>
                 {org.id === currentOrganization.id && (
-                  <Check className="h-4 w-4 text-green-500 flex-shrink-0" />
+                  <Check className="h-4 w-4 text-green-500 shrink-0" />
                 )}
               </DropdownMenuItem>
             ))

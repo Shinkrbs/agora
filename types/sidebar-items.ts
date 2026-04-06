@@ -13,29 +13,14 @@ export const adminSidebarItems: SidebarItem[] = [
     icon: LayoutDashboard,
   },
   {
-    title: "Voter Management",
-    href: "/voter-management",
-    icon: UserCog,
-  },
-  {
-    title: "Candidate Management",
-    href: "/candidate-management",
-    icon: FileUser,
-  },
-  {
     title: "Election Session Management",
-    href: "/election-session",
+    href: "/election-session-management",
     icon: Vote,
   },
   {
     title: "Organization Management",
     href: "/organization-management",
     icon: Building2,
-  },
-  {
-    title: "Partylist Management",
-    href: "/partylist-management",
-    icon: BookUser,
   },
   {
     title: "Settings",

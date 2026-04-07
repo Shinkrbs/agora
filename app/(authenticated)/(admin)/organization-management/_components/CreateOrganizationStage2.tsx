@@ -24,8 +24,8 @@ export function CreateOrganizationStage2({
       </div>
 
       <div className="flex gap-2">
-        <div className="h-1 flex-1 bg-blue-500 rounded-full"></div>
-        <div className="h-1 flex-1 bg-blue-500 rounded-full"></div>
+        <div className="h-1 flex-1 bg-primary rounded-full"></div>
+        <div className="h-1 flex-1 bg-primary rounded-full"></div>
         <div className="h-1 flex-1 bg-slate-300 dark:bg-slate-600 rounded-full"></div>
       </div>
 
@@ -51,7 +51,12 @@ export function CreateOrganizationStage2({
 
       <div className="flex gap-3 pt-4">
         {/* CRITICAL: Explicit type="button" prevents accidental form submission */}
-        <Button type="button" variant="outline" onClick={onPrevious} className="flex-1">
+        <Button
+          type="button"
+          variant="outline"
+          onClick={onPrevious}
+          className="flex-1"
+        >
           Previous
         </Button>
         <Button type="button" onClick={onNext} className="flex-1">

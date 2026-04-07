@@ -17,8 +17,7 @@ export function CreateOrganizationStage1({
   onNext,
   errors,
 }: CreateOrganizationStage1Props) {
-  const isFormValid =
-    uiState.name.trim() && uiState.shorthandName.trim();
+  const isFormValid = uiState.name.trim() && uiState.shorthandName.trim();
 
   return (
     <div className="space-y-6">
@@ -32,7 +31,7 @@ export function CreateOrganizationStage1({
       </div>
 
       <div className="flex gap-2">
-        <div className="h-1 flex-1 bg-blue-500 rounded-full"></div>
+        <div className="h-1 flex-1 bg-primary rounded-full"></div>
         <div className="h-1 flex-1 bg-slate-300 dark:bg-slate-600 rounded-full"></div>
         <div className="h-1 flex-1 bg-slate-300 dark:bg-slate-600 rounded-full"></div>
       </div>
@@ -45,9 +44,13 @@ export function CreateOrganizationStage1({
             name="name"
             placeholder="Enter organization name..."
             value={uiState.name}
-            onChange={(e) => setUiState((prev: any) => ({ ...prev, name: e.target.value }))}
+            onChange={(e) =>
+              setUiState((prev: any) => ({ ...prev, name: e.target.value }))
+            }
           />
-          {errors?.name && <p className="text-red-500 text-xs">{errors.name[0]}</p>}
+          {errors?.name && (
+            <p className="text-red-500 text-xs">{errors.name[0]}</p>
+          )}
         </div>
 
         <div className="space-y-2">
@@ -58,7 +61,10 @@ export function CreateOrganizationStage1({
             placeholder="e.g., ACME"
             value={uiState.shorthandName}
             onChange={(e) =>
-              setUiState((prev: any) => ({ ...prev, shorthandName: e.target.value }))
+              setUiState((prev: any) => ({
+                ...prev,
+                shorthandName: e.target.value,
+              }))
             }
             maxLength={10}
           />
@@ -76,7 +82,10 @@ export function CreateOrganizationStage1({
               type="file"
               accept="image/*"
               onChange={(e) =>
-                setUiState((prev: any) => ({ ...prev, logoFile: e.target.files?.[0] || null }))
+                setUiState((prev: any) => ({
+                  ...prev,
+                  logoFile: e.target.files?.[0] || null,
+                }))
               }
               className="hidden"
             />
@@ -103,12 +112,19 @@ export function CreateOrganizationStage1({
               )}
             </label>
           </div>
-          {errors?.logo && <p className="text-red-500 text-xs">{errors.logo[0]}</p>}
+          {errors?.logo && (
+            <p className="text-red-500 text-xs">{errors.logo[0]}</p>
+          )}
         </div>
       </div>
 
       <div className="flex gap-3 pt-4">
-        <Button type="button" onClick={onNext} disabled={!isFormValid} className="flex-1">
+        <Button
+          type="button"
+          onClick={onNext}
+          disabled={!isFormValid}
+          className="flex-1"
+        >
           Next
         </Button>
       </div>

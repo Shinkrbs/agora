@@ -18,12 +18,12 @@ export function SearchAndFilter({ onSearch }: SearchAndFilterProps) {
       setSearchQuery(value);
       onSearch(value);
     },
-    [onSearch]
+    [onSearch],
   );
 
   return (
-    <div className="flex gap-3 items-center justify-between">
-      <div className="flex-1 relative">
+    <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
+      <div className="w-full sm:flex-1 relative">
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
           placeholder="Search elections by title..."

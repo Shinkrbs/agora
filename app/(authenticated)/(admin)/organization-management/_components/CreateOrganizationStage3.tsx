@@ -33,9 +33,9 @@ export function CreateOrganizationStage3({
       </div>
 
       <div className="flex gap-2">
-        <div className="h-1 flex-1 bg-blue-500 rounded-full"></div>
-        <div className="h-1 flex-1 bg-blue-500 rounded-full"></div>
-        <div className="h-1 flex-1 bg-blue-500 rounded-full"></div>
+        <div className="h-1 flex-1 bg-primary rounded-full"></div>
+        <div className="h-1 flex-1 bg-primary rounded-full"></div>
+        <div className="h-1 flex-1 bg-primary rounded-full"></div>
       </div>
 
       <div className="bg-amber-50 dark:bg-amber-950 p-4 rounded-lg border border-amber-200 dark:border-amber-800">
@@ -53,7 +53,10 @@ export function CreateOrganizationStage3({
             type="file"
             accept="image/*"
             onChange={(e) =>
-              setUiState((prev: any) => ({ ...prev, receiptFile: e.target.files?.[0] || null }))
+              setUiState((prev: any) => ({
+                ...prev,
+                receiptFile: e.target.files?.[0] || null,
+              }))
             }
             className="hidden"
           />
@@ -82,22 +85,24 @@ export function CreateOrganizationStage3({
             )}
           </label>
         </div>
-        {errors?.receipt && <p className="text-red-500 text-xs">{errors.receipt[0]}</p>}
+        {errors?.receipt && (
+          <p className="text-red-500 text-xs">{errors.receipt[0]}</p>
+        )}
       </div>
 
       <div className="flex gap-3 pt-4">
-        <Button 
-          type="button" 
-          variant="outline" 
-          onClick={onPrevious} 
+        <Button
+          type="button"
+          variant="outline"
+          onClick={onPrevious}
           disabled={isPending}
           className="flex-1"
         >
           Previous
         </Button>
-        <Button 
+        <Button
           type="submit" // CRITICAL: This natively submits the form action
-          disabled={!isReceiptValid || isPending} 
+          disabled={!isReceiptValid || isPending}
           className="flex-1"
         >
           {isPending ? "Submitting..." : "Submit"}

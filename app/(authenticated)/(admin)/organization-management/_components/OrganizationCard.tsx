@@ -68,7 +68,7 @@ export function OrganizationCard({
       <Card className="relative p-6 h-full hover:shadow-lg transition-shadow flex flex-col">
         <div className="flex gap-4 mb-4">
           <div className="shrink-0">
-            <div className="w-14 h-14 rounded-full bg-linear-to-br from-slate-200 to-slate-300 dark:from-slate-700 dark:to-slate-600 overflow-hidden flex items-center justify-center ring-2 ring-slate-100 dark:ring-slate-800">
+            <div className="w-14 h-14 rounded-full bg-transparent overflow-hidden flex items-center justify-center ring-1 ring-slate-300 dark:ring-slate-700">
               <Image
                 src={logoUrl || "/logo.svg"}
                 alt={`${name} logo`}

@@ -1,6 +1,6 @@
 "use server";
 
-import { getElectionSessionsByOrganizationId as fetchElections } from "@/lib/queries/elections-queries";
+import { getElectionsByOrganization as fetchElections } from "../_queries/election-sessions";
 
 export async function fetchElectionsAction(organizationId: string) {
   return await fetchElections(organizationId);

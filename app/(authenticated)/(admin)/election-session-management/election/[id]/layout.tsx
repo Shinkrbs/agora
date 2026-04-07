@@ -13,7 +13,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { UniversalElectionHeader } from "./_components";
-import { mockElectionData, MockElectionData } from "./data/mock-data";
+import { LoadingSpinner } from "./_components";
+import { mockElectionData, MockElectionData, mockElectionDataCompleted, mockElectionDataDraft, mockElectionDataPending } from "./data/mock-data";
 
 interface ElectionLayoutProps {
   children: React.ReactNode;
@@ -36,9 +37,15 @@ export default function ElectionLayout({
   children,
   params,
 }: ElectionLayoutProps) {
+  const [isLoading, setIsLoading] = React.useState(false);
   const { id: electionId } = React.use(params);
   const pathname = usePathname();
   const router = useRouter();
+
+  // Hide spinner when pathname changes
+  React.useEffect(() => {
+    setIsLoading(false);
+  }, [pathname]);
 
   // Determine active tab based on current pathname
   const activeTab =
@@ -49,6 +56,7 @@ export default function ElectionLayout({
   const handleTabChange = (value: string) => {
     const selectedTab = tabs.find((tab) => tab.value === value);
     if (!selectedTab) return;
+    setIsLoading(true);
     router.push(
       `/election-session-management/election/${electionId}/${selectedTab.href}`,
     );
@@ -121,7 +129,9 @@ export default function ElectionLayout({
         </div>
       </div>
       {/* Content */}
-      <div className="mt-6">{children}</div>
+      <div className="mt-6">
+        {isLoading ? <LoadingSpinner isVisible={true} /> : children}
+      </div>
     </div>
   );
 }

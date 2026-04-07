@@ -23,13 +23,20 @@ export function ElectionCard({ election }: ElectionCardProps) {
     return colors[status];
   };
 
-  const getPaymentStatusColor = (status: PaymentStatus) => {
+  const getPaymentStatusColor = (status: PaymentStatus | null) => {
+    if (!status) return "bg-secondary text-secondary-foreground";
     const colors: Record<PaymentStatus, string> = {
       pending: "bg-secondary text-secondary-foreground",
       verified: "bg-accent text-accent-foreground",
       rejected: "bg-destructive/20 text-destructive",
     };
     return colors[status];
+  };
+
+  const getPaymentStatusDisplay = (status: PaymentStatus | null) => {
+    return status 
+      ? status.charAt(0).toUpperCase() + status.slice(1)
+      : "Not paid";
   };
 
   const formatDate = (dateString: string | null) => {
@@ -84,8 +91,7 @@ export function ElectionCard({ election }: ElectionCardProps) {
               election.payment_status
             )}`}
           >
-            {election.payment_status.charAt(0).toUpperCase() +
-              election.payment_status.slice(1)}
+            {getPaymentStatusDisplay(election.payment_status)}
           </Badge>
         </div>
       </div>

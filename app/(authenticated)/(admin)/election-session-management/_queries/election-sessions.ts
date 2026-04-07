@@ -50,7 +50,7 @@ export async function getElectionsByOrganization(organizationId: string): Promis
                 status: election.status,
                 start_date: election.start_date,
                 end_date: election.end_date,
-                payment_status: paymentInfo ? paymentInfo.status : null,
+                payment_status: paymentInfo?.status ?? "Not Paid",
                 turnout_percentage: turnoutInfo ? turnoutInfo.turnout_percentage : 0,
             };
         });

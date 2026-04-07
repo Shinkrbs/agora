@@ -6,6 +6,7 @@ export const createElectionSchema = z.object({
     .min(1, "Election title is required")
     .min(3, "Election title must be at least 3 characters")
     .max(255, "Election title must be less than 255 characters"),
+  organization_id: z.string().uuid("Invalid organization ID"),
 });
 
 export type CreateElectionInput = z.infer<typeof createElectionSchema>;

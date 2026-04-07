@@ -1,7 +1,10 @@
+"use client";
+
 import { ElectionCardSummary } from "../_types/election-card-type";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ElectionStatus, PaymentStatus } from "@/types/database";
+import Link from "next/link";
 
 interface ElectionCardProps {
   election: ElectionCardSummary;
@@ -39,7 +42,8 @@ export function ElectionCard({ election }: ElectionCardProps) {
   };
 
   return (
-    <Card className="min-w-80 shrink-0 p-4  hover:shadow-lg transition-shadow">
+    <Link href={`/election-session-management/election/${election.id}/dashboard`}>
+      <Card className="min-w-80 shrink-0 p-4 hover:shadow-lg transition-shadow cursor-pointer">
       <div className="space-y-3">
         <div className="flex items-start justify-between gap-2">
           <h3 className="font-semibold text-sm leading-tight text-foreground flex-1">
@@ -85,6 +89,7 @@ export function ElectionCard({ election }: ElectionCardProps) {
           </Badge>
         </div>
       </div>
-    </Card>
+      </Card>
+    </Link>
   );
 }

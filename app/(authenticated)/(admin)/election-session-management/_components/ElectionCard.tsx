@@ -64,16 +64,17 @@ export function ElectionCard({ election }: ElectionCardProps) {
         </div>
 
         {/* Metrics */}
-        <div className="bg-secondary rounded p-2 text-xs space-y-1">
-          <div className="flex justify-between">
-            <span className="text-secondary-foreground">Turnout:</span>
-            <span className="font-medium">
-              {election.turnout_percentage !== null
-                ? `${election.turnout_percentage}%`
+        {election.turnout_percentage !== undefined && (
+          <div className="bg-secondary rounded p-2 text-xs space-y-1">
+            <div className="flex justify-between">
+              <span className="text-secondary-foreground">Turnout:</span>
+              <span className="font-medium">
+                {election.turnout_percentage !== null
+                  ? `${election.turnout_percentage}%`
                 : "—"}
             </span>
           </div>
-        </div>
+        </div>)}
 
         {/* Payment Status */}
         <div className="border-t border-border pt-2">

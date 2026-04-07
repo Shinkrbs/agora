@@ -5,6 +5,7 @@ import { createElectionSchema } from "../_schemas/create-election-schema";
 import { createClient } from "@/lib/supabase/server";
 import { getCurrentUser } from "@/lib/queries/users-queries";
 import { DEFAULT_POSITIONS } from "../templates/position-templates";
+import { isMemberOfOrganization } from "../_queries/election-sessions";
 
 export async function createElectionAction(
   prevState: any,
@@ -25,6 +26,10 @@ export async function createElectionAction(
 
     if(!user) {
       throw new Error("Unauthorized");
+    }
+
+    if(! (await isMemberOfOrganization(validatedData.organization_id))) {
+      throw new Error("User is not a member of the organization");
     }
 
     const { data: electionData, error: electionError } = await supabase.from("election_sessions").insert({

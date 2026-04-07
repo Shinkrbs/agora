@@ -27,7 +27,7 @@ export async function getElectionsByOrganization(organizationId: string): Promis
         const { data, error } = await supabase.
             from("election_sessions").
             select('id, title, status, start_date, end_date').
-            eq("organization_id", organizationId);
+            eq("organization_id", organizationId).eq("is_deleted", false);
 
         if (error) {
             console.error("Error fetching elections:", error);
@@ -41,9 +41,11 @@ export async function getElectionsByOrganization(organizationId: string): Promis
             return { data: null, message: null, error: "Failed to fetch payment statuses" };
         }
 
+        const turnoutRows = turnOutData ?? [];
+        const paymentStatusRows = paymentStatusData ?? [];
         const elections: ElectionCardSummary[] = data.map((election) => {
-            const turnoutInfo = turnOutData.find((t: any) => t.election_id === election.id);
-            const paymentInfo = paymentStatusData.find((p: any) => p.election_id === election.id);
+            const turnoutInfo = turnoutRows.find((t: any) => t.election_id === election.id);
+            const paymentInfo = paymentStatusRows.find((p: any) => p.election_id === election.id);
             return {
                 id: election.id,
                 title: election.title,
@@ -68,11 +70,14 @@ export async function isMemberOfOrganization(organizationId: string): Promise<bo
         const supabase = await createClient(cookieStore);
         const user = await getCurrentUser();
 
+        if (!user) {
+            return false;
+        }
         const { data, error } = await supabase
             .from("organization_members")
             .select("*")
             .eq("organization_id", organizationId)
-            .eq("user_id", user?.id).maybeSingle();
+            .eq("user_id", user.id).maybeSingle();
         
         if (error) {
             console.error("Error checking organization membership:", error);

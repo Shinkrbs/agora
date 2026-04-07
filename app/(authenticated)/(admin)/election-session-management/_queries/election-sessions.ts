@@ -51,7 +51,7 @@ export async function getElectionsByOrganization(organizationId: string): Promis
                 start_date: election.start_date,
                 end_date: election.end_date,
                 payment_status: paymentInfo ? paymentInfo.status : null,
-                turnout_percentage: turnoutInfo ? turnoutInfo.turnout_percentage : null,
+                turnout_percentage: turnoutInfo ? turnoutInfo.turnout_percentage : 0,
             };
         });
 

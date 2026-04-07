@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function CandidateManagementPage({
+export default function ElectionDashboardPage({
   params,
 }: {
   params: Promise<{
@@ -11,12 +11,12 @@ export default function CandidateManagementPage({
   return (
     <div className="space-y-6">
       <div className="rounded-lg border border-border bg-card p-6">
-        <h2 className="text-xl font-semibold text-foreground mb-2">Candidate Management</h2>
-        <p className="text-muted-foreground text-sm">
-          Manage candidates for election ID: {id}
+        <h2 className="text-xl font-semibold text-foreground mb-2">Dashboard</h2>
+        <p className="text-muted-foreground">
+          Election ID: {id}
         </p>
         <p className="text-muted-foreground text-sm mt-4">
-          Candidate management content coming soon...
+          Dashboard content coming soon...
         </p>
       </div>
     </div>

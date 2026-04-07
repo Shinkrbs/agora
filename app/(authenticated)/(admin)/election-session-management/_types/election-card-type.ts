@@ -6,11 +6,6 @@ export interface ElectionCardSummary {
   status: ElectionStatus;
   start_date: string | null;
   end_date: string | null;
-  
   payment_status: PaymentStatus; 
-
-  metrics: {
-    positions_count: number;
-    turnout_percentage: number | null; 
-  };
+  turnout_percentage: number | null; 
 }

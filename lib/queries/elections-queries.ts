@@ -40,25 +40,6 @@ export async function getAllElectionSessions(): Promise<ElectionSession[] | null
     }
 }
 
-export async function getElectionSessionsByOrganizationId(orgId: string): Promise<ElectionSession[] | null> {
-    try {
-        const supabase = await createClient(await cookies());
-        const { data: sessions, error } = await supabase
-            .from("election_sessions")
-            .select("*")
-            .eq("organization_id", orgId)
-            .eq("is_deleted", false);
-        if (error) {
-            console.error("Error fetching election sessions for organization:", error);
-            return null; 
-        }
-        return sessions as ElectionSession[];
-    } catch (error) {
-        console.error("Unexpected error in getElectionSessionsByOrganizationId:", error);
-        return null;
-    }
-}
-
 export async function getElectionSessionsByStatus(status: ElectionStatus): Promise<ElectionSession[] | null> {
     try {
         const supabase = await createClient(await cookies());

@@ -18,12 +18,10 @@ export function ElectionSessionsList({ initialElections }: ElectionSessionsListP
   const filteredElections = useMemo(() => {
     let filtered = initialElections;
 
-    // Filter by status
     if (activeStatus !== "all") {
       filtered = filtered.filter((election) => election.status === activeStatus);
     }
 
-    // Filter by search query
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter((election) =>

@@ -3,6 +3,7 @@ import { Arimo, Space_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider as NextThemeProvider } from "next-themes";
 import NextTopLoader from "nextjs-toploader";
+import { Toaster } from "@/components/ui/sonner";
 
 // Configure Arimo
 const arimo = Arimo({
@@ -42,6 +43,7 @@ export default function RootLayout({
         >
           <NextTopLoader color="#61e267"/>
           {children}
+          <Toaster />
         </NextThemeProvider>
       </body>
     </html>

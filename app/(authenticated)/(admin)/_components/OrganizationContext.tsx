@@ -85,3 +85,8 @@ export function useOrganization() {
   }
   return context;
 }
+
+export function useCurrentOrganization(): Organization | null {
+  const { currentOrganization } = useOrganization();
+  return currentOrganization;
+}

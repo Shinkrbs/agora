@@ -2,7 +2,7 @@ export type UserRole = "admin" | "superadmin";
 export type OrgMemberRole = "owner" | "editor" | "viewer" | "member";
 
 export type ApprovalStatus = "pending" | "approved" | "rejected";
-export type PaymentStatus = "pending" | "verified" | "rejected";
+export type PaymentStatus = "unpaid" | "pending" | "verified" | "rejected";
 export type ElectionStatus = "draft" | "scheduled" | "active" | "completed" | "cancelled" | "archived";
 export type VoterCodeStatus = "unused" | "used" | "revoked";
 

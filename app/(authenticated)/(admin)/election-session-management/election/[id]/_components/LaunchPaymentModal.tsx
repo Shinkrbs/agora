@@ -31,7 +31,7 @@ export function LaunchPaymentModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-125">
         <DialogHeader>
           <DialogTitle>Launch Election & Complete Payment</DialogTitle>
           <DialogDescription>

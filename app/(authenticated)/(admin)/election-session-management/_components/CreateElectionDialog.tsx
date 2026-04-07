@@ -8,10 +8,12 @@ import { Label } from "@/components/ui/label";
 import { Plus } from "lucide-react";
 import { toast } from "sonner";
 import { createElectionAction } from "../_actions/create-election";
+import { useCurrentOrganization } from "../../_components/OrganizationContext";
 
 export function CreateElectionDialog() {
   const [open, setOpen] = useState(false);
   const [state, formAction, isPending] = useActionState(createElectionAction, null);
+  const organization = useCurrentOrganization();  
 
   const handleOpenChange = (newOpen: boolean) => {
     setOpen(newOpen);
@@ -57,6 +59,10 @@ export function CreateElectionDialog() {
               disabled={isPending}
               required
             />
+          </div>
+
+          <div>
+            <input type="hidden" name="organization_id" value={organization?.id || ""} />
           </div>
 
           <div className="flex gap-2 justify-end pt-2">

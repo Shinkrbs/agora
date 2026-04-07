@@ -4,7 +4,7 @@ import React from "react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import NextLink from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { ArrowLeft, ChevronDown } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -12,12 +12,16 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { UniversalElectionHeader } from "./_components";
+import { mockElectionData, MockElectionData } from "./data/mock-data";
 
 interface ElectionLayoutProps {
   children: React.ReactNode;
   params: Promise<{
     id: string;
   }>;
+  // New UI Props passed from a parent Server Component
+  mockData?: MockElectionData;
 }
 
 const tabs = [
@@ -52,26 +56,18 @@ export default function ElectionLayout({
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="space-y-2">
-        <NextLink
-          href="/election-session-management"
-          className="inline-flex w-fit pb-3"
-        >
-          <Button
-            variant="ghost"
-            size="sm"
-            className="h-8 px-2 text-muted-foreground hover:text-foreground"
-          >
-            <ArrowLeft className="mr-1 h-4 w-4" />
-            Back to Election Sessions
-          </Button>
-        </NextLink>
-        <h1 className="text-3xl font-bold text-foreground">Election Details</h1>
-        <p className="text-muted-foreground text-sm">
-          Manage and view details of your election.
-        </p>
-      </div>
+      {/* Universal Election Header */}
+      {mockElectionData && (
+        <UniversalElectionHeader
+          electionId={electionId}
+          title={mockElectionData.title}
+          startDate={mockElectionData.startDate}
+          endDate={mockElectionData.endDate}
+          status={mockElectionData.status}
+          paymentStatus={mockElectionData.paymentStatus}
+          isSetupComplete={mockElectionData.isSetupComplete}
+        />
+      )}
 
       {/* Tabs */}
       <div className="w-full">
@@ -124,7 +120,6 @@ export default function ElectionLayout({
           </Tabs>
         </div>
       </div>
-
       {/* Content */}
       <div className="mt-6">{children}</div>
     </div>

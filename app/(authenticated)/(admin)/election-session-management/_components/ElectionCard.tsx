@@ -41,7 +41,6 @@ export function ElectionCard({ election }: ElectionCardProps) {
   return (
     <Card className="min-w-80 shrink-0 p-4  hover:shadow-lg transition-shadow">
       <div className="space-y-3">
-        {/* Header with title and status */}
         <div className="flex items-start justify-between gap-2">
           <h3 className="font-semibold text-sm leading-tight text-foreground flex-1">
             {election.title}
@@ -51,7 +50,6 @@ export function ElectionCard({ election }: ElectionCardProps) {
           </Badge>
         </div>
 
-        {/* Dates */}
         <div className="text-xs text-muted-foreground space-y-1">
           <div className="flex justify-between">
             <span className="font-medium">Start:</span>
@@ -63,7 +61,6 @@ export function ElectionCard({ election }: ElectionCardProps) {
           </div>
         </div>
 
-        {/* Metrics */}
         {election.turnout_percentage !== undefined && (
           <div className="bg-secondary rounded p-2 text-xs space-y-1">
             <div className="flex justify-between">
@@ -76,7 +73,6 @@ export function ElectionCard({ election }: ElectionCardProps) {
           </div>
         </div>)}
 
-        {/* Payment Status */}
         <div className="border-t border-border pt-2">
           <div className="text-xs text-muted-foreground mb-1">Payment Status</div>
           <Badge

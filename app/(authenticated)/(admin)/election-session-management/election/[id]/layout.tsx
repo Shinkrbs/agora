@@ -132,13 +132,15 @@ export default function ElectionLayout({
             value={activeTab}
             onValueChange={handleTabChange}
             className="w-full"
+            suppressHydrationWarning
           >
-            <TabsList className="w-full h-auto justify-start gap-1 rounded-xl border border-border/50 bg-muted/50 p-1">
+            <TabsList className="w-full h-auto justify-start gap-1 rounded-xl border border-border/50 bg-muted/50 p-1" suppressHydrationWarning>
               {tabs.map((tab) => (
                 <TabsTrigger
                   key={tab.value}
                   value={tab.value}
                   className="rounded-lg border-0 px-4 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-background/60 hover:text-foreground data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm data-[state=active]:ring-1 data-[state=active]:ring-border/60"
+                  suppressHydrationWarning
                 >
                   {tab.label}
                 </TabsTrigger>

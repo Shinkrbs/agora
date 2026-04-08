@@ -46,7 +46,6 @@ export default function ElectionLayout({
   const router = useRouter();
   const [electionData, setElectionData] = useState<ElectionHeaderData | null>(null);
 
-  // Fetch election data when electionId changes
   useEffect(() => {
     async function fetchElectionData() {
       setIsLoading(true);
@@ -66,12 +65,10 @@ export default function ElectionLayout({
     }
   }, [electionId]);
 
-  // Reset loading state when tab changes (pathname changes)
   useEffect(() => {
     setIsLoading(false);
   }, [pathname]);
 
-  // Determine active tab based on current pathname
   const activeTab =
     tabs.find((tab) => pathname.includes(tab.href))?.value || "dashboard";
   const activeTabConfig =
@@ -88,7 +85,6 @@ export default function ElectionLayout({
 
   return (
     <div className="space-y-6">
-      {/* Universal Election Header */}
       {(electionHeaderData || electionData) && (
         <UniversalElectionHeader
           electionId={electionId}
@@ -101,7 +97,6 @@ export default function ElectionLayout({
         />
       )}
 
-      {/* Tabs */}
       <div className="w-full">
         <div className="md:hidden">
           <DropdownMenu>
@@ -152,7 +147,6 @@ export default function ElectionLayout({
           </Tabs>
         </div>
       </div>
-      {/* Content */}
       <div className="mt-6">
         {isLoading ? <LoadingSpinner isVisible={true} /> : children}
       </div>

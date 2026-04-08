@@ -17,7 +17,7 @@ import { formatDate } from "@/lib/utils";
 import { EditDetailsModal } from "./EditDetailsModal";
 import { LaunchPaymentModal } from "./LaunchPaymentModal";
 
-interface UniversalElectionHeaderProps {
+export interface UniversalElectionHeaderProps {
   electionId: string;
   title: string | null;
   startDate: string | null;
@@ -57,6 +57,15 @@ export function UniversalElectionHeader({
 }: UniversalElectionHeaderProps) {
   const [editDetailsOpen, setEditDetailsOpen] = useState(false);
   const [launchPaymentOpen, setLaunchPaymentOpen] = useState(false);
+  const election: UniversalElectionHeaderProps = {
+    electionId,
+    title,
+    startDate,
+    endDate,
+    status,
+    paymentStatus,
+    isSetupComplete,
+  };
 
   return (
     <div className="space-y-4 pb-2">
@@ -180,6 +189,7 @@ export function UniversalElectionHeader({
 
       {/* Modals */}
       <EditDetailsModal
+        election={election}
         isOpen={editDetailsOpen}
         onOpenChange={setEditDetailsOpen}
       />

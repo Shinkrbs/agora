@@ -7,7 +7,6 @@ import {
   Calendar,
   Settings,
   Play,
-  StopCircle,
   Download,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";

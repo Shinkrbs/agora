@@ -122,7 +122,7 @@ export function EditDetailsModal({
             )}
 
             <DialogFooter className="py-3">
-              <Button variant="outline" onClick={() => onOpenChange(false)}>
+              <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
                 Cancel
               </Button>
               <Button type="submit" disabled={isPending}>

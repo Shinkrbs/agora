@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, Loader2, Check } from "lucide-react";
+import { ChevronDown, Check } from "lucide-react";
 import Image from "next/image";
 import { toast } from "sonner";
 
@@ -18,13 +18,19 @@ interface OrganizationSwitcherProps {
   organizations: Organization[];
 }
 
-export function OrganizationSwitcher({ organizations }: OrganizationSwitcherProps) {
-  const { currentOrganization, setCurrentOrganization, isLoading, setIsLoading } =
-    useOrganization();
+export function OrganizationSwitcher({
+  organizations,
+}: OrganizationSwitcherProps) {
+  const {
+    currentOrganization,
+    setCurrentOrganization,
+    isLoading,
+    setIsLoading,
+  } = useOrganization();
   const [isOpen, setIsOpen] = useState(false);
 
   const approvedOrganizations = organizations.filter(
-    (org) => org.approval_status === "approved"
+    (org) => org.approval_status === "approved",
   );
 
   if (!currentOrganization || approvedOrganizations.length === 0) {
@@ -49,17 +55,6 @@ export function OrganizationSwitcher({ organizations }: OrganizationSwitcherProp
 
   return (
     <>
-      {isLoading && (
-        <div className="fixed inset-0 bg-black/20 flex items-center justify-center z-50">
-          <div className="bg-white dark:bg-slate-950 rounded-lg px-6 py-4 flex items-center gap-3 shadow-lg">
-            <Loader2 className="h-5 w-5 animate-spin text-blue-500" />
-            <p className="text-slate-900 dark:text-slate-50 font-medium">
-              Switching organization...
-            </p>
-          </div>
-        </div>
-      )}
-
       <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
         <DropdownMenuTrigger asChild>
           <Button
@@ -67,7 +62,7 @@ export function OrganizationSwitcher({ organizations }: OrganizationSwitcherProp
             className="gap-2 px-3 h-9"
             disabled={isLoading}
           >
-            <div className="w-6 h-6 rounded-full bg-linear-to-br from-slate-200 to-slate-300 dark:from-slate-700 dark:to-slate-600 overflow-hidden flex items-center justify-center">
+            <div className="w-6 h-6 border rounded-full bg-transparent overflow-hidden flex items-center justify-center">
               <Image
                 src={currentOrganization.logo_url || "/logo.svg"}
                 alt={`${currentOrganization.name} logo`}
@@ -98,7 +93,7 @@ export function OrganizationSwitcher({ organizations }: OrganizationSwitcherProp
                 onClick={() => handleSelectOrganization(org)}
                 className="flex items-center gap-2 py-2 px-2"
               >
-                <div className="w-6 h-6 rounded-full bg-linear-to-br from-slate-200 to-slate-300 dark:from-slate-700 dark:to-slate-600 overflow-hidden flex items-center justify-center shrink-0">
+                <div className="w-6 h-6 rounded-full border bg-transparent overflow-hidden flex items-center justify-center shrink-0">
                   <Image
                     src={org.logo_url || "/logo.svg"}
                     alt={`${org.name} logo`}

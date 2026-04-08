@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from "react";
 import { Input } from "@/components/ui/input";
-import { X } from "lucide-react";
+import { Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface PaymentSearchBarProps {
@@ -22,7 +22,7 @@ export function PaymentSearchBar({
       setSearchQuery(value);
       onSearchChange(value);
     },
-    [onSearchChange]
+    [onSearchChange],
   );
 
   const handleClear = useCallback(() => {
@@ -31,22 +31,24 @@ export function PaymentSearchBar({
   }, [onSearchChange]);
 
   return (
-    <div className="relative w-full">
+    <div className="relative w-full max-w-xl">
+      <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
       <Input
         type="text"
         placeholder={placeholder}
         value={searchQuery}
         onChange={handleChange}
-        className="pl-4 pr-10"
+        className="h-10 rounded-lg bg-background pl-9 pr-10"
       />
       {searchQuery && (
         <Button
           variant="ghost"
-          size="sm"
-          className="absolute right-1 top-1/2 -translate-y-1/2 h-6 w-6 p-0"
+          size="icon-sm"
+          className="absolute right-1.5 top-1/2 -translate-y-1/2"
           onClick={handleClear}
+          aria-label="Clear search"
         >
-          <X className="h-4 w-4" />
+          <X className="h-3.5 w-3.5" />
         </Button>
       )}
     </div>

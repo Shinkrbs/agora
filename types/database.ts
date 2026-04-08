@@ -113,6 +113,7 @@ export interface Partylist {
 export interface Candidate {
   id: string;
   position_id: string;
+  election_id: string;
   partylist_id: string | null; // Null if running independently
   first_name: string;
   last_name: string;

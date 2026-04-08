@@ -11,15 +11,18 @@ export function PaymentStatusBadge({ status }: PaymentStatusBadgeProps) {
   const statusConfig = {
     pending: {
       label: "Pending",
-      className: "bg-yellow-100 text-yellow-800 border-yellow-300 hover:bg-yellow-100",
+      className:
+        "border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-50 dark:border-amber-800/70 dark:bg-amber-950/40 dark:text-amber-300",
     },
     verified: {
       label: "Verified",
-      className: "bg-green-100 text-green-800 border-green-300 hover:bg-green-100",
+      className:
+        "border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-50 dark:border-emerald-800/70 dark:bg-emerald-950/40 dark:text-emerald-300",
     },
     rejected: {
       label: "Rejected",
-      className: "bg-red-100 text-red-800 border-red-300 hover:bg-red-100",
+      className:
+        "border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-50 dark:border-rose-800/70 dark:bg-rose-950/40 dark:text-rose-300",
     },
   };
 

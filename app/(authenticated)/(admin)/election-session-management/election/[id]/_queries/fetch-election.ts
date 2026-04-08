@@ -98,7 +98,7 @@ export async function fetchElection(electionId: string): Promise<{data: Election
         if(error) {
             return { data: null, message: "Error fetching election", error: error.message };
         }
-        const isSetupComplete = election.startDate !== null && election.endDate !== null && (await voterCount(electionId)) > 0 && (await candidateCount(electionId)) > 0 && (await positionCount(electionId)) > 0;
+        const isSetupComplete = data.start_date !== null && data.end_date !== null && (await voterCount(electionId)) > 0 && (await candidateCount(electionId)) > 0 && (await positionCount(electionId)) > 0;
         const payment_status = await paymentStatus(electionId);
 
         if(data) {

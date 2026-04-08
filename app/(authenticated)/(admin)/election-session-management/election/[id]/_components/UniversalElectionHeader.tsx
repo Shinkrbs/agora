@@ -19,7 +19,7 @@ import { LaunchPaymentModal } from "./LaunchPaymentModal";
 
 interface UniversalElectionHeaderProps {
   electionId: string;
-  title: string;
+  title: string | null;
   startDate: string | null;
   endDate: string | null;
   status: ElectionStatus;

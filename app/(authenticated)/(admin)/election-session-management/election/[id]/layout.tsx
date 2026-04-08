@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import NextLink from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -15,6 +14,10 @@ import {
 import { UniversalElectionHeader } from "./_components";
 import { LoadingSpinner } from "./_components";
 import { mockElectionData, MockElectionData, mockElectionDataCompleted, mockElectionDataDraft, mockElectionDataPending } from "./data/mock-data";
+import { use, useEffect, useState } from "react";
+import { ElectionHeaderData } from "./_types/election-header";
+import { fetchElectionAction } from "./_actions/fetch-election-action";
+import { toast } from "sonner"
 
 interface ElectionLayoutProps {
   children: React.ReactNode;
@@ -22,7 +25,7 @@ interface ElectionLayoutProps {
     id: string;
   }>;
   // New UI Props passed from a parent Server Component
-  mockData?: MockElectionData;
+  electionHeaderData: ElectionHeaderData | null; // Optional prop for election header data
 }
 
 const tabs = [
@@ -36,14 +39,35 @@ const tabs = [
 export default function ElectionLayout({
   children,
   params,
+  electionHeaderData,
 }: ElectionLayoutProps) {
-  const [isLoading, setIsLoading] = React.useState(false);
-  const { id: electionId } = React.use(params);
+  const [isLoading, setIsLoading] = useState(true);
+  const { id: electionId } = use(params);
   const pathname = usePathname();
   const router = useRouter();
+  const [electionData, setElectionData] = useState<ElectionHeaderData | null>(null);
 
-  // Hide spinner when pathname changes
-  React.useEffect(() => {
+  // Fetch election data when electionId changes
+  useEffect(() => {
+    async function fetchElectionData() {
+      setIsLoading(true);
+      const response = await fetchElectionAction(electionId);
+      if(response.error) {
+        console.error("Error fetching election data:", response.error);
+        toast.error("Error fetching election data: " + response.error);
+        setElectionData(null);
+      } else {
+        setElectionData(response.data);
+      }
+      setIsLoading(false);
+    }
+    if (electionId) {
+      fetchElectionData();
+    }
+  }, [electionId]);
+
+  // Reset loading state when tab changes (pathname changes)
+  useEffect(() => {
     setIsLoading(false);
   }, [pathname]);
 
@@ -65,15 +89,15 @@ export default function ElectionLayout({
   return (
     <div className="space-y-6">
       {/* Universal Election Header */}
-      {mockElectionData && (
+      {(electionHeaderData || electionData) && (
         <UniversalElectionHeader
           electionId={electionId}
-          title={mockElectionData.title}
-          startDate={mockElectionData.startDate}
-          endDate={mockElectionData.endDate}
-          status={mockElectionData.status}
-          paymentStatus={mockElectionData.paymentStatus}
-          isSetupComplete={mockElectionData.isSetupComplete}
+          title={(electionHeaderData || electionData)?.title ?? null}
+          startDate={(electionHeaderData || electionData)?.startDate ?? null}
+          endDate={(electionHeaderData || electionData)?.endDate ?? null}
+          status={(electionHeaderData || electionData)?.status ?? "draft"}
+          paymentStatus={(electionHeaderData || electionData)?.paymentStatus ?? "unpaid"}
+          isSetupComplete={(electionHeaderData || electionData)?.isSetupComplete ?? false}
         />
       )}
 

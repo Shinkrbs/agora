@@ -107,7 +107,7 @@ export function LaunchPaymentModal({
           {/* GCash QR Code Placeholder */}
           <div className="space-y-3">
             <Label>GCash QR Code</Label>
-            <div className="flex items-center justify-center rounded-lg border-2 border-dashed border-border bg-gradient-to-br from-muted to-muted/50 p-6">
+            <div className="flex items-center justify-center rounded-lg border-2 border-dashed border-border bg-linear-to-br from-muted to-muted/50 p-6">
               <Image 
                 src="/gcash.jpg" 
                 alt="GCash QR Code" 

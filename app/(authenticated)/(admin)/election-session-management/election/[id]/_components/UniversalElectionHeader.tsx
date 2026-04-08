@@ -16,6 +16,7 @@ import { ElectionStatus, PaymentStatus } from "@/types/database";
 import { formatDate } from "@/lib/utils";
 import { EditDetailsModal } from "./EditDetailsModal";
 import { LaunchPaymentModal } from "./LaunchPaymentModal";
+import { useCurrentOrganization } from "@/app/(authenticated)/(admin)/_components/OrganizationContext";
 
 export interface UniversalElectionHeaderProps {
   electionId: string;
@@ -57,6 +58,7 @@ export function UniversalElectionHeader({
 }: UniversalElectionHeaderProps) {
   const [editDetailsOpen, setEditDetailsOpen] = useState(false);
   const [launchPaymentOpen, setLaunchPaymentOpen] = useState(false);
+  const organization = useCurrentOrganization();
   const election: UniversalElectionHeaderProps = {
     electionId,
     title,
@@ -146,13 +148,6 @@ export function UniversalElectionHeader({
               </Button>
             )}
 
-            {status === "active" && (
-              <Button variant="destructive" className="gap-2">
-                <StopCircle className="h-4 w-4" />
-                End Election Early
-              </Button>
-            )}
-
             {status === "completed" && (
               <Button variant="outline" className="gap-2">
                 <Download className="h-4 w-4" />
@@ -194,6 +189,8 @@ export function UniversalElectionHeader({
         onOpenChange={setEditDetailsOpen}
       />
       <LaunchPaymentModal
+        electionId={electionId}
+        organizationId={organization?.id ?? ""}
         isOpen={launchPaymentOpen}
         onOpenChange={setLaunchPaymentOpen}
       />

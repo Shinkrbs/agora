@@ -31,7 +31,6 @@ export async function editElectionDetailsAction(electionId: string, _prevState: 
             title: validatedData.data.title,
             start_date: validatedData.data.startDate,
             end_date: validatedData.data.endDate,
-            status: "scheduled",
         }).eq("id", electionId).select().single();
 
         if (error) {

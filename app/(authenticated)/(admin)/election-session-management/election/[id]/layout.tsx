@@ -13,7 +13,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { UniversalElectionHeader } from "./_components";
 import { LoadingSpinner } from "./_components";
-import { mockElectionData, MockElectionData, mockElectionDataCompleted, mockElectionDataDraft, mockElectionDataPending } from "./data/mock-data";
 import { use, useEffect, useState } from "react";
 import { ElectionHeaderData } from "./_types/election-header";
 import { fetchElectionAction } from "./_actions/fetch-election-action";
@@ -57,6 +56,7 @@ export default function ElectionLayout({
         toast.error("Error fetching election data: " + response.error);
         setElectionData(null);
       } else {
+        toast.success("Election data fetched successfully");
         setElectionData(response.data);
       }
       setIsLoading(false);

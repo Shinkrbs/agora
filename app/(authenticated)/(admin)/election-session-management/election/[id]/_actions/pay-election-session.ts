@@ -41,7 +41,7 @@ export async function payElectionSessionAction(
 
         // Update election status to scheduled
         const { error: updateError } = await supabase
-            .from("elections")
+            .from("election_sessions")
             .update({ status: "scheduled" })
             .eq("id", electionPayment.election_id);
 

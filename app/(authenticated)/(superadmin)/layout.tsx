@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { superAdminSidebarItems } from "@/types/sidebar-items";
-import { HeaderBreadcrumb } from "@/components/HeaderBreadcrumb";
+import { SuperadminHeaderClient } from "./_components/SuperadminHeaderClient";
 
 export default async function SuperadminLayout({
   children,
@@ -22,17 +22,15 @@ export default async function SuperadminLayout({
 
   if (user?.role !== "superadmin") redirect("/unauthorized");
   const breadcrumbItems = superAdminSidebarItems.map(({ title, href }) => ({
-      title,
-      href,
-    }));
+    title,
+    href,
+  }));
   return (
     <SidebarProvider>
       <AppSidebar />
       <main className="min-h-svh flex-1">
-        <header className="border-b bg-background">
-          <HeaderBreadcrumb sidebarItems={breadcrumbItems} />
-        </header>
-        <section className="p-4 md:p-6">{children}</section>
+        <SuperadminHeaderClient breadcrumbItems={breadcrumbItems} />
+        <section className="p-3 md:p-1">{children}</section>
       </main>
     </SidebarProvider>
   );

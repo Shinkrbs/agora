@@ -9,6 +9,7 @@ import {
   SidebarSeparator,
 } from "@/components/ui/sidebar";
 import Image from "next/image";
+import Link from "next/link";
 import logo from "@/public/logo.svg";
 import { NavUserWrapper } from "./NavUserWrapper";
 import type { SidebarProfile } from "@/types/sidebar-items";
@@ -31,7 +32,7 @@ export async function AppSidebar() {
       <SidebarHeader className="shrink-0">
         <SidebarMenuItem>
           <SidebarMenuButton size="lg" asChild>
-            <a
+            <Link
               href={`/${user?.role}/dashboard`}
               className="flex items-center gap-2"
             >
@@ -52,7 +53,7 @@ export async function AppSidebar() {
                   Student Organization Election System
                 </span>
               </div>
-            </a>
+            </Link>
           </SidebarMenuButton>
         </SidebarMenuItem>
       </SidebarHeader>

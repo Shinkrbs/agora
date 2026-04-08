@@ -18,6 +18,7 @@ import { PaymentStatusFilter } from "./PaymentStatusFilter";
 import { toast } from "sonner";
 import updateOrganizationPayments from "../_actions/update-payments";
 import { PaymentStatus } from "@/types/database";
+import { Check, Eye, XCircle } from "lucide-react";
 
 interface OrganizationPaymentsTableProps {
   payments: OrganizationPaymentRowData[];
@@ -35,7 +36,7 @@ export function OrganizationPaymentsTable({
   const [isReceiptModalOpen, setIsReceiptModalOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
   const [processingPaymentId, setProcessingPaymentId] = useState<string | null>(
-    null
+    null,
   );
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedStatuses, setSelectedStatuses] = useState<PaymentStatus[]>([
@@ -95,7 +96,7 @@ export function OrganizationPaymentsTable({
         setProcessingPaymentId(null);
       });
     },
-    [onPaymentUpdated]
+    [onPaymentUpdated],
   );
 
   const handleViewReceipt = useCallback((url: string, orgName: string) => {
@@ -122,7 +123,7 @@ export function OrganizationPaymentsTable({
 
   if (payments.length === 0) {
     return (
-      <div className="rounded-lg border border-border bg-card text-card-foreground shadow-sm p-8 text-center">
+      <div className="rounded-xl border border-border bg-card p-10 text-center shadow-sm">
         <p className="text-muted-foreground">No payments found.</p>
       </div>
     );
@@ -130,175 +131,319 @@ export function OrganizationPaymentsTable({
 
   return (
     <>
-      <div className="rounded-lg border border-border bg-card overflow-hidden">
+      <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
         {/* Search and Filter Bar */}
-        <div className="border-b border-border bg-muted/30 p-4 space-y-4">
-          <PaymentSearchBar
-            onSearchChange={setSearchQuery}
-            placeholder="Search by organization, contact name, or email..."
-          />
-          <PaymentStatusFilter
-            selectedStatuses={selectedStatuses}
-            onStatusChange={setSelectedStatuses}
-          />
+        <div className="border-b border-border bg-muted/20 p-4 md:p-5">
+          <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+            <PaymentSearchBar
+              onSearchChange={setSearchQuery}
+              placeholder="Search organization, contact, or email..."
+            />
+            <div className="flex items-center justify-between gap-3 md:justify-end">
+              <PaymentStatusFilter
+                selectedStatuses={selectedStatuses}
+                onStatusChange={setSelectedStatuses}
+              />
+            </div>
+          </div>
+          <div className="mt-3 text-xs text-muted-foreground">
+            Showing {filteredPayments.length} of {payments.length} payments
+          </div>
         </div>
 
         {/* Table */}
         {filteredPayments.length === 0 ? (
-          <div className="p-8 text-center">
+          <div className="p-10 text-center">
             <p className="text-muted-foreground">
               No payments match your search or filter criteria.
             </p>
           </div>
         ) : (
-          <Table>
-            <TableHeader className="bg-muted/50">
-              <TableRow className="hover:bg-transparent border-b border-border">
-                <TableHead className="text-foreground font-semibold">
-                  Organization
-                </TableHead>
-                <TableHead className="text-foreground font-semibold">
-                  Submitted By
-                </TableHead>
-                <TableHead className="text-foreground font-semibold">
-                  Date & Amount
-                </TableHead>
-                <TableHead className="text-foreground font-semibold">
-                  Receipt
-                </TableHead>
-                <TableHead className="text-foreground font-semibold">
-                  Status
-                </TableHead>
-                <TableHead className="text-foreground font-semibold">
-                  Actions
-                </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
+          <>
+            <div className="space-y-3 p-3 md:hidden">
               {filteredPayments.map((payment) => (
-                <TableRow
+                <article
                   key={payment.id}
-                  className="border-b border-border hover:bg-muted/50 transition-colors"
+                  className="rounded-lg border border-border bg-background p-3"
                 >
-                  {/* Organization */}
-                  <TableCell className="font-medium">
-                    <div className="space-y-1">
-                      <p className="font-semibold text-foreground">
+                  <div className="mb-3 flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-semibold text-foreground">
                         {payment.organizations.name}
                       </p>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="truncate text-xs text-muted-foreground">
                         {payment.organizations.shorthand_name}
                       </p>
                     </div>
-                  </TableCell>
+                    <PaymentStatusBadge status={payment.status} />
+                  </div>
 
-                  {/* Submitted By */}
-                  <TableCell>
-                    <div className="space-y-1">
+                  <div className="grid grid-cols-1 gap-2 text-sm">
+                    <div>
+                      <p className="text-xs text-muted-foreground">
+                        Submitted by
+                      </p>
                       <p className="font-medium text-foreground">
                         {payment.users.first_name} {payment.users.last_name}
                       </p>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="truncate text-xs text-muted-foreground">
                         {payment.users.email}
                       </p>
                     </div>
-                  </TableCell>
-
-                  {/* Date & Amount */}
-                  <TableCell>
-                    <div className="space-y-1">
-                      <p className="text-foreground">
-                        {formatDate(payment.created_at)}
-                      </p>
-                      <p className="text-sm font-semibold text-green-600 dark:text-green-400">
-                        {formatCurrency(payment.amount)}
-                      </p>
+                    <div className="flex items-center justify-between gap-2">
+                      <div>
+                        <p className="text-xs text-muted-foreground">Date</p>
+                        <p className="text-xs text-foreground">
+                          {formatDate(payment.created_at)}
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-xs text-muted-foreground">Amount</p>
+                        <p className="text-sm font-semibold text-emerald-600 dark:text-emerald-400">
+                          {formatCurrency(payment.amount)}
+                        </p>
+                      </div>
                     </div>
-                  </TableCell>
+                  </div>
 
-                  {/* Receipt */}
-                  <TableCell>
+                  <div className="mt-3 flex flex-wrap gap-2">
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={() =>
                         handleViewReceipt(
                           payment.receipt_url,
-                          payment.organizations.name
+                          payment.organizations.name,
                         )
                       }
+                      className="rounded-md"
                     >
+                      <Eye className="h-4 w-4" />
                       View Receipt
                     </Button>
-                  </TableCell>
 
-                  {/* Status */}
-                  <TableCell>
-                    <PaymentStatusBadge status={payment.status} />
-                  </TableCell>
-
-                  {/* Actions */}
-                  <TableCell>
-                    <div className="flex gap-2">
-                      {payment.status === "pending" && (
-                        <>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() =>
-                              handlePaymentAction(payment.id, "verified")
-                            }
-                            disabled={isPending}
-                            className={
-                              processingPaymentId === payment.id
-                                ? "opacity-50"
-                                : ""
-                            }
-                          >
-                            {processingPaymentId === payment.id ? (
-                              <>
-                                <span className="mr-2 h-3 w-3 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                                Verifying...
-                              </>
-                            ) : (
-                              "Verify"
-                            )}
-                          </Button>
-                          <Button
-                            variant="destructive"
-                            size="sm"
-                            onClick={() =>
-                              handlePaymentAction(payment.id, "rejected")
-                            }
-                            disabled={isPending}
-                            className={
-                              processingPaymentId === payment.id
-                                ? "opacity-50"
-                                : ""
-                            }
-                          >
-                            {processingPaymentId === payment.id ? (
-                              <>
-                                <span className="mr-2 h-3 w-3 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                                Rejecting...
-                              </>
-                            ) : (
-                              "Reject"
-                            )}
-                          </Button>
-                        </>
-                      )}
-                      {payment.status !== "pending" && (
-                        <span className="text-xs text-muted-foreground">
-                          No actions
-                        </span>
-                      )}
-                    </div>
-                  </TableCell>
-                </TableRow>
+                    {payment.status === "pending" ? (
+                      <>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() =>
+                            handlePaymentAction(payment.id, "verified")
+                          }
+                          disabled={isPending}
+                          className={
+                            processingPaymentId === payment.id
+                              ? "opacity-50"
+                              : "rounded-md"
+                          }
+                        >
+                          {processingPaymentId === payment.id ? (
+                            <>
+                              <span className="mr-2 h-3 w-3 animate-spin rounded-full border-2 border-emerald-500 border-t-transparent" />
+                              Verifying...
+                            </>
+                          ) : (
+                            <>
+                              <Check className="h-4 w-4" />
+                              Verify
+                            </>
+                          )}
+                        </Button>
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          onClick={() =>
+                            handlePaymentAction(payment.id, "rejected")
+                          }
+                          disabled={isPending}
+                          className={
+                            processingPaymentId === payment.id
+                              ? "opacity-50"
+                              : "rounded-md"
+                          }
+                        >
+                          {processingPaymentId === payment.id ? (
+                            <>
+                              <span className="mr-2 h-3 w-3 animate-spin rounded-full border-2 border-emerald-500 border-t-transparent" />
+                              Rejecting...
+                            </>
+                          ) : (
+                            <>
+                              <XCircle className="h-4 w-4" />
+                              Reject
+                            </>
+                          )}
+                        </Button>
+                      </>
+                    ) : (
+                      <span className="self-center text-xs text-muted-foreground">
+                        No actions
+                      </span>
+                    )}
+                  </div>
+                </article>
               ))}
-            </TableBody>
-          </Table>
+            </div>
+
+            <div className="hidden md:block">
+              <Table>
+                <TableHeader className="bg-muted/30">
+                  <TableRow className="border-b border-border hover:bg-transparent">
+                    <TableHead className="h-11 px-4 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                      Organization
+                    </TableHead>
+                    <TableHead className="h-11 px-4 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                      Submitted By
+                    </TableHead>
+                    <TableHead className="h-11 px-4 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                      Date & Amount
+                    </TableHead>
+                    <TableHead className="h-11 px-4 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                      Receipt
+                    </TableHead>
+                    <TableHead className="h-11 px-4 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                      Status
+                    </TableHead>
+                    <TableHead className="h-11 px-4 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                      Actions
+                    </TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {filteredPayments.map((payment) => (
+                    <TableRow
+                      key={payment.id}
+                      className="border-b border-border/70 transition-colors hover:bg-muted/30"
+                    >
+                      {/* Organization */}
+                      <TableCell className="px-4 py-3.5 font-medium">
+                        <div className="space-y-1">
+                          <p className="font-semibold text-foreground">
+                            {payment.organizations.name}
+                          </p>
+                          <p className="text-sm text-muted-foreground">
+                            {payment.organizations.shorthand_name}
+                          </p>
+                        </div>
+                      </TableCell>
+
+                      {/* Submitted By */}
+                      <TableCell className="px-4 py-3.5">
+                        <div className="space-y-1">
+                          <p className="font-medium text-foreground">
+                            {payment.users.first_name} {payment.users.last_name}
+                          </p>
+                          <p className="text-sm text-muted-foreground">
+                            {payment.users.email}
+                          </p>
+                        </div>
+                      </TableCell>
+
+                      {/* Date & Amount */}
+                      <TableCell className="px-4 py-3.5">
+                        <div className="space-y-1">
+                          <p className="text-sm text-foreground">
+                            {formatDate(payment.created_at)}
+                          </p>
+                          <p className="text-sm font-semibold text-emerald-600 dark:text-emerald-400">
+                            {formatCurrency(payment.amount)}
+                          </p>
+                        </div>
+                      </TableCell>
+
+                      {/* Receipt */}
+                      <TableCell className="px-4 py-3.5">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() =>
+                            handleViewReceipt(
+                              payment.receipt_url,
+                              payment.organizations.name,
+                            )
+                          }
+                          className="rounded-md"
+                        >
+                          <Eye className="h-4 w-4" />
+                          View Receipt
+                        </Button>
+                      </TableCell>
+
+                      {/* Status */}
+                      <TableCell className="px-4 py-3.5">
+                        <PaymentStatusBadge status={payment.status} />
+                      </TableCell>
+
+                      {/* Actions */}
+                      <TableCell className="px-4 py-3.5">
+                        <div className="flex flex-wrap gap-2">
+                          {payment.status === "pending" && (
+                            <>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() =>
+                                  handlePaymentAction(payment.id, "verified")
+                                }
+                                disabled={isPending}
+                                className={
+                                  processingPaymentId === payment.id
+                                    ? "opacity-50"
+                                    : "rounded-md"
+                                }
+                              >
+                                {processingPaymentId === payment.id ? (
+                                  <>
+                                    <span className="mr-2 h-3 w-3 animate-spin rounded-full border-2 border-emerald-500 border-t-transparent" />
+                                    Verifying...
+                                  </>
+                                ) : (
+                                  <>
+                                    <Check className="h-4 w-4" />
+                                    Verify
+                                  </>
+                                )}
+                              </Button>
+                              <Button
+                                variant="destructive"
+                                size="sm"
+                                onClick={() =>
+                                  handlePaymentAction(payment.id, "rejected")
+                                }
+                                disabled={isPending}
+                                className={
+                                  processingPaymentId === payment.id
+                                    ? "opacity-50"
+                                    : "rounded-md"
+                                }
+                              >
+                                {processingPaymentId === payment.id ? (
+                                  <>
+                                    <span className="mr-2 h-3 w-3 animate-spin rounded-full border-2 border-emerald-500 border-t-transparent" />
+                                    Rejecting...
+                                  </>
+                                ) : (
+                                  <>
+                                    <XCircle className="h-4 w-4" />
+                                    Reject
+                                  </>
+                                )}
+                              </Button>
+                            </>
+                          )}
+                          {payment.status !== "pending" && (
+                            <span className="text-xs text-muted-foreground">
+                              No actions
+                            </span>
+                          )}
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </>
         )}
       </div>
 

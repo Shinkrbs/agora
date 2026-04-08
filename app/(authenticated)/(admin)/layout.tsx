@@ -7,6 +7,7 @@ import { adminSidebarItems } from "@/types/sidebar-items";
 import { getUserOrganizations } from "@/app/(authenticated)/(admin)/organization-management/_queries/organization-management-queries";
 import { OrganizationProvider } from "./_components";
 import { AdminHeaderClient } from "./_components/AdminHeaderClient";
+import { AdminChildrenLoadingOverlay } from "./_components";
 
 export default async function AdminLayout({
   children,
@@ -41,7 +42,10 @@ export default async function AdminLayout({
             organizations={organizations}
             breadcrumbItems={breadcrumbItems}
           />
-          <section className="p-4 md:p-6">{children}</section>
+          <section className="relative p-4 md:p-6">
+            <AdminChildrenLoadingOverlay />
+            {children}
+          </section>
         </main>
       </SidebarProvider>
     </OrganizationProvider>

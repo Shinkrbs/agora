@@ -29,7 +29,7 @@ export function ElectionCard({ election }: ElectionCardProps) {
   };
 
   const normalizePaymentStatus = (status: PaymentStatus | null | string) => {
-    if (!status) return "not_paid" as const;
+    if (!status) return "unpaid" as const;
     const normalized = status
       .toString()
       .trim()
@@ -39,7 +39,7 @@ export function ElectionCard({ election }: ElectionCardProps) {
     if (normalized === "pending") return "pending" as const;
     if (normalized === "verified") return "verified" as const;
     if (normalized === "rejected") return "rejected" as const;
-    return "not_paid" as const;
+    return "unpaid" as const;
   };
 
   const getPaymentStatusColor = (status: PaymentStatus | null | string) => {
@@ -52,7 +52,7 @@ export function ElectionCard({ election }: ElectionCardProps) {
         "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300",
       rejected: "bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300",
     };
-    if (normalized === "not_paid") {
+    if (normalized === "unpaid") {
       return "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300";
     }
     return colors[normalized];
@@ -60,7 +60,7 @@ export function ElectionCard({ election }: ElectionCardProps) {
 
   const getPaymentStatusDisplay = (status: PaymentStatus | null | string) => {
     const normalized = normalizePaymentStatus(status);
-    if (normalized === "not_paid") return "Not paid";
+    if (normalized === "unpaid") return "Unpaid";
     return normalized.charAt(0).toUpperCase() + normalized.slice(1);
   };
 

@@ -37,7 +37,7 @@ export async function editElectionDetailsAction(electionId: string, _prevState: 
             console.error("Error updating election details:", error);
             return { error: "Failed to update election details" };
         }
-        revalidatePath(`/election-session-management/election/[id]`);
+        revalidatePath(`/election-session-management/election/${electionId}`);
         return { message: "Election details updated successfully" };
     } catch (error) {
         console.error("Error updating election details:", error);

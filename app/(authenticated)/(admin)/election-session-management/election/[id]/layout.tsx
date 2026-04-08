@@ -23,8 +23,6 @@ interface ElectionLayoutProps {
   params: Promise<{
     id: string;
   }>;
-  // New UI Props passed from a parent Server Component
-  electionHeaderData: ElectionHeaderData | null; // Optional prop for election header data
 }
 
 const tabs = [
@@ -38,7 +36,6 @@ const tabs = [
 export default function ElectionLayout({
   children,
   params,
-  electionHeaderData,
 }: ElectionLayoutProps) {
   const [isLoading, setIsLoading] = useState(true);
   const { id: electionId } = use(params);
@@ -85,15 +82,15 @@ export default function ElectionLayout({
 
   return (
     <div className="space-y-6">
-      {(electionHeaderData || electionData) && (
+      {electionData && (
         <UniversalElectionHeader
           electionId={electionId}
-          title={(electionHeaderData || electionData)?.title ?? null}
-          startDate={(electionHeaderData || electionData)?.startDate ?? null}
-          endDate={(electionHeaderData || electionData)?.endDate ?? null}
-          status={(electionHeaderData || electionData)?.status ?? "draft"}
-          paymentStatus={(electionHeaderData || electionData)?.paymentStatus ?? "unpaid"}
-          isSetupComplete={(electionHeaderData || electionData)?.isSetupComplete ?? false}
+          title={electionData?.title ?? null}
+          startDate={electionData?.startDate ?? null}
+          endDate={electionData?.endDate ?? null}
+          status={electionData?.status ?? "draft"}
+          paymentStatus={electionData?.paymentStatus ?? "unpaid"}
+          isSetupComplete={electionData?.isSetupComplete ?? false}
         />
       )}
 

@@ -45,6 +45,7 @@ export function ElectionCard({ election }: ElectionCardProps) {
   const getPaymentStatusColor = (status: PaymentStatus | null | string) => {
     const normalized = normalizePaymentStatus(status);
     const colors: Record<PaymentStatus, string> = {
+      unpaid: "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300",
       pending:
         "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300",
       verified:

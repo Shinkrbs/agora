@@ -68,7 +68,7 @@ export function TemplatesHeader({
           className="sm:whitespace-nowrap"
         >
           <Plus className="h-4 w-4 mr-2" />
-          Add New Template
+          Create New Template
         </Button>
       </div>
     </div>

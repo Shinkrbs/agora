@@ -15,6 +15,7 @@ export async function createPositionTemplate(organizationId: string, templateDat
         }
 
         const { error } = await supabase.from("position_templates").insert({
+            name: templateData.name,
             positions: templateData.positions,
             organization_id: organizationId
         });

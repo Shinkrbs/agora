@@ -61,14 +61,14 @@ export function DeleteTemplateModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-106.25">
         <DialogHeader>
           <div className="flex items-center gap-2">
             <AlertTriangle className="h-5 w-5 text-destructive" />
             <DialogTitle>Delete Template</DialogTitle>
           </div>
           <DialogDescription>
-            Are you sure you want to delete <span className="font-semibold text-foreground">"{templateName}"</span>? This action cannot be undone.
+            Are you sure you want to delete <span className="font-semibold text-foreground">{templateName}</span>? This action cannot be undone.
           </DialogDescription>
         </DialogHeader>
 

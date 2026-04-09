@@ -80,7 +80,7 @@ export function CreateElectionDialog() {
           <DialogTitle>Create New Election</DialogTitle>
         </DialogHeader>
         <p className="text-sm text-muted-foreground mb-4">
-          Start by giving your election a title. You'll be able to add candidates
+          Start by giving your election a title. You&apos;ll be able to add candidates
           and more after creation.
         </p>
 

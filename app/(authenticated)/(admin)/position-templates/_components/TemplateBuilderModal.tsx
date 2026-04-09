@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { PositionTemplate, PositionTemplateItem } from '@/types/database';
 import {
   Dialog,
@@ -33,6 +33,17 @@ export function TemplateBuilderModal({
   const [positions, setPositions] = useState<PositionTemplateItem[]>(
     initialData?.positions ?? []
   );
+
+  // Sync state when initialData or modal opens
+  useEffect(() => {
+    if (isOpen && initialData) {
+      setTemplateName(initialData.name);
+      setPositions([...initialData.positions]);
+    } else if (isOpen && !initialData) {
+      setTemplateName('');
+      setPositions([]);
+    }
+  }, [isOpen, initialData]);
 
   const handleAddPosition = () => {
     setPositions([...positions, { name: '', seat_count: 1 }]);

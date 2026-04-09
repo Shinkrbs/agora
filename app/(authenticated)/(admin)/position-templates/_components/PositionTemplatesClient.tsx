@@ -21,7 +21,7 @@ export function PositionTemplatesClient() {
   const organization = useCurrentOrganization();
 
   useEffect(() => {
-    const hanldeFetchPositionTemplates = async () => {
+    const handleFetchPositionTemplates = async () => {
       if (!organization) {
         toast.error("No organization selected. Please select an organization to view its position templates.");
         setPositionTemplates([]);
@@ -39,7 +39,7 @@ export function PositionTemplatesClient() {
       }
     };
 
-    hanldeFetchPositionTemplates();
+    handleFetchPositionTemplates();
   }, [organization]);
 
   // Filter and sort logic

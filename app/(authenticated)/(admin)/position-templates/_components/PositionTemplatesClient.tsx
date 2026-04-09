@@ -1,23 +1,50 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { PositionTemplate } from '@/types/database';
 import { TemplateBuilderModal } from './TemplateBuilderModal';
 import { TemplateCard } from './TemplateCard';
 import { TemplatesHeader } from './TemplatesHeader';
-import { mockPositionTemplates } from './mock-data';
+import { useCurrentOrganization } from '../../_components/OrganizationContext';
+import { fetchPositionTemplates } from '../_queries/fetch-position-templates';
+import { toast } from 'sonner';
+import { fetchPositionTemplatesAction } from '../_actions/fetch-position-templates-action';
 
 type SortBy = 'name-asc' | 'date-desc';
 
 export function PositionTemplatesClient() {
+  const [positionTemplates, setPositionTemplates] = useState<PositionTemplate[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState<SortBy>('date-desc');
   const [isBuilderOpen, setIsBuilderOpen] = useState(false);
   const [builderData, setBuilderData] = useState<PositionTemplate | null>(null);
+  const organization = useCurrentOrganization();
+
+  useEffect(() => {
+    const hanldeFetchPositionTemplates = async () => {
+      if (!organization) {
+        toast.error("No organization selected. Please select an organization to view its position templates.");
+        setPositionTemplates([]);
+        return;
+      }
+
+      try {
+        const response = await fetchPositionTemplatesAction(organization.id);
+        toast.success("Position templates fetched successfully.");
+        setPositionTemplates(response.data ?? []);
+      } catch (error) {
+        console.error('Error fetching position templates:', error);
+        setPositionTemplates([]);
+        toast.error("Failed to fetch position templates.");
+      }
+    };
+
+    hanldeFetchPositionTemplates();
+  }, [organization]);
 
   // Filter and sort logic
   const filteredAndSortedTemplates = useMemo(() => {
-    let templates = [...mockPositionTemplates];
+    let templates = [...positionTemplates];
 
     // Filter by search query
     if (searchQuery.trim()) {
@@ -42,7 +69,7 @@ export function PositionTemplatesClient() {
     }
 
     return templates;
-  }, [searchQuery, sortBy]);
+  }, [positionTemplates, searchQuery, sortBy]);
 
   const handleAddTemplate = () => {
     setBuilderData(null);

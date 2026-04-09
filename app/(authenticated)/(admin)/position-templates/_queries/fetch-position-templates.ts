@@ -13,7 +13,7 @@ export async function fetchPositionTemplates(organizationId: string): Promise<{d
             redirect("/login");    
         }
 
-        const { data, error } = await supabase.from("position_templates").select("*").eq("organization_id", organizationId);
+        const { data, error } = await supabase.from("position_templates").select("*").eq("organization_id", organizationId).eq("is_deleted", false);
         if(error) {
             console.error("Error fetching position templates:", error);
             return { data: null, error: error.message };

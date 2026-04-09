@@ -52,7 +52,7 @@ export function TemplatesHeader({
 
           {/* Sort Select */}
           <Select value={sortBy} onValueChange={(value) => onSortChange(value as 'name-asc' | 'date-desc')}>
-            <SelectTrigger className="w-full sm:w-[200px]">
+            <SelectTrigger className="w-full sm:w-50">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>

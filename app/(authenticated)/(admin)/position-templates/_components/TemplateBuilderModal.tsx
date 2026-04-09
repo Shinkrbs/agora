@@ -14,20 +14,27 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
-import { Trash2, Plus } from 'lucide-react';
+import { Trash2, Plus, Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
+import { createPositionTemplate } from '../_actions/create-position-template';
+import { updatePositionTemplate } from '../_actions/update-position-template';
 
 interface TemplateBuilderModalProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
   initialData?: PositionTemplate;
   templates?: PositionTemplate[];
+  organizationId: string;
+  onSave?: () => void;
 }
 
 export function TemplateBuilderModal({
   isOpen,
   onOpenChange,
   initialData,
-  templates
+  templates,
+  organizationId,
+  onSave,
 }: TemplateBuilderModalProps) {
   const [templateName, setTemplateName] = useState(
     initialData?.name ?? ''
@@ -36,6 +43,7 @@ export function TemplateBuilderModal({
     initialData?.positions ?? []
   );
   const [nameError, setNameError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Sync state when initialData or modal opens
   useEffect(() => {
@@ -72,22 +80,49 @@ export function TemplateBuilderModal({
     setPositions(positions.filter((_, i) => i !== index));
   };
 
-  const handleSave = () => {
-    // Mock save function
-    const payload = {
-      name: templateName,
-      positions,
-    };
-    console.log(
-      initialData
-        ? `Updating template: ${initialData.id}`
-        : 'Creating new template:',
-      payload
-    );
-    // Reset and close
-    setTemplateName('');
-    setPositions([]);
-    onOpenChange(false);
+  const handleSave = async () => {
+    setIsLoading(true);
+    try {
+      const payload = {
+        name: templateName,
+        positions,
+        organization_id: organizationId,
+      };
+
+      let result;
+      if (initialData) {
+        // EDIT mode
+        result = await updatePositionTemplate(initialData.id, {
+          name: templateName,
+          positions,
+        });
+      } else {
+        // CREATE mode
+        result = await createPositionTemplate(organizationId, payload);
+      }
+
+      if (!result.success) {
+        toast.error(result.error || 'Failed to save template');
+        return;
+      }
+
+      toast.success(
+        initialData ? 'Template updated successfully' : 'Template created successfully'
+      );
+      
+      // Refresh parent data
+      onSave?.();
+      
+      // Reset and close
+      setTemplateName('');
+      setPositions([]);
+      setNameError(null);
+      onOpenChange(false);
+    } catch (error) {
+      toast.error((error as Error).message || 'An unexpected error occurred');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleCancel = () => {
@@ -229,11 +264,15 @@ export function TemplateBuilderModal({
         </div>
 
         <DialogFooter className="gap-2">
-          <Button variant="outline" onClick={handleCancel}>
+          <Button variant="outline" onClick={handleCancel} disabled={isLoading}>
             Cancel
           </Button>
-          <Button onClick={handleSave} disabled={!templateName.trim() || !!nameError}>
-            Save Template
+          <Button
+            onClick={handleSave}
+            disabled={!templateName.trim() || !!nameError || isLoading}
+          >
+            {isLoading && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
+            {isLoading ? 'Saving...' : 'Save Template'}
           </Button>
         </DialogFooter>
       </DialogContent>

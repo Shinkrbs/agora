@@ -20,25 +20,24 @@ export function PositionTemplatesClient() {
   const [builderData, setBuilderData] = useState<PositionTemplate | null>(null);
   const organization = useCurrentOrganization();
 
+  const handleFetchPositionTemplates = async () => {
+    if (!organization) {
+      toast.error("No organization selected. Please select an organization to view its position templates.");
+      setPositionTemplates([]);
+      return;
+    }
+
+    try {
+      const response = await fetchPositionTemplatesAction(organization.id);
+      setPositionTemplates(response.data ?? []);
+    } catch (error) {
+      console.error('Error fetching position templates:', error);
+      setPositionTemplates([]);
+      toast.error("Failed to fetch position templates.");
+    }
+  };
+
   useEffect(() => {
-    const handleFetchPositionTemplates = async () => {
-      if (!organization) {
-        toast.error("No organization selected. Please select an organization to view its position templates.");
-        setPositionTemplates([]);
-        return;
-      }
-
-      try {
-        const response = await fetchPositionTemplatesAction(organization.id);
-        toast.success("Position templates fetched successfully.");
-        setPositionTemplates(response.data ?? []);
-      } catch (error) {
-        console.error('Error fetching position templates:', error);
-        setPositionTemplates([]);
-        toast.error("Failed to fetch position templates.");
-      }
-    };
-
     handleFetchPositionTemplates();
   }, [organization]);
 
@@ -144,6 +143,8 @@ export function PositionTemplatesClient() {
         isOpen={isBuilderOpen}
         onOpenChange={handleCloseBuilder}
         initialData={builderData || undefined}
+        organizationId={organization?.id || ''}
+        onSave={handleFetchPositionTemplates}
       />
     </div>
   );

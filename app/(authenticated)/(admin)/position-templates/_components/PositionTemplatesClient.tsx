@@ -9,6 +9,7 @@ import { DeleteTemplateModal } from './DeleteTemplateModal';
 import { useCurrentOrganization } from '../../_components/OrganizationContext';
 import { toast } from 'sonner';
 import { fetchPositionTemplatesAction } from '../_actions/fetch-position-templates-action';
+import { createPositionTemplate } from '../_actions/create-position-template';
 import { Button } from '@/components/ui/button';
 
 type SortBy = 'name-asc' | 'date-desc';
@@ -84,6 +85,28 @@ export function PositionTemplatesClient() {
     setIsBuilderOpen(true);
   };
 
+  const handleDuplicateTemplate = async (template: PositionTemplate) => {
+    try {
+      const duplicateData = {
+        name: `${template.name} - Copy`,
+        positions: template.positions,
+        organization_id: organization?.id || '',
+      };
+
+      const result = await createPositionTemplate(organization?.id || '', duplicateData);
+
+      if (!result.success) {
+        toast.error(result.error || 'Failed to duplicate template');
+        return;
+      }
+
+      toast.success(`Template duplicated as "${duplicateData.name}"`);
+      handleFetchPositionTemplates();
+    } catch (error) {
+      toast.error((error as Error).message || 'An unexpected error occurred');
+    }
+  };
+
   const handleDeleteTemplate = (template: PositionTemplate) => {
     setDeleteTemplateId(template.id);
     setDeleteTemplateName(template.name);
@@ -116,6 +139,7 @@ export function PositionTemplatesClient() {
               key={template.id}
               template={template}
               onEdit={handleEditTemplate}
+              onDuplicate={handleDuplicateTemplate}
               onDelete={handleDeleteTemplate}
             />
           ))}

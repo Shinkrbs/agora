@@ -17,12 +17,14 @@ import { formatDistanceToNow } from 'date-fns';
 interface TemplateCardProps {
   template: PositionTemplate;
   onEdit: (template: PositionTemplate) => void;
+  onDuplicate: (template: PositionTemplate) => void;
   onDelete: (template: PositionTemplate) => void;
 }
 
 export function TemplateCard({
   template,
   onEdit,
+  onDuplicate,
   onDelete,
 }: TemplateCardProps) {
   const totalSeats = template.positions.reduce(
@@ -31,7 +33,7 @@ export function TemplateCard({
   );
 
   const handleDuplicate = () => {
-    console.log(`Duplicating template: ${template.id}`, template);
+    onDuplicate(template);
   };
 
   const handleDelete = () => {

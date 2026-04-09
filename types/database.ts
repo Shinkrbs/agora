@@ -146,6 +146,26 @@ export interface Vote {
   is_deleted: boolean;
 }
 
+// 1. The Template Container
+export interface PositionTemplate {
+  id: string;
+  organization_id: string;
+  name: string;
+  created_at: string;
+  updated_at: string;
+  is_deleted: boolean;
+}
+
+// 2. The Template Items (The actual positions)
+export interface PositionTemplateItem {
+  id: string;
+  template_id: string;
+  name: string;
+  seat_count: number;
+  created_at: string;
+  updated_at: string;
+}
+
 // Profile attributes
 export type UserProfileEditable = Pick<
   User,

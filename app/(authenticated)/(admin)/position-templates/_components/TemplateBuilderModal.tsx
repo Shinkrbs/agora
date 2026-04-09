@@ -20,12 +20,14 @@ interface TemplateBuilderModalProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
   initialData?: PositionTemplate;
+  templates?: PositionTemplate[];
 }
 
 export function TemplateBuilderModal({
   isOpen,
   onOpenChange,
   initialData,
+  templates
 }: TemplateBuilderModalProps) {
   const [templateName, setTemplateName] = useState(
     initialData?.name ?? ''
@@ -33,15 +35,18 @@ export function TemplateBuilderModal({
   const [positions, setPositions] = useState<PositionTemplateItem[]>(
     initialData?.positions ?? []
   );
+  const [nameError, setNameError] = useState<string | null>(null);
 
   // Sync state when initialData or modal opens
   useEffect(() => {
     if (isOpen && initialData) {
       setTemplateName(initialData.name);
       setPositions([...initialData.positions]);
+      setNameError(null);
     } else if (isOpen && !initialData) {
       setTemplateName('');
       setPositions([]);
+      setNameError(null);
     }
   }, [isOpen, initialData]);
 
@@ -121,8 +126,33 @@ export function TemplateBuilderModal({
               id="template-name"
               placeholder="e.g., Standard Council Ballot"
               value={templateName}
-              onChange={(e) => setTemplateName(e.target.value)}
+              onChange={(e) => {
+                const newName = e.target.value;
+                setTemplateName(newName);
+                
+                // Check for duplicate names
+                if (newName.trim()) {
+                  const isDuplicate = templates?.some(
+                    (t) =>
+                      t.name.toLowerCase() === newName.toLowerCase() &&
+                      t.id !== initialData?.id
+                  );
+                  if (isDuplicate) {
+                    setNameError('A template with this name already exists.');
+                  } else {
+                    setNameError(null);
+                  }
+                } else {
+                  setNameError(null);
+                }
+              }}
+              aria-invalid={!!nameError}
             />
+            {nameError && (
+              <p className="text-sm font-medium text-destructive">
+                {nameError}
+              </p>
+            )}
           </div>
 
           <Separator />
@@ -202,7 +232,7 @@ export function TemplateBuilderModal({
           <Button variant="outline" onClick={handleCancel}>
             Cancel
           </Button>
-          <Button onClick={handleSave} disabled={!templateName.trim()}>
+          <Button onClick={handleSave} disabled={!templateName.trim() || !!nameError}>
             Save Template
           </Button>
         </DialogFooter>

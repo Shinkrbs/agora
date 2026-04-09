@@ -6,9 +6,9 @@ import { TemplateBuilderModal } from './TemplateBuilderModal';
 import { TemplateCard } from './TemplateCard';
 import { TemplatesHeader } from './TemplatesHeader';
 import { useCurrentOrganization } from '../../_components/OrganizationContext';
-import { fetchPositionTemplates } from '../_queries/fetch-position-templates';
 import { toast } from 'sonner';
 import { fetchPositionTemplatesAction } from '../_actions/fetch-position-templates-action';
+import { Button } from '@/components/ui/button';
 
 type SortBy = 'name-asc' | 'date-desc';
 
@@ -126,12 +126,13 @@ export function PositionTemplatesClient() {
                 : 'No position templates yet. Create your first one to get started.'}
             </p>
             {!searchQuery && (
-              <button
+              <Button
+                type="button"
                 onClick={handleAddTemplate}
                 className="text-primary hover:underline font-medium"
               >
                 Create New Template
-              </button>
+              </Button>
             )}
           </div>
         )}
@@ -139,6 +140,7 @@ export function PositionTemplatesClient() {
 
       {/* Builder Modal */}
       <TemplateBuilderModal
+        templates={positionTemplates}
         isOpen={isBuilderOpen}
         onOpenChange={handleCloseBuilder}
         initialData={builderData || undefined}

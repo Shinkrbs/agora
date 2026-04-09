@@ -17,7 +17,7 @@ import { formatDistanceToNow } from 'date-fns';
 interface TemplateCardProps {
   template: PositionTemplate;
   onEdit: (template: PositionTemplate) => void;
-  onDelete: (templateId: string) => void;
+  onDelete: (template: PositionTemplate) => void;
 }
 
 export function TemplateCard({
@@ -35,8 +35,7 @@ export function TemplateCard({
   };
 
   const handleDelete = () => {
-    console.log(`Deleting template: ${template.id}`);
-    onDelete(template.id);
+    onDelete(template);
   };
 
   return (

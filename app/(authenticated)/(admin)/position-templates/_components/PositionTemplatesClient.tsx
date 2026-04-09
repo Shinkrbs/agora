@@ -5,6 +5,7 @@ import { PositionTemplate } from '@/types/database';
 import { TemplateBuilderModal } from './TemplateBuilderModal';
 import { TemplateCard } from './TemplateCard';
 import { TemplatesHeader } from './TemplatesHeader';
+import { DeleteTemplateModal } from './DeleteTemplateModal';
 import { useCurrentOrganization } from '../../_components/OrganizationContext';
 import { toast } from 'sonner';
 import { fetchPositionTemplatesAction } from '../_actions/fetch-position-templates-action';
@@ -18,6 +19,9 @@ export function PositionTemplatesClient() {
   const [sortBy, setSortBy] = useState<SortBy>('date-desc');
   const [isBuilderOpen, setIsBuilderOpen] = useState(false);
   const [builderData, setBuilderData] = useState<PositionTemplate | null>(null);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [deleteTemplateId, setDeleteTemplateId] = useState<string>('');
+  const [deleteTemplateName, setDeleteTemplateName] = useState<string>('');
   const organization = useCurrentOrganization();
 
   const handleFetchPositionTemplates = async () => {
@@ -80,9 +84,10 @@ export function PositionTemplatesClient() {
     setIsBuilderOpen(true);
   };
 
-  const handleDeleteTemplate = (templateId: string) => {
-    console.log(`Delete action initiated for template: ${templateId}`);
-    // In a real app, this would trigger a deletion mutation
+  const handleDeleteTemplate = (template: PositionTemplate) => {
+    setDeleteTemplateId(template.id);
+    setDeleteTemplateName(template.name);
+    setIsDeleteOpen(true);
   };
 
   const handleCloseBuilder = (open: boolean) => {
@@ -145,6 +150,15 @@ export function PositionTemplatesClient() {
         initialData={builderData || undefined}
         organizationId={organization?.id || ''}
         onSave={handleFetchPositionTemplates}
+      />
+
+      {/* Delete Modal */}
+      <DeleteTemplateModal
+        isOpen={isDeleteOpen}
+        onOpenChange={setIsDeleteOpen}
+        templateId={deleteTemplateId}
+        templateName={deleteTemplateName}
+        onDelete={handleFetchPositionTemplates}
       />
     </div>
   );

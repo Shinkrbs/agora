@@ -157,7 +157,7 @@ export function PositionTemplatesClient() {
               <Button
                 type="button"
                 onClick={handleAddTemplate}
-                className="text-primary hover:underline font-medium"
+                className="text-white hover:underline font-medium"
               >
                 Create New Template
               </Button>

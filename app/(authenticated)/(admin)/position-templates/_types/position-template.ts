@@ -1,5 +1,3 @@
-import { PositionTemplate, PositionTemplateItem } from "@/types/database";
+import { PositionTemplate } from "@/types/database";
 
-export interface PositionTemplateWithItems extends PositionTemplate {
-  items: PositionTemplateItem[];
-}
+export type InsertPositionTemplate = Omit<PositionTemplate, 'id' | 'created_at' | 'updated_at' | 'is_deleted'>;

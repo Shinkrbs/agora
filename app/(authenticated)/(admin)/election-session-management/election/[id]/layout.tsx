@@ -1,10 +1,9 @@
 "use client";
 
-import React from "react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import NextLink from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { ArrowLeft, ChevronDown } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -12,6 +11,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { UniversalElectionHeader } from "./_components";
+import { LoadingSpinner } from "./_components";
+import { use, useEffect, useState } from "react";
+import { ElectionHeaderData } from "./_types/election-header";
+import { fetchElectionAction } from "./_actions/fetch-election-action";
+import { toast } from "sonner"
 
 interface ElectionLayoutProps {
   children: React.ReactNode;
@@ -32,11 +37,35 @@ export default function ElectionLayout({
   children,
   params,
 }: ElectionLayoutProps) {
-  const { id: electionId } = React.use(params);
+  const [isLoading, setIsLoading] = useState(true);
+  const { id: electionId } = use(params);
   const pathname = usePathname();
   const router = useRouter();
+  const [electionData, setElectionData] = useState<ElectionHeaderData | null>(null);
 
-  // Determine active tab based on current pathname
+  useEffect(() => {
+    async function fetchElectionData() {
+      setIsLoading(true);
+      const response = await fetchElectionAction(electionId);
+      if(response.error) {
+        console.error("Error fetching election data:", response.error);
+        toast.error("Error fetching election data: " + response.error);
+        setElectionData(null);
+      } else {
+        toast.success("Election data fetched successfully");
+        setElectionData(response.data);
+      }
+      setIsLoading(false);
+    }
+    if (electionId) {
+      fetchElectionData();
+    }
+  }, [electionId]);
+
+  useEffect(() => {
+    setIsLoading(false);
+  }, [pathname]);
+
   const activeTab =
     tabs.find((tab) => pathname.includes(tab.href))?.value || "dashboard";
   const activeTabConfig =
@@ -45,6 +74,7 @@ export default function ElectionLayout({
   const handleTabChange = (value: string) => {
     const selectedTab = tabs.find((tab) => tab.value === value);
     if (!selectedTab) return;
+    setIsLoading(true);
     router.push(
       `/election-session-management/election/${electionId}/${selectedTab.href}`,
     );
@@ -52,28 +82,18 @@ export default function ElectionLayout({
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="space-y-2">
-        <NextLink
-          href="/election-session-management"
-          className="inline-flex w-fit pb-3"
-        >
-          <Button
-            variant="ghost"
-            size="sm"
-            className="h-8 px-2 text-muted-foreground hover:text-foreground"
-          >
-            <ArrowLeft className="mr-1 h-4 w-4" />
-            Back to Election Sessions
-          </Button>
-        </NextLink>
-        <h1 className="text-3xl font-bold text-foreground">Election Details</h1>
-        <p className="text-muted-foreground text-sm">
-          Manage and view details of your election.
-        </p>
-      </div>
+      {electionData && (
+        <UniversalElectionHeader
+          electionId={electionId}
+          title={electionData?.title ?? null}
+          startDate={electionData?.startDate ?? null}
+          endDate={electionData?.endDate ?? null}
+          status={electionData?.status ?? "draft"}
+          paymentStatus={electionData?.paymentStatus ?? "unpaid"}
+          isSetupComplete={electionData?.isSetupComplete ?? false}
+        />
+      )}
 
-      {/* Tabs */}
       <div className="w-full">
         <div className="md:hidden">
           <DropdownMenu>
@@ -109,13 +129,15 @@ export default function ElectionLayout({
             value={activeTab}
             onValueChange={handleTabChange}
             className="w-full"
+            suppressHydrationWarning
           >
-            <TabsList className="w-full h-auto justify-start gap-1 rounded-xl border border-border/50 bg-muted/50 p-1">
+            <TabsList className="w-full h-auto justify-start gap-1 rounded-xl border border-border/50 bg-muted/50 p-1" suppressHydrationWarning>
               {tabs.map((tab) => (
                 <TabsTrigger
                   key={tab.value}
                   value={tab.value}
                   className="rounded-lg border-0 px-4 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-background/60 hover:text-foreground data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm data-[state=active]:ring-1 data-[state=active]:ring-border/60"
+                  suppressHydrationWarning
                 >
                   {tab.label}
                 </TabsTrigger>
@@ -124,9 +146,9 @@ export default function ElectionLayout({
           </Tabs>
         </div>
       </div>
-
-      {/* Content */}
-      <div className="mt-6">{children}</div>
+      <div className="mt-6">
+        {isLoading ? <LoadingSpinner isVisible={true} /> : children}
+      </div>
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { LayoutDashboard, UserCog, FileUser, Vote, Building2, BookUser, Settings, type LucideIcon} from "lucide-react";
+import { LayoutDashboard, UserCog, FileUser, Vote, Building2, Settings, type LucideIcon, ClipboardList} from "lucide-react";
 
 export type SidebarItem = {
   title: string;
@@ -11,6 +11,11 @@ export const adminSidebarItems: SidebarItem[] = [
     title: "Dashboard",
     href: "/admin/dashboard",
     icon: LayoutDashboard,
+  },
+  {
+    title: "Position Templates",
+    href: "/position-templates",
+    icon: ClipboardList,
   },
   {
     title: "Election Session Management",

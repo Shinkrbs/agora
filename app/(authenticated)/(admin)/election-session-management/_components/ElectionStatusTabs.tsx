@@ -34,7 +34,7 @@ export function ElectionStatusTabs({
     statuses.find((status) => status.value === activeStatus) ?? statuses[0];
 
   return (
-    <div className="w-full">
+    <div className="w-full" suppressHydrationWarning>
       <div className="md:hidden">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

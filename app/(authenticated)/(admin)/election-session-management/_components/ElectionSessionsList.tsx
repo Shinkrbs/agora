@@ -39,7 +39,7 @@ export function ElectionSessionsList({
   }, [activeStatus, searchQuery, initialElections]);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" suppressHydrationWarning>
       <div className="space-y-1">
         <h1 className="text-2xl sm:text-3xl font-bold text-foreground leading-tight">
           Election Session Management

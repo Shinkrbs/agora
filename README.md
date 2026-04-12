@@ -7,6 +7,7 @@
 AG.010.001 | 2026-02-27 |
 AG.010.002 | 2026-03-22 |
 AG.010.003 | 2026-04-05 |
+AG.010.004 | 2026-04-13 |
 
 ## AG.010.001 Release Notes 
 
@@ -43,6 +44,20 @@ AG.010.003 | 2026-04-05 |
 ● Database Type Safety: Established foundational enums and interfaces for Supabase interactions.
 
 ● Profile Management: Initial CRUD functionality for user profile pages.
+
+## AG.010.004 Release Notes 
+
+● Users can now seamlessly create, edit, and join organizations directly within the system.  
+
+● Introduced a complete payment verification system for organizations and elections, including GCash QR integration and status filtering.  
+
+ ● Added the end-to-end workflow for creating election sessions, managing dynamic data, and processing election-specific payments.  
+
+● Replaced hard coded positions with a custom template builder, allowing you to create, edit, duplicate, and dynamically select ballot structures for new elections.
+
+● Improved mobile responsiveness, unified global theming, added semantic status colors (e.g., green for verified, yellow for pending), and smoothed out the organization-switching experience.  
+
+● Fixed major election-related routing issues and transitioned multiple pages from static mockups to dynamic, database-driven interfaces. 
 
 ## Important Links
 

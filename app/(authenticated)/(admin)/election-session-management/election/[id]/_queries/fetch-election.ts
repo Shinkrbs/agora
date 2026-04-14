@@ -62,7 +62,6 @@ const paymentStatus: (electionId: string) => Promise<PaymentStatus> = async (ele
         if(error) {
             console.error("Error checking payment status:", error);
         }
-        console.log("Payment status data:", data);
         return data === null ? "unpaid" : (data.status as PaymentStatus);
     } catch (error) {
         console.error("Error checking payment status:", error);
@@ -111,9 +110,6 @@ export async function fetchElection(electionId: string): Promise<{data: Election
                 isSetupComplete: isSetupComplete,
             }
         }
-
-        console.log("Election data:", election);
-
 
         return { data: election, message: "Election fetched successfully", error: null };
     } catch (error) {

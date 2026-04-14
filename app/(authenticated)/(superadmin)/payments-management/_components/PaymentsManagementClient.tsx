@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { OrganizationPaymentRowData } from "../_types/payment-types";
+import { ElectionPaymentRowData } from "../_types/election-payment-types";
 import { OrganizationPaymentsTable } from "./OrganizationPaymentsTable";
 import { ElectionsPaymentsTable } from "./ElectionsPaymentsTable";
 import { ChevronDown } from "lucide-react";
@@ -16,6 +17,7 @@ import {
 
 interface PaymentsManagementClientProps {
   organizationPayments: OrganizationPaymentRowData[];
+  electionPayments: ElectionPaymentRowData[];
   onPaymentUpdated?: () => void;
   onVerifyPayment?: (paymentId: string) => void;
   onRejectPayment?: (paymentId: string) => void;
@@ -23,6 +25,7 @@ interface PaymentsManagementClientProps {
 
 export function PaymentsManagementClient({
   organizationPayments,
+  electionPayments,
   onPaymentUpdated,
 }: PaymentsManagementClientProps) {
   const [activeTab, setActiveTab] = useState("organizations");
@@ -101,7 +104,10 @@ export function PaymentsManagementClient({
 
           {/* Elections Tab */}
           <TabsContent value="elections" className="mt-6">
-            <ElectionsPaymentsTable />
+            <ElectionsPaymentsTable
+              payments={electionPayments}
+              onPaymentUpdated={onPaymentUpdated}
+            />
           </TabsContent>
         </Tabs>
       </div>

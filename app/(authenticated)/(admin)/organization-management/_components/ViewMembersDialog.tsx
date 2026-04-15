@@ -1,9 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { X, Building2, UserCircle } from "lucide-react";
+import { Input } from "@/components/ui/input"; // Make sure you have this component
+import { X, Building2, UserCircle, Search } from "lucide-react";
 import Image from "next/image";
 import { MemberDetails } from "../_types/_mockmembersdata";
 
@@ -13,7 +15,7 @@ interface ViewOrganizationDialogProps {
   name: string;
   shorthandName: string;
   logoUrl?: string | null;
-  members: MemberDetails[]; // Added members prop
+  members: MemberDetails[];
 }
 
 export function ViewOrganizationDialog({
@@ -24,11 +26,22 @@ export function ViewOrganizationDialog({
   logoUrl,
   members,
 }: ViewOrganizationDialogProps) {
+  // State for the search query
+  const [searchQuery, setSearchQuery] = useState("");
+
   if (!isOpen) return null;
+
+  // Filter members based on name or email
+  const filteredMembers = members.filter((member) => {
+    const fullName = `${member.first_name} ${member.last_name}`.toLowerCase();
+    const email = member.email.toLowerCase();
+    const query = searchQuery.toLowerCase();
+
+    return fullName.includes(query) || email.includes(query);
+  });
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      {/* Increased max-width to max-w-3xl to fit the table comfortably */}
       <Card className="w-full max-w-3xl p-6 md:p-8 relative max-h-[90vh] flex flex-col">
         <button
           type="button"
@@ -48,12 +61,12 @@ export function ViewOrganizationDialog({
           </p>
         </div>
 
-        <div className="flex-1 overflow-hidden flex flex-col space-y-6">
+        <div className="flex-1 overflow-hidden flex flex-col space-y-4">
           {/* Organization Info Header */}
           <div className="shrink-0 flex items-center gap-3 bg-slate-50 dark:bg-slate-900/50 p-3 rounded-lg border border-slate-100 dark:border-slate-800">
             {logoUrl ? (
               <div className="shrink-0 w-10 h-10 rounded-md overflow-hidden border border-slate-200 dark:border-slate-700 bg-white">
-                <Image
+                <Image // Note: keeping as Image, change back to <img> if using external mock URLs without config
                   src={logoUrl}
                   alt={`${name} logo`}
                   width={40}
@@ -77,6 +90,18 @@ export function ViewOrganizationDialog({
             </div>
           </div>
 
+          {/* Search Bar */}
+          <div className="shrink-0 relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500 dark:text-slate-400" />
+            <Input
+              type="text"
+              placeholder="Search members by name or email..."
+              className="pl-9 w-full"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+
           {/* Members Table */}
           <div className="flex-1 overflow-hidden border border-slate-200 dark:border-slate-800 rounded-lg flex flex-col">
             <div className="overflow-y-auto max-h-[40vh]">
@@ -87,13 +112,12 @@ export function ViewOrganizationDialog({
                     <th className="px-4 py-3 font-medium">Email</th>
                     <th className="px-4 py-3 font-medium">Role</th>
                     <th className="px-4 py-3 font-medium">Joined Date</th>
-                    <th className="px-4 py-3 font-medium">Kicked Date</th>{" "}
-                    {/* Added Header */}
+                    <th className="px-4 py-3 font-medium">Kicked Date</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
-                  {members.length > 0 ? (
-                    members.map((member) => (
+                  {filteredMembers.length > 0 ? (
+                    filteredMembers.map((member) => (
                       <tr
                         key={member.id}
                         className="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors"
@@ -138,7 +162,6 @@ export function ViewOrganizationDialog({
                             },
                           )}
                         </td>
-                        {/* Added Kicked Date Data */}
                         <td className="px-4 py-3 text-slate-500 dark:text-slate-400">
                           {member.kicked_at ? (
                             new Date(member.kicked_at).toLocaleDateString(
@@ -160,12 +183,14 @@ export function ViewOrganizationDialog({
                   ) : (
                     <tr>
                       <td
-                        colSpan={
-                          5
-                        } /* Updated colSpan from 4 to 5 to match new column count */
+                        colSpan={5}
                         className="px-4 py-8 text-center text-slate-500"
                       >
-                        No members found.
+                        {searchQuery ? (
+                          <>No members found matching "{searchQuery}".</>
+                        ) : (
+                          <>No members found.</>
+                        )}
                       </td>
                     </tr>
                   )}

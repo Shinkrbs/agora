@@ -13,14 +13,14 @@ import { Button } from "@/components/ui/button";
 
 interface ReceiptModalProps {
   receiptUrl: string;
-  orgName: string;
+  title: string;
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
 export function ReceiptModal({
   receiptUrl,
-  orgName,
+  title,
   isOpen,
   onOpenChange,
 }: ReceiptModalProps) {
@@ -32,7 +32,7 @@ export function ReceiptModal({
         <DialogHeader>
           <DialogTitle>Payment Receipt</DialogTitle>
           <DialogDescription>
-            Receipt for {orgName}
+            Receipt for {title}
           </DialogDescription>
         </DialogHeader>
         <div className="relative w-full bg-muted rounded-lg overflow-hidden">
@@ -44,7 +44,7 @@ export function ReceiptModal({
           <div className="relative w-full h-96">
             <Image
               src={receiptUrl}
-              alt={`Payment receipt for ${orgName}`}
+              alt={`Payment receipt for ${title}`}
               fill
               className="object-contain"
               onLoadingComplete={() => setIsImageLoading(false)}

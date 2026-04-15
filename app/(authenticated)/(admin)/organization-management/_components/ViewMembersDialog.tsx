@@ -37,10 +37,10 @@ export function ViewOrganizationDialog({
 
         <div className="mb-6">
           <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-50">
-            Organization Details
+            View Members
           </h2>
           <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
-            View information about this organization
+            Here you can see the members of the organization.
           </p>
         </div>
 

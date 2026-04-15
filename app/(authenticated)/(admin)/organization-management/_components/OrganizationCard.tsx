@@ -20,6 +20,7 @@ import {
 import Image from "next/image";
 import { ApprovalStatus } from "@/types/database";
 import { EditOrganizationDialog } from "./EditOrganizationDialog";
+import { ViewOrganizationDialog } from "./ViewMembersDialog";
 
 interface OrganizationCardProps {
   id: string;
@@ -66,6 +67,7 @@ export function OrganizationCard({
   approvalStatus,
 }: OrganizationCardProps) {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
   const statusConfig = getStatusConfig(approvalStatus);
   const StatusIcon = statusConfig.icon;
   const isApproved = approvalStatus === "approved";
@@ -101,7 +103,7 @@ export function OrganizationCard({
                 <DropdownMenuItem
                   className="cursor-pointer"
                   disabled={!isApproved}
-                  onClick={() => setIsEditDialogOpen(true)}
+                  onClick={() => setIsViewDialogOpen(true)}
                 >
                   <CircleUser className="h-4 w-4 mr-2" />
                   View Members
@@ -159,6 +161,13 @@ export function OrganizationCard({
         initialName={name}
         initialShorthand={shorthandName}
         initialLogoUrl={logoUrl}
+      />
+      <ViewOrganizationDialog
+        isOpen={isViewDialogOpen}
+        onClose={() => setIsViewDialogOpen(false)}
+        name={name} // Adjust these props based on your actual data variables
+        shorthandName={shorthandName}
+        logoUrl={logoUrl}
       />
     </>
   );

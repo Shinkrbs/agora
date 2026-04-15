@@ -5,9 +5,6 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { X, Building2, UserCircle, Search, Filter } from "lucide-react";
-import Image from "next/image";
-import { MemberDetails } from "../_types/_mockmembersdata";
 import {
   Select,
   SelectContent,
@@ -15,6 +12,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { X, Building2, UserCircle, Search, Filter } from "lucide-react";
+import Image from "next/image";
+import { MemberDetails } from "../_types/_mockmembersdata";
 
 interface ViewOrganizationDialogProps {
   isOpen: boolean;
@@ -25,7 +25,6 @@ interface ViewOrganizationDialogProps {
   members: MemberDetails[];
 }
 
-// Define the valid filter options
 type FilterStatus = "all" | "active" | "kicked";
 
 export function ViewOrganizationDialog({
@@ -36,58 +35,53 @@ export function ViewOrganizationDialog({
   logoUrl,
   members,
 }: ViewOrganizationDialogProps) {
-  // States for search and filtering
   const [searchQuery, setSearchQuery] = useState("");
   const [filterStatus, setFilterStatus] = useState<FilterStatus>("all");
 
   if (!isOpen) return null;
 
-  // Filter members based on BOTH search query AND selected status
   const filteredMembers = members.filter((member) => {
-    // 1. Search Query Logic
     const fullName = `${member.first_name} ${member.last_name}`.toLowerCase();
     const email = member.email.toLowerCase();
     const query = searchQuery.toLowerCase();
     const matchesSearch = fullName.includes(query) || email.includes(query);
 
-    // 2. Status Filter Logic
     let matchesFilter = true;
     if (filterStatus === "active") {
-      matchesFilter = member.kicked_at === null; // Active means no kicked_at date
+      matchesFilter = member.kicked_at === null;
     } else if (filterStatus === "kicked") {
-      matchesFilter = member.kicked_at !== null; // Kicked means they have a kicked_at date
+      matchesFilter = member.kicked_at !== null;
     }
 
-    // Must match both to show up in the table
     return matchesSearch && matchesFilter;
   });
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <Card className="w-full max-w-3xl p-6 md:p-8 relative max-h-[90vh] flex flex-col">
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <Card className="w-full max-w-3xl p-6 md:p-8 relative max-h-[90vh] flex flex-col bg-card text-card-foreground border-border shadow-lg">
         <button
           type="button"
           onClick={onClose}
-          className="absolute top-6 right-6 p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-md transition-colors"
+          className="absolute top-6 right-6 p-2 hover:bg-accent hover:text-accent-foreground rounded-md transition-colors"
           aria-label="Close dialog"
         >
-          <X className="h-5 w-5 text-slate-600 dark:text-slate-400" />
+          <X className="h-5 w-5 text-muted-foreground" />
         </button>
 
         <div className="mb-6 shrink-0">
-          <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-50">
+          <h2 className="text-2xl font-semibold text-foreground">
             Organization Members
           </h2>
-          <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
+          <p className="text-sm text-muted-foreground mt-1">
             View the list of members currently in this organization.
           </p>
         </div>
 
         <div className="flex-1 overflow-hidden flex flex-col space-y-4">
           {/* Organization Info Header */}
-          <div className="shrink-0 flex items-center gap-3 bg-slate-50 dark:bg-slate-900/50 p-3 rounded-lg border border-slate-100 dark:border-slate-800">
+          <div className="shrink-0 flex items-center gap-3 bg-muted/50 p-3 rounded-lg border border-border">
             {logoUrl ? (
-              <div className="shrink-0 w-10 h-10 rounded-md overflow-hidden border border-slate-200 dark:border-slate-700 bg-white">
+              <div className="shrink-0 w-10 h-10 rounded-md overflow-hidden border border-border bg-background">
                 <Image
                   src={logoUrl}
                   alt={`${name} logo`}
@@ -97,16 +91,16 @@ export function ViewOrganizationDialog({
                 />
               </div>
             ) : (
-              <div className="shrink-0 w-10 h-10 rounded-md flex items-center justify-center border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800">
-                <Building2 className="w-5 h-5 text-slate-400" />
+              <div className="shrink-0 w-10 h-10 rounded-md flex items-center justify-center border border-border bg-muted">
+                <Building2 className="w-5 h-5 text-muted-foreground" />
               </div>
             )}
 
             <div className="flex flex-col">
-              <Label className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-0.5">
+              <Label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-0.5">
                 Organization Name
               </Label>
-              <p className="text-sm font-medium text-slate-900 dark:text-slate-50 leading-tight">
+              <p className="text-sm font-medium text-foreground leading-tight">
                 {name || "N/A"} {shorthandName && `(${shorthandName})`}
               </p>
             </div>
@@ -114,28 +108,28 @@ export function ViewOrganizationDialog({
 
           {/* Search and Filter Controls */}
           <div className="shrink-0 flex flex-col sm:flex-row gap-3">
-            {/* Search Bar */}
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500 dark:text-slate-400" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 type="text"
                 placeholder="Search members by name or email..."
-                className="pl-9 w-full"
+                className="pl-9 w-full bg-background border-input"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
 
-            {/* Status Filter Dropdown */}
-            <div className="relative shrink-0">
-              <Filter className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500 dark:text-slate-400 pointer-events-none" />
+            <div className="relative shrink-0 w-full sm:w-[180px]">
+              <div className="absolute left-3 top-1/2 -translate-y-1/2 z-10 pointer-events-none">
+                <Filter className="h-4 w-4 text-muted-foreground" />
+              </div>
               <Select
                 value={filterStatus}
                 onValueChange={(value) =>
                   setFilterStatus(value as FilterStatus)
                 }
               >
-                <SelectTrigger className="w-full pl-9">
+                <SelectTrigger className="w-full pl-9 bg-background border-input">
                   <SelectValue placeholder="Filter status..." />
                 </SelectTrigger>
                 <SelectContent position="popper" sideOffset={4}>
@@ -148,10 +142,10 @@ export function ViewOrganizationDialog({
           </div>
 
           {/* Members Table */}
-          <div className="flex-1 overflow-hidden border border-slate-200 dark:border-slate-800 rounded-lg flex flex-col">
+          <div className="flex-1 overflow-hidden border border-border rounded-lg flex flex-col bg-card">
             <div className="overflow-y-auto max-h-[40vh]">
               <table className="w-full text-sm text-left whitespace-nowrap">
-                <thead className="bg-slate-50 dark:bg-slate-900/80 sticky top-0 z-10 text-slate-500 dark:text-slate-400 backdrop-blur-sm shadow-sm">
+                <thead className="bg-muted/50 sticky top-0 z-10 text-muted-foreground backdrop-blur-sm shadow-sm border-b border-border">
                   <tr>
                     <th className="px-4 py-3 font-medium">Member</th>
                     <th className="px-4 py-3 font-medium">Email</th>
@@ -160,12 +154,12 @@ export function ViewOrganizationDialog({
                     <th className="px-4 py-3 font-medium">Kicked Date</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
+                <tbody className="divide-y divide-border">
                   {filteredMembers.length > 0 ? (
                     filteredMembers.map((member) => (
                       <tr
                         key={member.id}
-                        className="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors"
+                        className="hover:bg-muted/50 transition-colors"
                       >
                         <td className="px-4 py-3 flex items-center gap-3">
                           {member.avatar_url ? (
@@ -174,53 +168,49 @@ export function ViewOrganizationDialog({
                               alt={`${member.first_name} avatar`}
                               width={28}
                               height={28}
-                              className="rounded-full object-cover border border-slate-200 dark:border-slate-700"
+                              className="rounded-full object-cover border border-border"
                             />
                           ) : (
-                            <UserCircle className="w-7 h-7 text-slate-400" />
+                            <UserCircle className="w-7 h-7 text-muted-foreground" />
                           )}
-                          <span className="font-medium text-slate-900 dark:text-slate-50">
+                          <span className="font-medium text-foreground">
                             {member.first_name} {member.last_name}
                           </span>
                         </td>
-                        <td className="px-4 py-3 text-slate-600 dark:text-slate-300">
+                        <td className="px-4 py-3 text-muted-foreground">
                           {member.email}
                         </td>
                         <td className="px-4 py-3">
                           <span
-                            className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium
-                              ${member.role === "OWNER" ? "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400" : ""}
-                              ${member.role === "ADMIN" ? "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400" : ""}
-                              ${member.role === "MEMBER" ? "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-400" : ""}
+                            className={`inline-flex items-center px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider
+                              ${member.role === "OWNER" ? "bg-primary/15 text-primary" : ""}
+                              ${member.role === "ADMIN" ? "bg-secondary text-secondary-foreground" : ""}
+                              ${member.role === "MEMBER" ? "bg-muted text-muted-foreground" : ""}
                             `}
                           >
                             {member.role}
                           </span>
                         </td>
-                        <td className="px-4 py-3 text-slate-500 dark:text-slate-400">
+                        <td className="px-4 py-3 text-muted-foreground">
                           {new Date(member.joined_at).toLocaleDateString(
                             undefined,
-                            {
-                              year: "numeric",
-                              month: "short",
-                              day: "numeric",
-                            },
+                            { year: "numeric", month: "short", day: "numeric" },
                           )}
                         </td>
-                        <td className="px-4 py-3 text-slate-500 dark:text-slate-400">
+                        <td className="px-4 py-3 text-muted-foreground">
                           {member.kicked_at ? (
-                            new Date(member.kicked_at).toLocaleDateString(
-                              undefined,
-                              {
-                                year: "numeric",
-                                month: "short",
-                                day: "numeric",
-                              },
-                            )
-                          ) : (
-                            <span className="text-slate-400 dark:text-slate-500 italic">
-                              -
+                            <span className="text-destructive font-medium">
+                              {new Date(member.kicked_at).toLocaleDateString(
+                                undefined,
+                                {
+                                  year: "numeric",
+                                  month: "short",
+                                  day: "numeric",
+                                },
+                              )}
                             </span>
+                          ) : (
+                            <span className="italic opacity-50">-</span>
                           )}
                         </td>
                       </tr>
@@ -229,7 +219,7 @@ export function ViewOrganizationDialog({
                     <tr>
                       <td
                         colSpan={5}
-                        className="px-4 py-8 text-center text-slate-500"
+                        className="px-4 py-8 text-center text-muted-foreground"
                       >
                         {searchQuery || filterStatus !== "all" ? (
                           <>No members found matching your search or filter.</>

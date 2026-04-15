@@ -4,8 +4,8 @@ import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input"; // Make sure you have this component
-import { X, Building2, UserCircle, Search } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { X, Building2, UserCircle, Search, Filter } from "lucide-react";
 import Image from "next/image";
 import { MemberDetails } from "../_types/_mockmembersdata";
 
@@ -18,6 +18,9 @@ interface ViewOrganizationDialogProps {
   members: MemberDetails[];
 }
 
+// Define the valid filter options
+type FilterStatus = "all" | "active" | "kicked";
+
 export function ViewOrganizationDialog({
   isOpen,
   onClose,
@@ -26,18 +29,30 @@ export function ViewOrganizationDialog({
   logoUrl,
   members,
 }: ViewOrganizationDialogProps) {
-  // State for the search query
+  // States for search and filtering
   const [searchQuery, setSearchQuery] = useState("");
+  const [filterStatus, setFilterStatus] = useState<FilterStatus>("all");
 
   if (!isOpen) return null;
 
-  // Filter members based on name or email
+  // Filter members based on BOTH search query AND selected status
   const filteredMembers = members.filter((member) => {
+    // 1. Search Query Logic
     const fullName = `${member.first_name} ${member.last_name}`.toLowerCase();
     const email = member.email.toLowerCase();
     const query = searchQuery.toLowerCase();
+    const matchesSearch = fullName.includes(query) || email.includes(query);
 
-    return fullName.includes(query) || email.includes(query);
+    // 2. Status Filter Logic
+    let matchesFilter = true;
+    if (filterStatus === "active") {
+      matchesFilter = member.kicked_at === null; // Active means no kicked_at date
+    } else if (filterStatus === "kicked") {
+      matchesFilter = member.kicked_at !== null; // Kicked means they have a kicked_at date
+    }
+
+    // Must match both to show up in the table
+    return matchesSearch && matchesFilter;
   });
 
   return (
@@ -66,7 +81,7 @@ export function ViewOrganizationDialog({
           <div className="shrink-0 flex items-center gap-3 bg-slate-50 dark:bg-slate-900/50 p-3 rounded-lg border border-slate-100 dark:border-slate-800">
             {logoUrl ? (
               <div className="shrink-0 w-10 h-10 rounded-md overflow-hidden border border-slate-200 dark:border-slate-700 bg-white">
-                <Image // Note: keeping as Image, change back to <img> if using external mock URLs without config
+                <Image
                   src={logoUrl}
                   alt={`${name} logo`}
                   width={40}
@@ -90,16 +105,35 @@ export function ViewOrganizationDialog({
             </div>
           </div>
 
-          {/* Search Bar */}
-          <div className="shrink-0 relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500 dark:text-slate-400" />
-            <Input
-              type="text"
-              placeholder="Search members by name or email..."
-              className="pl-9 w-full"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
+          {/* Search and Filter Controls */}
+          <div className="shrink-0 flex flex-col sm:flex-row gap-3">
+            {/* Search Bar */}
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500 dark:text-slate-400" />
+              <Input
+                type="text"
+                placeholder="Search members by name or email..."
+                className="pl-9 w-full"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+
+            {/* Status Filter Dropdown */}
+            <div className="relative shrink-0">
+              <Filter className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500 dark:text-slate-400 pointer-events-none" />
+              <select
+                className="flex h-10 w-full sm:w-[180px] items-center justify-between rounded-md border border-slate-200 bg-white pl-9 pr-3 py-2 text-sm ring-offset-white focus:outline-none focus:ring-2 focus:ring-slate-950 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-800 dark:bg-slate-950 dark:ring-offset-slate-950 dark:focus:ring-slate-300 text-slate-900 dark:text-slate-50 appearance-none cursor-pointer"
+                value={filterStatus}
+                onChange={(e) =>
+                  setFilterStatus(e.target.value as FilterStatus)
+                }
+              >
+                <option value="all">All Members</option>
+                <option value="active">Active Members</option>
+                <option value="kicked">Kicked Members</option>
+              </select>
+            </div>
           </div>
 
           {/* Members Table */}
@@ -144,10 +178,10 @@ export function ViewOrganizationDialog({
                         <td className="px-4 py-3">
                           <span
                             className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium
-                  ${member.role === "OWNER" ? "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400" : ""}
-                  ${member.role === "ADMIN" ? "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400" : ""}
-                  ${member.role === "MEMBER" ? "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-400" : ""}
-                `}
+                              ${member.role === "OWNER" ? "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400" : ""}
+                              ${member.role === "ADMIN" ? "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400" : ""}
+                              ${member.role === "MEMBER" ? "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-400" : ""}
+                            `}
                           >
                             {member.role}
                           </span>
@@ -186,8 +220,8 @@ export function ViewOrganizationDialog({
                         colSpan={5}
                         className="px-4 py-8 text-center text-slate-500"
                       >
-                        {searchQuery ? (
-                          <>No members found matching "{searchQuery}".</>
+                        {searchQuery || filterStatus !== "all" ? (
+                          <>No members found matching your search or filter.</>
                         ) : (
                           <>No members found.</>
                         )}

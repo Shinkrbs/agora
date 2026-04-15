@@ -8,6 +8,13 @@ import { Input } from "@/components/ui/input";
 import { X, Building2, UserCircle, Search, Filter } from "lucide-react";
 import Image from "next/image";
 import { MemberDetails } from "../_types/_mockmembersdata";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface ViewOrganizationDialogProps {
   isOpen: boolean;
@@ -122,17 +129,21 @@ export function ViewOrganizationDialog({
             {/* Status Filter Dropdown */}
             <div className="relative shrink-0">
               <Filter className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500 dark:text-slate-400 pointer-events-none" />
-              <select
-                className="flex h-10 w-full sm:w-[180px] items-center justify-between rounded-md border border-slate-200 bg-white pl-9 pr-3 py-2 text-sm ring-offset-white focus:outline-none focus:ring-2 focus:ring-slate-950 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-800 dark:bg-slate-950 dark:ring-offset-slate-950 dark:focus:ring-slate-300 text-slate-900 dark:text-slate-50 appearance-none cursor-pointer"
+              <Select
                 value={filterStatus}
-                onChange={(e) =>
-                  setFilterStatus(e.target.value as FilterStatus)
+                onValueChange={(value) =>
+                  setFilterStatus(value as FilterStatus)
                 }
               >
-                <option value="all">All Members</option>
-                <option value="active">Active Members</option>
-                <option value="kicked">Kicked Members</option>
-              </select>
+                <SelectTrigger className="w-full pl-9">
+                  <SelectValue placeholder="Filter status..." />
+                </SelectTrigger>
+                <SelectContent position="popper" sideOffset={4}>
+                  <SelectItem value="all">All Members</SelectItem>
+                  <SelectItem value="active">Active Members</SelectItem>
+                  <SelectItem value="kicked">Kicked Members</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
 

@@ -450,7 +450,7 @@ export function OrganizationPaymentsTable({
       {isReceiptModalOpen && selectedReceipt && (
         <ReceiptModal
           receiptUrl={selectedReceipt.url}
-          orgName={selectedReceipt.orgName}
+          title={selectedReceipt.orgName}
           isOpen={isReceiptModalOpen}
           onOpenChange={(open) => {
             if (!open) {

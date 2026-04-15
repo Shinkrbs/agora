@@ -21,6 +21,7 @@ import Image from "next/image";
 import { ApprovalStatus } from "@/types/database";
 import { EditOrganizationDialog } from "./EditOrganizationDialog";
 import { ViewOrganizationDialog } from "./ViewMembersDialog";
+import { mockCombinedMembers } from "../_types/_mockmembersdata";
 
 interface OrganizationCardProps {
   id: string;
@@ -165,9 +166,10 @@ export function OrganizationCard({
       <ViewOrganizationDialog
         isOpen={isViewDialogOpen}
         onClose={() => setIsViewDialogOpen(false)}
-        name={name} // Adjust these props based on your actual data variables
+        name={name}
         shorthandName={shorthandName}
         logoUrl={logoUrl}
+        members={mockCombinedMembers} // Pass the mock data here
       />
     </>
   );

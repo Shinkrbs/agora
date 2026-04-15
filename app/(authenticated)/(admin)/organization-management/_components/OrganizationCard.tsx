@@ -9,7 +9,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { MoreVertical, Pencil, Check, Clock, X } from "lucide-react";
+import {
+  MoreVertical,
+  Pencil,
+  Check,
+  Clock,
+  X,
+  CircleUser,
+} from "lucide-react";
 import Image from "next/image";
 import { ApprovalStatus } from "@/types/database";
 import { EditOrganizationDialog } from "./EditOrganizationDialog";
@@ -96,9 +103,18 @@ export function OrganizationCard({
                   disabled={!isApproved}
                   onClick={() => setIsEditDialogOpen(true)}
                 >
+                  <CircleUser className="h-4 w-4 mr-2" />
+                  View Members
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  disabled={!isApproved}
+                  onClick={() => setIsEditDialogOpen(true)}
+                >
                   <Pencil className="h-4 w-4 mr-2" />
                   Edit Organization
                 </DropdownMenuItem>
+
                 <DropdownMenuItem className="cursor-pointer">
                   Switch to {name}
                 </DropdownMenuItem>

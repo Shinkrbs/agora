@@ -1,0 +1,1 @@
+export { PartylistCard } from "./PartylistCard";

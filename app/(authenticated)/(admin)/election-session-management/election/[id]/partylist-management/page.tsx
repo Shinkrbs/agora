@@ -3,7 +3,7 @@
 import { use, useEffect, useState } from "react";
 import { fetchPartylists } from "./_actions/fetch-partylists-action";
 import { PartylistWithCandidateCount } from "./_types/partylist-types";
-import { PartylistCard } from "./_components";
+import { PartylistCard, DeletePartylistModal } from "./_components";
 
 export default function PartylistManagementPage({
   params,
@@ -15,6 +15,8 @@ export default function PartylistManagementPage({
   const { id } = use(params);
   const [partylists, setPartylists] = useState<PartylistWithCandidateCount[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [selectedPartylist, setSelectedPartylist] = useState<PartylistWithCandidateCount | null>(null);
 
   useEffect(() => {
     async function hanldeFetchPartylists() {
@@ -36,8 +38,21 @@ export default function PartylistManagementPage({
   };
 
   const handleDelete = (partylistId: string) => {
-    console.log("Delete partylist:", partylistId);
-    // TODO: Implement delete functionality
+    const partylist = partylists.find((p) => p.id === partylistId) || null;
+    setSelectedPartylist(partylist);
+    setDeleteModalOpen(true);
+  };
+
+  const handleDeleteSuccess = async () => {
+    // Refetch partylists after successful deletion
+    setIsLoading(true);
+    const partylistsData = await fetchPartylists(id);
+    if (partylistsData.data) {
+      setPartylists(partylistsData.data);
+    } else {
+      console.error("Error fetching partylists:", partylistsData.error);
+    }
+    setIsLoading(false);
   };
   return (
     <div className="space-y-6">
@@ -68,6 +83,13 @@ export default function PartylistManagementPage({
           </div>
         )}
       </div>
+
+      <DeletePartylistModal
+        open={deleteModalOpen}
+        onOpenChange={setDeleteModalOpen}
+        partylist={selectedPartylist}
+        onSuccess={handleDeleteSuccess}
+      />
     </div>
   );
 }

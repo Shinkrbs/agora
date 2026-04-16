@@ -58,9 +58,6 @@ export function ViewOrganizationDialog({
 
   return (
     <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      {/* RESIZE UPDATES: Added resize, overflow-hidden, and explicit dimensions. 
-        w-[800px] sets a default start width, while max-w/max-h constraints prevent it from growing off-screen.
-      */}
       <Card className="w-[800px] max-w-[95vw] h-[75vh] max-h-[95vh] min-w-[320px] min-h-[400px] p-6 md:p-8 relative flex flex-col bg-card text-card-foreground border-border shadow-lg resize overflow-hidden">
         <button
           type="button"
@@ -146,7 +143,6 @@ export function ViewOrganizationDialog({
 
           {/* Members Table */}
           <div className="flex-1 overflow-hidden border border-border rounded-lg flex flex-col bg-card">
-            {/* RESIZE UPDATE: Replaced max-h-[40vh] with h-full so it adapts dynamically */}
             <div className="overflow-y-auto h-full">
               <table className="w-full text-sm text-left whitespace-nowrap">
                 <thead className="bg-muted/50 sticky top-0 z-10 text-muted-foreground backdrop-blur-sm shadow-sm border-b border-border">
@@ -238,15 +234,7 @@ export function ViewOrganizationDialog({
             </div>
           </div>
 
-          <div className="shrink-0 pt-4">
-            <Button
-              type="button"
-              onClick={onClose}
-              className="w-full sm:w-auto sm:float-right"
-            >
-              Close Window
-            </Button>
-          </div>
+          <div className="shrink-0 pt-4"></div>
         </div>
       </Card>
     </div>

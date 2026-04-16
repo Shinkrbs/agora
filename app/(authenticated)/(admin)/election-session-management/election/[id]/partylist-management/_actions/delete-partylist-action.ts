@@ -11,6 +11,11 @@ export async function deletePartylist(partylistId: string): Promise<{ success: b
         const { error } = await supabase.from("partylists").update({ is_deleted: true }).eq("id", partylistId);
         if (error) {
             throw new Error("Failed to delete partylist");
+        } else {
+            const {error} = await supabase.from("candidates").update({ partylist_id: null }).eq("partylist_id", partylistId);
+            if(error) {
+                throw new Error("Failed to update candidates");
+            }
         }
         return { success: true, error: null };
     } catch (error) {

@@ -308,18 +308,26 @@ export const mockOrganizationMembers: OrganizationMember[] = [
   },
 ];
 // Combined Data with dynamically mapped UI fields
-export const mockCombinedMembers: MemberDetails[] = mockOrganizationMembers.map(
-  (member) => {
-    // Find the associated user for this member
-    const user = mockUsers.find((u) => u.id === member.user_id);
+const mapMockMemberDetails = (member: OrganizationMember): MemberDetails => {
+  // Find the associated user for this member
+  const user = mockUsers.find((u) => u.id === member.user_id);
 
-    return {
-      ...member,
-      // Flatten the requested user details directly onto the member object
-      first_name: user?.first_name || "Unknown",
-      last_name: user?.last_name || "Unknown",
-      email: user?.email || "No email provided",
-      avatar_url: user?.avatar_url || null,
-    };
-  },
-);
+  return {
+    ...member,
+    // Flatten the requested user details directly onto the member object
+    first_name: user?.first_name || "Unknown",
+    last_name: user?.last_name || "Unknown",
+    email: user?.email || "No email provided",
+    avatar_url: user?.avatar_url || null,
+  };
+};
+
+// New helper function to get members scoped to a specific organization
+export const getMockMembersForOrg = (orgId: string): MemberDetails[] =>
+  mockOrganizationMembers
+    .filter((member) => member.organization_id === orgId)
+    .map(mapMockMemberDetails);
+
+// Keeping this for backward compatibility or global views
+export const mockCombinedMembers: MemberDetails[] =
+  mockOrganizationMembers.map(mapMockMemberDetails);

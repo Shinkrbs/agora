@@ -3,7 +3,13 @@ export type OrgMemberRole = "owner" | "editor" | "viewer" | "member";
 
 export type ApprovalStatus = "pending" | "approved" | "rejected";
 export type PaymentStatus = "unpaid" | "pending" | "verified" | "rejected";
-export type ElectionStatus = "draft" | "scheduled" | "active" | "completed" | "cancelled" | "archived";
+export type ElectionStatus =
+  | "draft"
+  | "scheduled"
+  | "active"
+  | "completed"
+  | "cancelled"
+  | "archived";
 export type VoterCodeStatus = "unused" | "used" | "revoked";
 
 // ==========================================
@@ -44,7 +50,13 @@ export interface OrganizationMember {
   joined_at: string;
   kicked_at: string | null;
 }
-
+// Flattened type for the Dialog UI
+export interface MemberDetails extends OrganizationMember {
+  first_name: string;
+  last_name: string;
+  email: string;
+  avatar_url?: string | null;
+}
 // ==========================================
 // BILLING & LEDGERS
 // ==========================================
@@ -166,7 +178,13 @@ export interface PositionTemplate {
 // Profile attributes
 export type UserProfileEditable = Pick<
   User,
-  "avatar_url" | "username" | "first_name" | "last_name" | "middle_name" | "suffix" | "email"
+  | "avatar_url"
+  | "username"
+  | "first_name"
+  | "last_name"
+  | "middle_name"
+  | "suffix"
+  | "email"
 >;
 
 export type UserProfileReadonly = Pick<

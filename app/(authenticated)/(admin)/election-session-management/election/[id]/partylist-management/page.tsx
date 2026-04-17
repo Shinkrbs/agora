@@ -1,9 +1,13 @@
 "use client";
 
 import { use, useEffect, useState } from "react";
+import { toast } from "sonner";
 import { fetchPartylists } from "./_actions/fetch-partylists-action";
+import { editPartylist } from "./_actions/edit-partylist";
 import { PartylistWithCandidateCount } from "./_types/partylist-types";
-import { PartylistCard, DeletePartylistModal } from "./_components";
+import { PartylistCard, DeletePartylistModal, EditPartylistModal } from "./_components";
+import { Candidate } from "@/types/database";
+import { fetchCandidatesAction } from "@/lib/actions/candidates";
 
 export default function PartylistManagementPage({
   params,
@@ -14,12 +18,14 @@ export default function PartylistManagementPage({
 }) {
   const { id } = use(params);
   const [partylists, setPartylists] = useState<PartylistWithCandidateCount[]>([]);
+  const [candidates, setCandidates] = useState<Candidate[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [editModalOpen, setEditModalOpen] = useState(false);
   const [selectedPartylist, setSelectedPartylist] = useState<PartylistWithCandidateCount | null>(null);
 
   useEffect(() => {
-    async function hanldeFetchPartylists() {
+    async function handleFetchPartylists() {
       setIsLoading(true);
       const partylistsData = await fetchPartylists(id);
       if (partylistsData.data) {
@@ -27,14 +33,24 @@ export default function PartylistManagementPage({
       } else {
         console.error("Error fetching partylists:", partylistsData.error);
       }
+    }
+    async function handleFetchCandidates() {
+      setIsLoading(true);
+      const cadidatesData = await fetchCandidatesAction(id);
+      if (cadidatesData.data) {
+        setCandidates(cadidatesData.data);
+      } else {
+        console.error("Error fetching candidates:", cadidatesData.error);
+      }
       setIsLoading(false);
     }
-    hanldeFetchPartylists();
+    handleFetchPartylists();
+    handleFetchCandidates();
   }, [id]);
 
   const handleEdit = (partylist: PartylistWithCandidateCount) => {
-    console.log("Edit partylist:", partylist);
-    // TODO: Implement edit functionality
+    setSelectedPartylist(partylist);
+    setEditModalOpen(true);
   };
 
   const handleDelete = (partylistId: string) => {
@@ -53,6 +69,54 @@ export default function PartylistManagementPage({
       console.error("Error fetching partylists:", partylistsData.error);
     }
     setIsLoading(false);
+  };
+
+  const handleEditSave = async (data: {
+    name: string;
+    description: string;
+    addedMemberIds: string[];
+    removedMemberIds: string[];
+  }) => {
+    if (!selectedPartylist) return;
+
+    try {
+      const result = await editPartylist({
+        partylistId: selectedPartylist.id,
+        name: data.name,
+        description: data.description,
+        addedMemberIds: data.addedMemberIds,
+        removedMemberIds: data.removedMemberIds,
+      });
+
+      if (result.success) {
+        toast.success(`Partylist "${data.name}" updated successfully!`);
+        // Refetch partylists and candidates after successful edit
+        setIsLoading(true);
+        const [partylistsData, candidatesData] = await Promise.all([
+          fetchPartylists(id),
+          fetchCandidatesAction(id),
+        ]);
+
+        if (partylistsData.data) {
+          setPartylists(partylistsData.data);
+        } else {
+          console.error("Error fetching partylists:", partylistsData.error);
+        }
+
+        if (candidatesData.data) {
+          setCandidates(candidatesData.data);
+        } else {
+          console.error("Error fetching candidates:", candidatesData.error);
+        }
+
+        setIsLoading(false);
+      } else {
+        toast.error(result.error || "Failed to update partylist");
+      }
+    } catch (error) {
+      toast.error("An unexpected error occurred");
+      console.error("Edit error:", error);
+    }
   };
   return (
     <div className="space-y-6">
@@ -89,6 +153,14 @@ export default function PartylistManagementPage({
         onOpenChange={setDeleteModalOpen}
         partylist={selectedPartylist}
         onSuccess={handleDeleteSuccess}
+      />
+
+      <EditPartylistModal
+        open={editModalOpen}
+        onOpenChange={setEditModalOpen}
+        partylist={selectedPartylist}
+        candidates={candidates}
+        onSave={handleEditSave}
       />
     </div>
   );

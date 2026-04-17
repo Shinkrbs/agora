@@ -30,10 +30,6 @@ export interface Partylist {
   shorthand_name: string;
 }
 
-/**
- * Fetch all candidates for an election with position and partylist relations
- * Returns flattened CandidateTableRow[] for the data table
- */
 export async function fetchCandidatesQuery(
   electionId: string
 ): Promise<{ data: CandidateTableRow[] | null; error: string | null }> {
@@ -41,7 +37,6 @@ export async function fetchCandidatesQuery(
     const cookieStore = await cookies();
     const supabase = await createClient(cookieStore);
 
-    // Query candidates with position and partylist joins
     const { data, error } = await supabase
       .from("candidates")
       .select(
@@ -73,7 +68,6 @@ export async function fetchCandidatesQuery(
       return { data: [], error: null };
     }
 
-    // Transform to flattened CandidateTableRow[]
     const tableRows: CandidateTableRow[] = (data as unknown as CandidateRow[]).map(
       (row) => {
         const full_name = [
@@ -85,7 +79,6 @@ export async function fetchCandidatesQuery(
           .filter((part) => part)
           .join(" ");
 
-        // Handle both single object and array responses from Supabase
         const positionData = Array.isArray(row.positions) ? row.positions[0] : row.positions;
         const partylistData = Array.isArray(row.partylists) ? row.partylists[0] : row.partylists;
 
@@ -135,9 +128,6 @@ export async function fetchCandidatesQuery(
   }
 }
 
-/**
- * Fetch positions for an election (for the select dropdown)
- */
 export async function fetchPositionsQuery(
   electionId: string
 ): Promise<{ data: Position[] | null; error: string | null }> {
@@ -164,9 +154,6 @@ export async function fetchPositionsQuery(
   }
 }
 
-/**
- * Fetch partylists for an election (for the select dropdown)
- */
 export async function fetchPartyslistsQuery(
   electionId: string
 ): Promise<{ data: Partylist[] | null; error: string | null }> {

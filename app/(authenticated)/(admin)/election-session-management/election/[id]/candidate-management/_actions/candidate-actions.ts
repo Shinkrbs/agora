@@ -12,9 +12,6 @@ interface EditCandidateInput extends CandidateFormData {
   candidate_id: string;
 }
 
-/**
- * Create a new candidate
- */
 export async function createCandidateAction(
   data: CreateCandidateInput
 ): Promise<{ success: boolean; error: string | null; candidateId?: string }> {
@@ -74,9 +71,6 @@ export async function createCandidateAction(
   }
 }
 
-/**
- * Edit an existing candidate
- */
 export async function editCandidateAction(
   data: EditCandidateInput
 ): Promise<{ success: boolean; error: string | null }> {
@@ -131,9 +125,6 @@ export async function editCandidateAction(
   }
 }
 
-/**
- * Soft delete a candidate
- */
 export async function deleteCandidateAction(
   candidateId: string
 ): Promise<{ success: boolean; error: string | null }> {

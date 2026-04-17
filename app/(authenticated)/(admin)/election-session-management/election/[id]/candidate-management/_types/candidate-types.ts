@@ -1,8 +1,5 @@
 import { Candidate } from "@/types/database";
 
-/**
- * Candidate with joined relations (Position and Partylist data)
- */
 export interface CandidateWithRelations extends Candidate {
   position?: {
     name: string;
@@ -13,35 +10,24 @@ export interface CandidateWithRelations extends Candidate {
   } | null;
 }
 
-/**
- * Flattened table row for the data table UI
- */
 export interface CandidateTableRow {
-  // Basic info
   id: string;
   image_url: string | null;
-  full_name: string; // Combined: first_name middle_name last_name suffix
+  full_name: string; 
   
-  // Position info
   position_id: string;
   position_name: string;
   
-  // Partylist info
   partylist_id: string | null;
   partylist_name: string | null;
   partylist_shorthand: string | null;
-  is_independent: boolean; // True if partylist_id is null
+  is_independent: boolean; 
   
-  // Platform info
-  has_platform: boolean; // Derived from platform JSON column
+  has_platform: boolean; 
   
-  // Original candidate for modals
   raw_candidate: CandidateWithRelations;
 }
 
-/**
- * Form data for creating/editing a candidate
- */
 export interface CandidateFormData {
   first_name: string;
   last_name: string;
@@ -49,6 +35,6 @@ export interface CandidateFormData {
   suffix: string | null;
   position_id: string;
   partylist_id: string | null;
-  vision: string; // Candidate's vision statement
-  key_projects: string[]; // Array of key projects
+  vision: string; 
+  key_projects: string[]; 
 }

@@ -2,13 +2,17 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
+import { uploadFile } from "@/lib/utils/upload-file";
 
 interface EditPartylistData {
   partylistId: string;
+  organizationId: string;
+  electionId: string;
   name: string;
   description: string;
   addedMemberIds: string[];
   removedMemberIds: string[];
+  logoFile?: File | null;
 }
 
 export async function editPartylist(data: EditPartylistData): Promise<{ success: boolean; error: string | null }> {
@@ -16,13 +20,25 @@ export async function editPartylist(data: EditPartylistData): Promise<{ success:
     const cookieStore = await cookies();
     const supabase = await createClient(cookieStore);
 
-    // Update partylist name and description
+    // Handle logo upload if a new logo file is provided
+    let updateData: any = {
+      name: data.name,
+      description: data.description,
+    };
+
+    if (data.logoFile && data.logoFile.size > 0) {
+      const folderPath = `${data.organizationId}/${data.electionId}`;
+      const uploadResult = await uploadFile(supabase, "elections", data.logoFile, folderPath);
+      if (uploadResult.error) {
+        throw new Error("Failed to upload logo");
+      }
+      updateData.logo_url = uploadResult.url;
+    }
+
+    // Update partylist name, description, and logo (if provided)
     const { error: partylistError } = await supabase
       .from("partylists")
-      .update({
-        name: data.name,
-        description: data.description,
-      })
+      .update(updateData)
       .eq("id", data.partylistId);
 
     if (partylistError) {

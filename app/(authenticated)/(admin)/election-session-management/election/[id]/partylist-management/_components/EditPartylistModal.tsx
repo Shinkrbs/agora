@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { RotateCcw } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { RotateCcw, X } from "lucide-react";
+import Image from "next/image";
 import {
   Dialog,
   DialogContent,
@@ -37,6 +38,7 @@ interface EditPartylistModalProps {
     description: string;
     addedMemberIds: string[];
     removedMemberIds: string[];
+    logoFile?: File | null;
   }) => Promise<void>;
 }
 
@@ -61,6 +63,9 @@ export function EditPartylistModal({
   const [newMemberIds, setNewMemberIds] = useState<Set<string>>(
     new Set()
   );
+  const [logoFile, setLogoFile] = useState<File | null>(null);
+  const [logoPreview, setLogoPreview] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Initialize form with partylist data
   useEffect(() => {
@@ -69,6 +74,11 @@ export function EditPartylistModal({
       setInitialName(partylist.name);
       setDescription(partylist.description || "");
       setInitialDescription(partylist.description || "");
+      setLogoFile(null);
+      setLogoPreview(null);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
 
       // Get members associated with this partylist
       const memberIds = new Set(
@@ -102,6 +112,34 @@ export function EditPartylistModal({
     setSelectedMemberIds((prev) => new Set([...prev, candidateId]));
   };
 
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // Validate file type
+      if (!file.type.startsWith("image/")) {
+        alert("Please select an image file");
+        return;
+      }
+
+      setLogoFile(file);
+
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setLogoPreview(event.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemoveLogo = () => {
+    setLogoFile(null);
+    setLogoPreview(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
   const handleSave = async () => {
     if (!partylist) return;
 
@@ -119,6 +157,7 @@ export function EditPartylistModal({
         description,
         addedMemberIds,
         removedMemberIds,
+        logoFile: logoFile || null,
       });
 
       onOpenChange(false);
@@ -148,7 +187,8 @@ export function EditPartylistModal({
   );
   const hasNameChanged = name !== initialName;
   const hasDescriptionChanged = description !== initialDescription;
-  const hasChanges = addedMemberIds.length > 0 || removedMemberIds.length > 0 || hasNameChanged || hasDescriptionChanged;
+  const hasLogoChanged = logoFile !== null;
+  const hasChanges = addedMemberIds.length > 0 || removedMemberIds.length > 0 || hasNameChanged || hasDescriptionChanged || hasLogoChanged;
 
   // Determine save button text
   const getSaveButtonText = () => {
@@ -200,6 +240,72 @@ export function EditPartylistModal({
               disabled={isLoading}
               className="w-full min-h-20 px-3 py-2 border border-input rounded-md bg-background text-foreground placeholder-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
             />
+          </div>
+
+          {/* Logo Section */}
+          <div className="space-y-4">
+            <h3 className="font-semibold text-sm">Logo</h3>
+            
+            {/* Current Logo Preview */}
+            {partylist?.logo_url && !logoPreview && (
+              <div className="space-y-2">
+                <Label className="text-xs text-muted-foreground">Current Logo</Label>
+                <div className="h-24 w-24">
+                  <Image
+                    src={partylist.logo_url}
+                    alt="Current logo"
+                    className="h-full w-full object-cover rounded-md border border-input"
+                    width={95}
+                    height={95}
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* Logo Upload or Preview */}
+            {!logoPreview ? (
+              <div className="space-y-2">
+                <Label htmlFor="partylist-logo">Change Logo (Optional)</Label>
+                <input
+                  ref={fileInputRef}
+                  id="partylist-logo"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileSelect}
+                  disabled={isLoading}
+                  className="block w-full text-sm text-muted-foreground
+                    file:mr-4 file:py-2 file:px-4
+                    file:rounded-md file:border-0
+                    file:text-sm file:font-semibold
+                    file:bg-primary file:text-primary-foreground
+                    hover:file:bg-primary/90
+                    disabled:opacity-50 disabled:cursor-not-allowed"
+                />
+              </div>
+            ) : (
+              <div className="space-y-2">
+                <Label>New Logo Preview</Label>
+                <div className="relative inline-block">
+                  <Image
+                    src={logoPreview}
+                    alt="Logo preview"
+                    className="h-24 w-24 object-cover rounded-md border border-input"
+                    width={95}
+                    height={95}
+                  />
+                  <Button
+                    size="icon"
+                    variant="destructive"
+                    className="absolute -top-2 -right-2 h-6 w-6"
+                    onClick={handleRemoveLogo}
+                    disabled={isLoading}
+                  >
+                    <X className="h-4 w-4" />
+                    <span className="sr-only">Remove new logo</span>
+                  </Button>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Members Section */}

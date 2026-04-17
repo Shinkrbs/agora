@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
+import { toast } from "sonner";
 import { Plus, X } from "lucide-react";
 import {
   Dialog,
@@ -42,7 +43,7 @@ export function CreatePartylistModal({
     if (file) {
       // Validate file type
       if (!file.type.startsWith("image/")) {
-        alert("Please select an image file");
+        toast.error("Please select an image file");
         return;
       }
 
@@ -67,7 +68,7 @@ export function CreatePartylistModal({
 
   const handleCreate = async () => {
     if (!name.trim()) {
-      alert("Partylist name is required");
+      toast.error("Partylist name is required");
       return;
     }
 
@@ -97,11 +98,11 @@ export function CreatePartylistModal({
         onOpenChange(false);
         onSuccess();
       } else {
-        alert(result.error || "Failed to create partylist");
+        toast.error(result.error || "Failed to create partylist");
       }
     } catch (error) {
       console.error("Create error:", error);
-      alert("An unexpected error occurred");
+      toast.error("An unexpected error occurred");
     } finally {
       setIsLoading(false);
     }

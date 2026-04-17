@@ -38,7 +38,7 @@ export default function PartylistManagementPage({
       if (partylistsData.data) {
         setPartylists(partylistsData.data);
       } else {
-        console.error("Error fetching partylists:", partylistsData.error);
+        toast.error(partylistsData.error || "Failed to load partylists");
       }
     }
     async function handleFetchCandidates() {
@@ -47,7 +47,7 @@ export default function PartylistManagementPage({
       if (cadidatesData.data) {
         setCandidates(cadidatesData.data);
       } else {
-        console.error("Error fetching candidates:", cadidatesData.error);
+        toast.error(cadidatesData.error || "Failed to load candidates");
       }
       setIsLoading(false);
     }
@@ -73,7 +73,7 @@ export default function PartylistManagementPage({
     if (partylistsData.data) {
       setPartylists(partylistsData.data);
     } else {
-      console.error("Error fetching partylists:", partylistsData.error);
+      toast.error(partylistsData.error || "Failed to reload partylists");
     }
     setIsLoading(false);
   };
@@ -111,13 +111,13 @@ export default function PartylistManagementPage({
         if (partylistsData.data) {
           setPartylists(partylistsData.data);
         } else {
-          console.error("Error fetching partylists:", partylistsData.error);
+          toast.error(partylistsData.error || "Failed to reload partylists");
         }
 
         if (candidatesData.data) {
           setCandidates(candidatesData.data);
         } else {
-          console.error("Error fetching candidates:", candidatesData.error);
+          toast.error(candidatesData.error || "Failed to reload candidates");
         }
 
         setIsLoading(false);

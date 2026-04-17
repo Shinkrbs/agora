@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { toast } from "sonner";
 import { RotateCcw, X } from "lucide-react";
 import Image from "next/image";
 import {
@@ -117,7 +118,7 @@ export function EditPartylistModal({
     if (file) {
       // Validate file type
       if (!file.type.startsWith("image/")) {
-        alert("Please select an image file");
+        toast.error("Please select an image file");
         return;
       }
 
@@ -163,6 +164,7 @@ export function EditPartylistModal({
       onOpenChange(false);
     } catch (error) {
       console.error("Save error:", error);
+      toast.error("An error occurred while saving");
     } finally {
       setIsLoading(false);
     }

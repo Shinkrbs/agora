@@ -119,7 +119,7 @@ export interface Candidate {
   last_name: string;
   middle_name: string | null;
   suffix: string | null;
-  image_url: string;
+  image_url: string | null;
   platform: Record<string, unknown> | null; // For the JSON column
   created_at: string;
   updated_at: string;

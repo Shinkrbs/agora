@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/select";
 import { Building2, UserCircle, Search, Filter } from "lucide-react";
 import Image from "next/image";
-import { MemberDetails } from "../_types/_mockmembersdata";
+import { MemberDetails } from "@/types/database"; // Must match the OrganizationCard import!
 
 interface ViewOrganizationDialogProps {
   isOpen: boolean;
@@ -29,6 +29,7 @@ interface ViewOrganizationDialogProps {
   shorthandName: string;
   logoUrl?: string | null;
   members: MemberDetails[];
+  isLoading?: boolean;
 }
 
 type FilterStatus = "all" | "active" | "kicked";
@@ -182,9 +183,9 @@ export function ViewOrganizationDialog({
                         <td className="px-4 py-3">
                           <span
                             className={`inline-flex items-center px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider
-                              ${member.role === "OWNER" ? "bg-primary/15 text-primary" : ""}
-                              ${member.role === "ADMIN" ? "bg-secondary text-secondary-foreground" : ""}
-                              ${member.role === "MEMBER" ? "bg-muted text-muted-foreground" : ""}
+                              ${String(member.role).toUpperCase() === "OWNER" ? "bg-primary/15 text-primary" : ""}
+                              ${String(member.role).toUpperCase() === "ADMIN" ? "bg-secondary text-secondary-foreground" : ""}
+                              ${String(member.role).toUpperCase() === "MEMBER" ? "bg-muted text-muted-foreground" : ""}
                             `}
                           >
                             {member.role}

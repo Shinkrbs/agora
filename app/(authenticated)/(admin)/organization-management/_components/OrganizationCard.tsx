@@ -21,8 +21,8 @@ import Image from "next/image";
 import { ApprovalStatus } from "@/types/database";
 import { EditOrganizationDialog } from "./EditOrganizationDialog";
 import { ViewOrganizationDialog } from "./ViewMembersDialog";
-import { mockCombinedMembers } from "../_types/_mockmembersdata";
-
+import { Organization, MemberDetails } from "@/types/database";
+import { useOrganizationMembers } from "../hooks/useOrganizationMembers";
 interface OrganizationCardProps {
   id: string;
   name: string;
@@ -68,10 +68,16 @@ export function OrganizationCard({
   approvalStatus,
 }: OrganizationCardProps) {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
   const statusConfig = getStatusConfig(approvalStatus);
   const StatusIcon = statusConfig.icon;
   const isApproved = approvalStatus === "approved";
+  const {
+    isViewDialogOpen,
+    setIsViewDialogOpen,
+    members,
+    isLoadingMembers,
+    handleOpenViewMembers,
+  } = useOrganizationMembers(id);
 
   return (
     <>
@@ -104,7 +110,7 @@ export function OrganizationCard({
                 <DropdownMenuItem
                   className="cursor-pointer"
                   disabled={!isApproved}
-                  onClick={() => setIsViewDialogOpen(true)}
+                  onClick={handleOpenViewMembers}
                 >
                   <CircleUser className="h-4 w-4 mr-2" />
                   View Members
@@ -169,7 +175,8 @@ export function OrganizationCard({
         name={name}
         shorthandName={shorthandName}
         logoUrl={logoUrl}
-        members={mockCombinedMembers} // Pass the mock data here
+        members={members} // Pass the mock data here
+        isLoading={isLoadingMembers}
       />
     </>
   );

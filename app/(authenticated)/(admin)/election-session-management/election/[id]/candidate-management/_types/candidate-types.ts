@@ -1,5 +1,13 @@
 import { Candidate } from "@/types/database";
 
+/**
+ * Platform data structure for candidate
+ */
+export interface CandidatePlatform {
+  vision: string;
+  key_projects: string[];
+}
+
 export interface CandidateWithRelations extends Candidate {
   position?: {
     name: string;

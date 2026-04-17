@@ -39,6 +39,7 @@ import {
 import {
   CandidateTableRow,
   CandidateFormData,
+  CandidatePlatform,
 } from "../_types/candidate-types";
 
 interface Position {
@@ -86,7 +87,10 @@ export function AddEditCandidateModal({
   // Initialize form when modal opens or candidate changes
   useEffect(() => {
     if (candidate && open) {
-      const platformData = candidate.raw_candidate.platform || {};
+      const platformData = (candidate.raw_candidate.platform as CandidatePlatform | null) || {
+        vision: "",
+        key_projects: [],
+      };
       setFormData({
         first_name: candidate.raw_candidate.first_name,
         last_name: candidate.raw_candidate.last_name,

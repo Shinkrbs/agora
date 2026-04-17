@@ -9,11 +9,20 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { MoreVertical, Pencil, Check, Clock, X } from "lucide-react";
+import {
+  MoreVertical,
+  Pencil,
+  Check,
+  Clock,
+  X,
+  CircleUser,
+} from "lucide-react";
 import Image from "next/image";
 import { ApprovalStatus } from "@/types/database";
 import { EditOrganizationDialog } from "./EditOrganizationDialog";
-
+import { ViewOrganizationDialog } from "./ViewMembersDialog";
+import { Organization, MemberDetails } from "@/types/database";
+import { useOrganizationMembers } from "../hooks/useOrganizationMembers";
 interface OrganizationCardProps {
   id: string;
   name: string;
@@ -62,6 +71,13 @@ export function OrganizationCard({
   const statusConfig = getStatusConfig(approvalStatus);
   const StatusIcon = statusConfig.icon;
   const isApproved = approvalStatus === "approved";
+  const {
+    isViewDialogOpen,
+    setIsViewDialogOpen,
+    members,
+    isLoadingMembers,
+    handleOpenViewMembers,
+  } = useOrganizationMembers(id);
 
   return (
     <>
@@ -94,11 +110,20 @@ export function OrganizationCard({
                 <DropdownMenuItem
                   className="cursor-pointer"
                   disabled={!isApproved}
+                  onClick={handleOpenViewMembers}
+                >
+                  <CircleUser className="h-4 w-4 mr-2" />
+                  View Members
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  disabled={!isApproved}
                   onClick={() => setIsEditDialogOpen(true)}
                 >
                   <Pencil className="h-4 w-4 mr-2" />
                   Edit Organization
                 </DropdownMenuItem>
+
                 <DropdownMenuItem className="cursor-pointer">
                   Switch to {name}
                 </DropdownMenuItem>
@@ -143,6 +168,15 @@ export function OrganizationCard({
         initialName={name}
         initialShorthand={shorthandName}
         initialLogoUrl={logoUrl}
+      />
+      <ViewOrganizationDialog
+        isOpen={isViewDialogOpen}
+        onClose={() => setIsViewDialogOpen(false)}
+        name={name}
+        shorthandName={shorthandName}
+        logoUrl={logoUrl}
+        members={members} // Pass the mock data here
+        isLoading={isLoadingMembers}
       />
     </>
   );

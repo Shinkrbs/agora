@@ -1,7 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { Card } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -12,7 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { X, Building2, UserCircle, Search, Filter } from "lucide-react";
+import { Building2, UserCircle, Search, Filter } from "lucide-react";
 import Image from "next/image";
 import { MemberDetails } from "../_types/_mockmembersdata";
 
@@ -38,8 +44,6 @@ export function ViewOrganizationDialog({
   const [searchQuery, setSearchQuery] = useState("");
   const [filterStatus, setFilterStatus] = useState<FilterStatus>("all");
 
-  if (!isOpen) return null;
-
   const filteredMembers = members.filter((member) => {
     const fullName = `${member.first_name} ${member.last_name}`.toLowerCase();
     const email = member.email.toLowerCase();
@@ -57,27 +61,22 @@ export function ViewOrganizationDialog({
   });
 
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <Card className="w-[800px] max-w-[95vw] h-[75vh] max-h-[95vh] min-w-[320px] min-h-[400px] p-6 md:p-8 relative flex flex-col bg-card text-card-foreground border-border shadow-lg resize overflow-hidden">
-        <button
-          type="button"
-          onClick={onClose}
-          className="absolute top-6 right-6 p-2 hover:bg-accent hover:text-accent-foreground rounded-md transition-colors"
-          aria-label="Close dialog"
-        >
-          <X className="h-5 w-5 text-muted-foreground" />
-        </button>
-
-        <div className="mb-6 shrink-0">
-          <h2 className="text-2xl font-semibold text-foreground">
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      {/* Replaced Card with DialogContent. 
+        Kept the resize, custom dimensions, and flex layouts for the dynamic table height.
+      */}
+      <DialogContent className="sm:max-w-[1200px] w-[95vw] h-[85vh] max-h-[95vh] min-w-[320px] min-h-[400px] p-6 md:p-8 flex flex-col bg-card text-card-foreground border-border shadow-lg resize overflow-hidden">
+        {/* Replaced manual h2/p with accessible DialogHeader components */}
+        <DialogHeader className="shrink-0 text-left">
+          <DialogTitle className="text-2xl font-semibold text-foreground">
             Organization Members
-          </h2>
-          <p className="text-sm text-muted-foreground mt-1">
+          </DialogTitle>
+          <DialogDescription className="text-sm text-muted-foreground mt-1">
             View the list of members currently in this organization.
-          </p>
-        </div>
+          </DialogDescription>
+        </DialogHeader>
 
-        <div className="flex-1 overflow-hidden flex flex-col space-y-4">
+        <div className="flex-1 overflow-hidden flex flex-col space-y-4 mt-2">
           {/* Organization Info Header */}
           <div className="shrink-0 flex items-center gap-3 bg-muted/50 p-3 rounded-lg border border-border">
             {logoUrl ? (
@@ -234,9 +233,14 @@ export function ViewOrganizationDialog({
             </div>
           </div>
 
-          <div className="shrink-0 pt-4"></div>
+          {/* Optional: DialogFooter could go here, but this bottom area is fine too */}
+          <div className="shrink-0 pt-4 flex justify-end">
+            <Button type="button" onClick={onClose} variant="outline">
+              Close
+            </Button>
+          </div>
         </div>
-      </Card>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }

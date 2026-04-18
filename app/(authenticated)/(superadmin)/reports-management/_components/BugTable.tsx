@@ -6,11 +6,11 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 const getSeverityStyles = (severity: Severity) => {
   switch (severity) {
     case "High":
-      return "bg-red-950 text-red-400 border-red-400/20 hover:bg-red-900";
+      return "bg-red-950 text-red-400 border-red-400/20";
     case "Medium":
-      return "bg-amber-950 text-amber-400 border-amber-400/20 hover:bg-amber-900";
+      return "bg-amber-950 text-amber-400 border-amber-400/20";
     case "Low":
-      return "bg-green-950 text-green-400 border-green-400/20 hover:bg-green-900";
+      return "bg-green-950 text-green-400 border-green-400/20";
     default:
       return "";
   }

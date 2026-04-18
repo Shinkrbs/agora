@@ -6,17 +6,23 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 const getSeverityStyles = (severity: Severity) => {
   switch (severity) {
     case "High":
-      return "bg-[#5C1D2A] text-[#FF8DA1] border-[#FF8DA1]/20 hover:bg-[#5C1D2A]/80";
+      return "bg-red-950 text-red-400 border-red-400/20 hover:bg-red-900";
     case "Medium":
-      return "bg-[#3E1B5A] text-[#D09CFA] border-[#D09CFA]/20 hover:bg-[#3E1B5A]/80";
+      return "bg-amber-950 text-amber-400 border-amber-400/20 hover:bg-amber-900";
     case "Low":
-      return "bg-[#1A3B5C] text-[#8AC3FF] border-[#8AC3FF]/20 hover:bg-[#1A3B5C]/80";
+      return "bg-green-950 text-green-400 border-green-400/20 hover:bg-green-900";
     default:
       return "";
   }
 };
 
-export const BugTable = ({ bugs }: { bugs: BugReport[] }) => {
+interface BugTableProps {
+  bugs: BugReport[];
+  onRowClick: (bug: BugReport) => void;
+}
+
+// FIX: Destructure onRowClick and apply the BugTableProps interface
+export const BugTable = ({ bugs, onRowClick }: BugTableProps) => {
   return (
     <div className="w-full overflow-x-auto">
       <table className="w-full text-left border-collapse">
@@ -35,7 +41,8 @@ export const BugTable = ({ bugs }: { bugs: BugReport[] }) => {
           {bugs.map((bug) => (
             <tr
               key={bug.id}
-              className="hover:bg-[#1A1A1A] transition-colors group"
+              onClick={() => onRowClick(bug)} // This will now work perfectly
+              className="hover:bg-[#1A1A1A] transition-colors group cursor-pointer"
             >
               <td className="px-6 py-3">
                 <span className="text-sm font-medium text-gray-200">

@@ -1,7 +1,10 @@
+"use client";
+import { useState } from "react";
 import { TrackerToolbar } from "./_components/TrackerToolbar";
 import { BugTable } from "./_components/BugTable";
+import { BugDetailsDialog } from "./_components/BugDetailsDialog";
+import { AddBugDialog } from "./_components/AddBugDialog";
 import { BugReport } from "./_types";
-
 const mockData: BugReport[] = [
   {
     id: "1",
@@ -30,6 +33,12 @@ const mockData: BugReport[] = [
 ];
 
 export default function ReportsManagementPage() {
+  const [bugs, setBugs] = useState<BugReport[]>(mockData);
+  const [selectedBug, setSelectedBug] = useState<BugReport | null>(null);
+
+  const handleAddBug = (newBug: BugReport) => {
+    setBugs((prev) => [...prev, newBug]);
+  };
   return (
     <div className="w-full h-full p-8 text-gray-100">
       {/* Header */}
@@ -47,28 +56,14 @@ export default function ReportsManagementPage() {
         <TrackerToolbar />
 
         <div className="flex-1">
-          <BugTable bugs={mockData} />
+          <BugTable bugs={bugs} onRowClick={(bug) => setSelectedBug(bug)} />
         </div>
-
-        {/* Footer Action */}
-        <div className="p-3 border-t border-neutral-800/80 bg-[#171717] hover:bg-[#1E1E1E] transition-colors cursor-pointer flex items-center group">
-          <button className="flex items-center gap-2 text-sm font-medium text-gray-400 group-hover:text-gray-200 ml-3">
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M12 4v16m8-8H4"
-              ></path>
-            </svg>
-            Add item
-          </button>
-        </div>
+        <AddBugDialog onAddBug={handleAddBug} />
+        <BugDetailsDialog
+          bug={selectedBug}
+          isOpen={selectedBug !== null}
+          onClose={() => setSelectedBug(null)}
+        />
       </div>
     </div>
   );

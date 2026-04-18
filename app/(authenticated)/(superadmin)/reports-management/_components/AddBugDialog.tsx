@@ -54,10 +54,12 @@ export const AddBugDialog = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        {/* This triggers the modal from the bottom of the table */}
-        <div className="p-3 border-t border-neutral-800/80 bg-[#171717] hover:bg-[#1E1E1E] transition-colors cursor-pointer flex items-center group w-full">
-          <button className="flex items-center gap-2 text-sm font-medium text-gray-400 group-hover:text-gray-200 ml-3">
+      {/* Moved the wrapper div OUTSIDE the DialogTrigger and removed its hover/cursor classes
+       */}
+      <div className="p-3 border-t border-neutral-800/80 bg-[#171717] flex items-center w-full">
+        <DialogTrigger asChild>
+          {/* Added px-2 and hover:bg-neutral-800 so only the button highlights on hover */}
+          <button className="inline-flex w-fit items-center gap-2 text-sm font-medium text-gray-400 hover:text-gray-200 hover:bg-neutral-800 ml-3 px-3 py-1.5 border border-neutral-700 rounded-md transition-colors cursor-pointer">
             <svg
               className="w-4 h-4"
               fill="none"
@@ -73,8 +75,8 @@ export const AddBugDialog = ({
             </svg>
             Add item
           </button>
-        </div>
-      </DialogTrigger>
+        </DialogTrigger>
+      </div>
 
       <DialogContent className="bg-[#141414] border-neutral-800 text-gray-200">
         <DialogHeader>

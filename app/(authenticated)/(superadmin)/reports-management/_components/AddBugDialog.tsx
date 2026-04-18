@@ -35,18 +35,17 @@ export const AddBugDialog = ({
     if (!summary || !details) return;
 
     const newBug: BugReport = {
-      id: Math.random().toString(36).substr(2, 9), // Simple ID generator
+      id: Math.random().toString(36).substr(2, 9),
       summary,
       severity,
       details,
-      submittedBy: "alice (you)", // Mocked current user
+      submittedBy: "alice (you)",
       dateSubmitted: "Just now",
     };
 
     onAddBug(newBug);
     setIsOpen(false);
 
-    // Reset form
     setSummary("");
     setDetails("");
     setSeverity("Medium");
@@ -54,12 +53,10 @@ export const AddBugDialog = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      {/* Moved the wrapper div OUTSIDE the DialogTrigger and removed its hover/cursor classes
-       */}
-      <div className="p-3 border-t border-neutral-800/80 bg-[#171717] flex items-center w-full">
+      {/* Updated border explicitly for light/dark mode */}
+      <div className="p-3 border-t border-neutral-200 dark:border-neutral-800 flex items-center w-full">
         <DialogTrigger asChild>
-          {/* Added px-2 and hover:bg-neutral-800 so only the button highlights on hover */}
-          <button className="inline-flex w-fit items-center gap-2 text-sm font-medium text-gray-400 hover:text-gray-200 hover:bg-neutral-800 ml-3 px-3 py-1.5 border border-neutral-700 rounded-md transition-colors cursor-pointer">
+          <button className="inline-flex w-fit items-center gap-2 text-sm font-medium text-muted-foreground hover:text-accent-foreground hover:bg-accent ml-3 px-3 py-1.5 border border-neutral-300 dark:border-neutral-700 rounded-md transition-colors cursor-pointer">
             <svg
               className="w-4 h-4"
               fill="none"
@@ -78,38 +75,41 @@ export const AddBugDialog = ({
         </DialogTrigger>
       </div>
 
-      <DialogContent className="bg-[#141414] border-neutral-800 text-gray-200">
+      {/* Added border override to the modal content itself */}
+      <DialogContent className="sm:max-w-[425px] border border-neutral-300 dark:border-neutral-800">
         <DialogHeader>
-          <DialogTitle className="text-white">Add new bug report</DialogTitle>
+          <DialogTitle>Add new bug report</DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4 py-4">
           <div className="space-y-2">
-            <Label htmlFor="summary" className="text-gray-400">
+            <Label htmlFor="summary" className="text-muted-foreground">
               Summary
             </Label>
+            {/* Replaced border-border with dark:border-neutral-700 */}
             <Input
               id="summary"
               value={summary}
               onChange={(e) => setSummary(e.target.value)}
               placeholder="e.g. App crashes on login"
-              className="bg-[#121212] border-neutral-700 text-white"
+              className="border border-neutral-300 dark:border-neutral-700 bg-background"
               required
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="severity" className="text-gray-400">
+            <Label htmlFor="severity" className="text-muted-foreground">
               Severity
             </Label>
             <Select
               value={severity}
               onValueChange={(val) => setSeverity(val as Severity)}
             >
-              <SelectTrigger className="bg-[#121212] border-neutral-700 text-white">
+              {/* Replaced border-border with dark:border-neutral-700 */}
+              <SelectTrigger className="border border-neutral-300 dark:border-neutral-700 bg-background">
                 <SelectValue placeholder="Select severity" />
               </SelectTrigger>
-              <SelectContent className="bg-[#1E1E1E] border-neutral-700 text-white">
+              <SelectContent className="border border-neutral-300 dark:border-neutral-700">
                 <SelectItem value="High">High</SelectItem>
                 <SelectItem value="Medium">Medium</SelectItem>
                 <SelectItem value="Low">Low</SelectItem>
@@ -118,15 +118,16 @@ export const AddBugDialog = ({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="details" className="text-gray-400">
+            <Label htmlFor="details" className="text-muted-foreground">
               Details
             </Label>
+            {/* Replaced border-border with dark:border-neutral-700 */}
             <Textarea
               id="details"
               value={details}
               onChange={(e) => setDetails(e.target.value)}
               placeholder="Provide steps to reproduce..."
-              className="bg-[#121212] border-neutral-700 text-white min-h-[100px]"
+              className="min-h-[100px] border border-neutral-300 dark:border-neutral-700 bg-background"
               required
             />
           </div>
@@ -136,16 +137,10 @@ export const AddBugDialog = ({
               type="button"
               variant="ghost"
               onClick={() => setIsOpen(false)}
-              className="hover:bg-neutral-800 hover:text-white text-gray-400"
             >
               Cancel
             </Button>
-            <Button
-              type="submit"
-              className="bg-[#007A5A] hover:bg-[#00634A] text-white"
-            >
-              Save Bug
-            </Button>
+            <Button type="submit">Save Bug</Button>
           </DialogFooter>
         </form>
       </DialogContent>

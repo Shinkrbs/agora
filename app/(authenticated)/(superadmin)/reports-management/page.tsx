@@ -32,7 +32,6 @@ export default function ReportsManagementPage() {
     });
 
     // 2. Sorting Logic
-    // We create a copy using [...result] because .sort() mutates the original array
     return [...result].sort((a, b) => {
       // Primary Sort: Severity
       if (severitySort !== "None") {
@@ -53,9 +52,6 @@ export default function ReportsManagementPage() {
 
       // Secondary Sort: Date (If severity is tied or set to "None")
       if (dateSort !== "None") {
-        // NOTE: Since your mock data uses strings like "< 1 minute ago", standard Date parsing won't work perfectly here.
-        // For a production app with ISO date strings, you would use: new Date(a.date).getTime() - new Date(b.date).getTime()
-        // This is a simple string fallback for the mock data:
         const compare = a.dateSubmitted.localeCompare(b.dateSubmitted);
         return dateSort === "Decreasing" ? -compare : compare;
       }
@@ -65,18 +61,18 @@ export default function ReportsManagementPage() {
   }, [bugs, searchQuery, severitySort, dateSort]);
 
   return (
-    <div className="w-full h-full p-8 text-gray-100">
+    <div className="w-full h-full p-8 text-foreground">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold tracking-tight text-white mb-1">
-          Bugs tracker
-        </h1>
-        <p className="text-sm text-gray-400">
+        {/* Inherits text-foreground automatically */}
+        <h1 className="text-2xl font-bold tracking-tight mb-1">Bugs tracker</h1>
+        {/* Applied text-muted-foreground for secondary text */}
+        <p className="text-sm text-muted-foreground">
           Describe how your team plans to use this list
         </p>
       </div>
 
-      <div className="bg-[#141414] border border-neutral-800 rounded-lg shadow-sm overflow-hidden flex flex-col">
-        {/* Pass the updated props */}
+      {/* Replaced hardcoded bg and border with bg-card and border-border */}
+      <div className="bg-card text-card-foreground border border-border rounded-lg shadow-sm overflow-hidden flex flex-col">
         <TrackerToolbar
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
@@ -93,7 +89,7 @@ export default function ReportsManagementPage() {
           />
 
           {displayedBugs.length === 0 && (
-            <div className="p-8 text-center text-sm text-gray-500">
+            <div className="p-8 text-center text-sm text-muted-foreground">
               No bugs match your search.
             </div>
           )}

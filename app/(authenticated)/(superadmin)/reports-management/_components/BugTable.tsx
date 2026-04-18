@@ -32,9 +32,7 @@ export const BugTable = ({ bugs, onRowClick }: BugTableProps) => {
             <th className="px-6 py-3 font-medium w-32">Severity</th>
             <th className="px-6 py-3 font-medium w-1/3">Details</th>
             <th className="px-6 py-3 font-medium w-48">Submitted by</th>
-            <th className="px-6 py-3 font-medium whitespace-nowrap">
-              Date submitted
-            </th>
+            <th className="px-6 py-3 font-medium whitespace-nowrap">Date</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-neutral-800/50">

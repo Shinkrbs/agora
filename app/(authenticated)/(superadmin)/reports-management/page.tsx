@@ -5,32 +5,7 @@ import { BugTable } from "./_components/BugTable";
 import { BugDetailsDialog } from "./_components/BugDetailsDialog";
 import { AddBugDialog } from "./_components/AddBugDialog";
 import { BugReport } from "./_types";
-const mockData: BugReport[] = [
-  {
-    id: "1",
-    summary: "App version 10.12 crashes",
-    severity: "High",
-    details: "Welcome screen freezes and...",
-    submittedBy: "alice (you)",
-    dateSubmitted: "< 1 minute ago",
-  },
-  {
-    id: "2",
-    summary: "Passwordless login creates loop",
-    severity: "High",
-    details: "Sign in page routes back to...",
-    submittedBy: "alice (you)",
-    dateSubmitted: "< 1 minute ago",
-  },
-  {
-    id: "3",
-    summary: "Ingredients list hidden on small devices",
-    severity: "Medium",
-    details: "Doesn’t load if screen width is...",
-    submittedBy: "alice (you)",
-    dateSubmitted: "< 1 minute ago",
-  },
-];
+import mockData from "./_data/mockbugs";
 
 export default function ReportsManagementPage() {
   const [bugs, setBugs] = useState<BugReport[]>(mockData);

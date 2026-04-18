@@ -1,0 +1,215 @@
+"use client";
+
+import { useMemo, useState } from "react";
+import {
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  useReactTable,
+  ColumnDef,
+  ColumnFiltersState,
+} from "@tanstack/react-table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Check, AlertCircle, MoreHorizontal } from "lucide-react";
+import { CandidateTableRow } from "../_types/candidate-types";
+
+interface CandidateTableProps {
+  data: CandidateTableRow[];
+  isLoading: boolean;
+  onEdit: (candidate: CandidateTableRow) => void;
+  onDelete: (candidate: CandidateTableRow) => void;
+  onSearch: (query: string) => void;
+}
+
+export function CandidateTable({
+  data,
+  isLoading,
+  onEdit,
+  onDelete,
+  onSearch,
+}: CandidateTableProps) {
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+
+  const columns = useMemo<ColumnDef<CandidateTableRow>[]>(
+    () => [
+      {
+        accessorKey: "full_name",
+        header: "Candidate",
+        cell: ({ row }) => {
+          const candidate = row.original;
+          const initials = `${candidate.raw_candidate.first_name[0]}${candidate.raw_candidate.last_name[0]}`.toUpperCase();
+
+          return (
+            <div className="flex items-center gap-3">
+              <Avatar className="h-8 w-8">
+                <AvatarImage
+                  src={candidate.image_url || undefined}
+                  alt={candidate.full_name}
+                />
+                <AvatarFallback>{initials}</AvatarFallback>
+              </Avatar>
+              <div className="flex flex-col">
+                <span className="font-medium">{candidate.full_name}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        accessorKey: "position_name",
+        header: "Position",
+        cell: ({ row }) => <span>{row.original.position_name}</span>,
+      },
+      {
+        accessorKey: "partylist_name",
+        header: "Partylist",
+        cell: ({ row }) => {
+          const candidate = row.original;
+          if (candidate.is_independent) {
+            return <Badge variant="secondary">Independent</Badge>;
+          }
+          return (
+            <Badge>
+              {candidate.partylist_shorthand || candidate.partylist_name}
+            </Badge>
+          );
+        },
+      },
+      {
+        accessorKey: "has_platform",
+        header: "Platform",
+        cell: ({ row }) => {
+          const hasPlatform = row.original.has_platform;
+          return hasPlatform ? (
+            <div className="flex items-center gap-2">
+              <Check className="h-4 w-4 text-green-600" />
+              <span className="text-sm text-green-600">Added</span>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2">
+              <AlertCircle className="h-4 w-4 text-yellow-600" />
+              <span className="text-sm text-yellow-600">Not Added</span>
+            </div>
+          );
+        },
+      },
+      {
+        id: "actions",
+        header: "Actions",
+        cell: ({ row }) => {
+          const candidate = row.original;
+
+          return (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="h-8 w-8 p-0">
+                  <span className="sr-only">Open menu</span>
+                  <MoreHorizontal className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => onEdit(candidate)}>
+                  Edit
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => onDelete(candidate)}
+                  className="text-red-600"
+                >
+                  Delete
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          );
+        },
+      },
+    ],
+    [onEdit, onDelete]
+  );
+
+  const table = useReactTable({
+    data,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
+    state: {
+      columnFilters,
+    },
+  });
+
+  return (
+    <div className="space-y-4">
+      <div className="rounded-lg border border-border">
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                ))}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {isLoading ? (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="text-center text-muted-foreground py-8"
+                >
+                  Loading candidates...
+                </TableCell>
+              </TableRow>
+            ) : table.getRowModel().rows.length === 0 ? (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="text-center text-muted-foreground py-8"
+                >
+                  No candidates found
+                </TableCell>
+              </TableRow>
+            ) : (
+              table.getRowModel().rows.map((row) => (
+                <TableRow key={row.id}>
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
+      </div>
+    </div>
+  );
+}

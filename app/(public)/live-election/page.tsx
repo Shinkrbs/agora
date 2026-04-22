@@ -13,7 +13,6 @@ import {
 } from "./_data/mock-election-data";
 
 export default function LiveElectionPage() {
-  // Helper function to figure out if a race is close based on margin
   const getStatusText = (candidates: typeof allCandidates) => {
     if (candidates.length < 2) return undefined;
     const diff = Math.abs(candidates[0].percentage - candidates[1].percentage);
@@ -24,8 +23,8 @@ export default function LiveElectionPage() {
     <>
       <LandingPageHeader />
 
-      <div className="min-h-screen bg-[#f8fafc] p-4 md:p-8 font-sans">
-        {/* Changed to max-w-4xl since we no longer have sidebars */}
+      {/* FIX: Removed bg-[#f8fafc] -> Replaced with bg-background */}
+      <div className="min-h-screen bg-background text-foreground p-4 md:p-8 font-sans transition-colors duration-200">
         <div className="max-w-4xl mx-auto space-y-8">
           <LiveElectionHeader
             title={currentElection.title}
@@ -36,17 +35,13 @@ export default function LiveElectionPage() {
 
           <div className="space-y-6 pt-4">
             {positions.map((position) => {
-              // 1. Filter candidates for this specific position
               const candidatesForPos = allCandidates.filter(
                 (c) => c.position_id === position.id,
               );
-
-              // 2. Sort them by highest vote count first
               const sortedCandidates = candidatesForPos.sort(
                 (a, b) => b.vote_count - a.vote_count,
               );
 
-              // 3. Transform data for the UI component
               const transformedCandidates = sortedCandidates.map((c) => ({
                 id: c.id,
                 firstName: c.first_name,
@@ -59,7 +54,6 @@ export default function LiveElectionPage() {
                 colorHex: c.color_hex,
               }));
 
-              // 4. Render the Card
               return (
                 <CandidateRaceCard
                   key={position.id}

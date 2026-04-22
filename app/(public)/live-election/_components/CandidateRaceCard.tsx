@@ -23,14 +23,11 @@ export function CandidateRaceCard({
   candidates,
 }: CandidateRaceCardProps) {
   return (
-    <Card className="shadow-sm border-gray-200">
+    <Card className="shadow-sm border-border bg-card text-card-foreground">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <CardTitle className="text-xl font-bold">{positionName}</CardTitle>
         {statusText && (
-          <Badge
-            variant="secondary"
-            className="bg-amber-100 text-amber-800 hover:bg-amber-100 font-medium"
-          >
+          <Badge variant="secondary" className="font-medium">
             {statusText}
           </Badge>
         )}
@@ -47,7 +44,7 @@ export function CandidateRaceCard({
                   {candidate.firstName[0]}
                 </div>
                 <div>
-                  <div className="font-bold text-lg">
+                  <div className="font-bold text-lg text-foreground">
                     {candidate.firstName} {candidate.lastName}
                   </div>
                   <div className="text-sm text-muted-foreground">
@@ -56,7 +53,7 @@ export function CandidateRaceCard({
                 </div>
               </div>
               <div className="text-right">
-                <div className="font-bold text-xl">
+                <div className="font-bold text-xl text-foreground">
                   {candidate.percentage.toFixed(1)}%
                 </div>
                 <div className="text-sm text-muted-foreground">
@@ -64,8 +61,8 @@ export function CandidateRaceCard({
                 </div>
               </div>
             </div>
-            {/* Progress Bar */}
-            <div className="h-3 w-full bg-gray-100 rounded-full overflow-hidden">
+            {/* CHANGED: bg-gray-100 to bg-muted */}
+            <div className="h-3 w-full bg-muted rounded-full overflow-hidden">
               <div
                 className="h-full rounded-full transition-all duration-1000 ease-out"
                 style={{

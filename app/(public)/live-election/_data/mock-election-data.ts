@@ -5,25 +5,49 @@ import {
   Candidate,
 } from "@/types/database";
 
-export const currentElection: ElectionSession = {
-  id: "elec-123",
-  title: "VSU Supreme Student Council Elections 2026",
-  organization_id: "org-vsu-ssc",
-  start_date: "2026-04-20T08:00:00Z",
-  end_date: "2026-04-21T17:00:00Z",
-  status: "active",
-  created_at: new Date().toISOString(),
-  updated_at: new Date().toISOString(),
-  is_deleted: false,
-};
+export const activeElections: ElectionSession[] = [
+  {
+    id: "elec-123",
+    title: "VSU Supreme Student Council Elections 2026",
+    organization_id: "org-vsu-ssc",
+    start_date: "2026-04-20T08:00:00Z",
+    end_date: "2026-04-21T17:00:00Z",
+    status: "active",
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    is_deleted: false,
+  },
+  {
+    id: "elec-456",
+    title: "Computer Science Society Elections",
+    organization_id: "org-vsu-css",
+    start_date: "2026-04-20T08:00:00Z",
+    end_date: "2026-04-21T17:00:00Z",
+    status: "active",
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    is_deleted: false,
+  },
+];
 
-export const electionStats = {
-  totalBallotsCast: 7814,
-  reportingPercentage: 84,
-  lastUpdated: "Just now",
+export const electionStats: Record<
+  string,
+  { totalBallotsCast: number; reportingPercentage: number; lastUpdated: string }
+> = {
+  "elec-123": {
+    totalBallotsCast: 7814,
+    reportingPercentage: 84,
+    lastUpdated: "Just now",
+  },
+  "elec-456": {
+    totalBallotsCast: 450,
+    reportingPercentage: 92,
+    lastUpdated: "2 mins ago",
+  },
 };
 
 export const partylists: Record<string, Partylist> = {
+  // SSC Parties
   "party-1": {
     id: "party-1",
     election_id: "elec-123",
@@ -46,9 +70,34 @@ export const partylists: Record<string, Partylist> = {
     updated_at: "",
     is_deleted: false,
   },
+
+  // CSS Parties
+  "party-css-1": {
+    id: "party-css-1",
+    election_id: "elec-456",
+    name: "Tech Innovators",
+    shorthand_name: "TI",
+    description: "",
+    logo_url: "",
+    created_at: "",
+    updated_at: "",
+    is_deleted: false,
+  },
+  "party-css-2": {
+    id: "party-css-2",
+    election_id: "elec-456",
+    name: "Code Collective",
+    shorthand_name: "CC",
+    description: "",
+    logo_url: "",
+    created_at: "",
+    updated_at: "",
+    is_deleted: false,
+  },
 };
 
 export const positions: Position[] = [
+  // SSC Positions
   {
     id: "pos-pres",
     election_id: "elec-123",
@@ -76,11 +125,48 @@ export const positions: Position[] = [
     updated_at: "",
     is_deleted: false,
   },
-  // ADDED: Treasurer Position
   {
     id: "pos-treasurer",
     election_id: "elec-123",
     name: "Treasurer",
+    seat_count: 1,
+    created_at: "",
+    updated_at: "",
+    is_deleted: false,
+  },
+
+  // CSS Positions
+  {
+    id: "pos-css-pres",
+    election_id: "elec-456",
+    name: "President",
+    seat_count: 1,
+    created_at: "",
+    updated_at: "",
+    is_deleted: false,
+  },
+  {
+    id: "pos-css-vp",
+    election_id: "elec-456",
+    name: "Vice President",
+    seat_count: 1,
+    created_at: "",
+    updated_at: "",
+    is_deleted: false,
+  },
+  {
+    id: "pos-css-sec",
+    election_id: "elec-456",
+    name: "Secretary",
+    seat_count: 1,
+    created_at: "",
+    updated_at: "",
+    is_deleted: false,
+  },
+  {
+    id: "pos-css-aud",
+    election_id: "elec-456",
+    name: "Auditor",
     seat_count: 1,
     created_at: "",
     updated_at: "",
@@ -95,7 +181,9 @@ export interface CandidateWithVotes extends Candidate {
 }
 
 export const allCandidates: CandidateWithVotes[] = [
-  // President Candidates
+  // ==========================================
+  // SSC CANDIDATES (elec-123)
+  // ==========================================
   {
     id: "cand-1",
     position_id: "pos-pres",
@@ -132,8 +220,6 @@ export const allCandidates: CandidateWithVotes[] = [
     percentage: 45.6,
     color_hex: "#16a34a",
   },
-
-  // Vice President Candidates
   {
     id: "cand-3",
     position_id: "pos-vp",
@@ -170,8 +256,6 @@ export const allCandidates: CandidateWithVotes[] = [
     percentage: 49.5,
     color_hex: "#2563eb",
   },
-
-  // Secretary Candidates
   {
     id: "cand-5",
     position_id: "pos-sec",
@@ -208,8 +292,6 @@ export const allCandidates: CandidateWithVotes[] = [
     percentage: 34.7,
     color_hex: "#9333ea",
   },
-
-  // ADDED: Treasurer Candidates
   {
     id: "cand-7",
     position_id: "pos-treasurer",
@@ -245,5 +327,160 @@ export const allCandidates: CandidateWithVotes[] = [
     vote_count: 3594,
     percentage: 47.2,
     color_hex: "#2563eb",
+  },
+
+  // ==========================================
+  // CSS CANDIDATES (elec-456)
+  // ==========================================
+  // CSS President
+  {
+    id: "cand-css-1",
+    position_id: "pos-css-pres",
+    election_id: "elec-456",
+    partylist_id: "party-css-1",
+    first_name: "Alan",
+    last_name: "Turing",
+    middle_name: null,
+    suffix: null,
+    image_url: null,
+    platform: null,
+    created_at: "",
+    updated_at: "",
+    is_deleted: false,
+    vote_count: 310,
+    percentage: 68.9,
+    color_hex: "#f59e0b",
+  }, // Amber
+  {
+    id: "cand-css-2",
+    position_id: "pos-css-pres",
+    election_id: "elec-456",
+    partylist_id: "party-css-2",
+    first_name: "Grace",
+    last_name: "Hopper",
+    middle_name: null,
+    suffix: null,
+    image_url: null,
+    platform: null,
+    created_at: "",
+    updated_at: "",
+    is_deleted: false,
+    vote_count: 140,
+    percentage: 31.1,
+    color_hex: "#0ea5e9",
+  }, // Sky Blue
+
+  // CSS Vice President
+  {
+    id: "cand-css-3",
+    position_id: "pos-css-vp",
+    election_id: "elec-456",
+    partylist_id: "party-css-2",
+    first_name: "Ada",
+    last_name: "Lovelace",
+    middle_name: null,
+    suffix: null,
+    image_url: null,
+    platform: null,
+    created_at: "",
+    updated_at: "",
+    is_deleted: false,
+    vote_count: 280,
+    percentage: 62.2,
+    color_hex: "#0ea5e9",
+  },
+  {
+    id: "cand-css-4",
+    position_id: "pos-css-vp",
+    election_id: "elec-456",
+    partylist_id: "party-css-1",
+    first_name: "Linus",
+    last_name: "Torvalds",
+    middle_name: null,
+    suffix: null,
+    image_url: null,
+    platform: null,
+    created_at: "",
+    updated_at: "",
+    is_deleted: false,
+    vote_count: 170,
+    percentage: 37.8,
+    color_hex: "#f59e0b",
+  },
+
+  // CSS Secretary
+  {
+    id: "cand-css-5",
+    position_id: "pos-css-sec",
+    election_id: "elec-456",
+    partylist_id: "party-css-1",
+    first_name: "Margaret",
+    last_name: "Hamilton",
+    middle_name: null,
+    suffix: null,
+    image_url: null,
+    platform: null,
+    created_at: "",
+    updated_at: "",
+    is_deleted: false,
+    vote_count: 300,
+    percentage: 66.7,
+    color_hex: "#f59e0b",
+  },
+  {
+    id: "cand-css-6",
+    position_id: "pos-css-sec",
+    election_id: "elec-456",
+    partylist_id: "party-css-2",
+    first_name: "Tim",
+    last_name: "Berners-Lee",
+    middle_name: null,
+    suffix: null,
+    image_url: null,
+    platform: null,
+    created_at: "",
+    updated_at: "",
+    is_deleted: false,
+    vote_count: 150,
+    percentage: 33.3,
+    color_hex: "#0ea5e9",
+  },
+
+  // CSS Auditor (Dead Tie!)
+  {
+    id: "cand-css-7",
+    position_id: "pos-css-aud",
+    election_id: "elec-456",
+    partylist_id: "party-css-2",
+    first_name: "Ken",
+    last_name: "Thompson",
+    middle_name: null,
+    suffix: null,
+    image_url: null,
+    platform: null,
+    created_at: "",
+    updated_at: "",
+    is_deleted: false,
+    vote_count: 225,
+    percentage: 50.0,
+    color_hex: "#0ea5e9",
+  },
+  {
+    id: "cand-css-8",
+    position_id: "pos-css-aud",
+    election_id: "elec-456",
+    partylist_id: "party-css-1",
+    first_name: "Dennis",
+    last_name: "Ritchie",
+    middle_name: null,
+    suffix: null,
+    image_url: null,
+    platform: null,
+    created_at: "",
+    updated_at: "",
+    is_deleted: false,
+    vote_count: 225,
+    percentage: 50.0,
+    color_hex: "#f59e0b",
   },
 ];

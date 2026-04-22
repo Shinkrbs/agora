@@ -1,12 +1,10 @@
-// app/live-election/lib/mock-data.ts
 import {
   ElectionSession,
   Position,
   Partylist,
   Candidate,
-} from "@/types/database"; // Adjust path as needed
+} from "@/types/database";
 
-// 1. Election Session
 export const currentElection: ElectionSession = {
   id: "elec-123",
   title: "VSU Supreme Student Council Elections 2026",
@@ -19,17 +17,22 @@ export const currentElection: ElectionSession = {
   is_deleted: false,
 };
 
-// 2. Partylists
+export const electionStats = {
+  totalBallotsCast: 7814,
+  reportingPercentage: 84,
+  lastUpdated: "Just now",
+};
+
 export const partylists: Record<string, Partylist> = {
   "party-1": {
     id: "party-1",
     election_id: "elec-123",
     name: "Alyansang Tapat",
     shorthand_name: "AT",
-    description: "Progressive student leadership.",
+    description: "",
     logo_url: "",
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
+    created_at: "",
+    updated_at: "",
     is_deleted: false,
   },
   "party-2": {
@@ -37,45 +40,62 @@ export const partylists: Record<string, Partylist> = {
     election_id: "elec-123",
     name: "Lakas Estudyante",
     shorthand_name: "LE",
-    description: "Action-driven governance.",
+    description: "",
     logo_url: "",
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
+    created_at: "",
+    updated_at: "",
     is_deleted: false,
   },
 };
 
-// 3. Positions
 export const positions: Position[] = [
   {
     id: "pos-pres",
     election_id: "elec-123",
     name: "Student Body President",
     seat_count: 1,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
+    created_at: "",
+    updated_at: "",
     is_deleted: false,
   },
   {
-    id: "pos-senator",
+    id: "pos-vp",
     election_id: "elec-123",
-    name: "Senators",
-    seat_count: 12,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
+    name: "Vice President",
+    seat_count: 1,
+    created_at: "",
+    updated_at: "",
+    is_deleted: false,
+  },
+  {
+    id: "pos-sec",
+    election_id: "elec-123",
+    name: "Secretary",
+    seat_count: 1,
+    created_at: "",
+    updated_at: "",
+    is_deleted: false,
+  },
+  // ADDED: Treasurer Position
+  {
+    id: "pos-treasurer",
+    election_id: "elec-123",
+    name: "Treasurer",
+    seat_count: 1,
+    created_at: "",
+    updated_at: "",
     is_deleted: false,
   },
 ];
 
-// 4. Candidates with Mock Vote Data
-// We extend the Candidate type locally just for the UI to include vote counts.
 export interface CandidateWithVotes extends Candidate {
   vote_count: number;
   percentage: number;
   color_hex: string;
 }
 
-export const presidentCandidates: CandidateWithVotes[] = [
+export const allCandidates: CandidateWithVotes[] = [
+  // President Candidates
   {
     id: "cand-1",
     position_id: "pos-pres",
@@ -87,12 +107,12 @@ export const presidentCandidates: CandidateWithVotes[] = [
     suffix: null,
     image_url: null,
     platform: null,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
+    created_at: "",
+    updated_at: "",
     is_deleted: false,
     vote_count: 4253,
     percentage: 54.4,
-    color_hex: "#2563eb", // Blue
+    color_hex: "#2563eb",
   },
   {
     id: "cand-2",
@@ -105,18 +125,125 @@ export const presidentCandidates: CandidateWithVotes[] = [
     suffix: null,
     image_url: null,
     platform: null,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
+    created_at: "",
+    updated_at: "",
     is_deleted: false,
     vote_count: 3561,
     percentage: 45.6,
-    color_hex: "#16a34a", // Green
+    color_hex: "#16a34a",
+  },
+
+  // Vice President Candidates
+  {
+    id: "cand-3",
+    position_id: "pos-vp",
+    election_id: "elec-123",
+    partylist_id: "party-2",
+    first_name: "Jordan",
+    last_name: "Lee",
+    middle_name: null,
+    suffix: null,
+    image_url: null,
+    platform: null,
+    created_at: "",
+    updated_at: "",
+    is_deleted: false,
+    vote_count: 3950,
+    percentage: 50.5,
+    color_hex: "#16a34a",
+  },
+  {
+    id: "cand-4",
+    position_id: "pos-vp",
+    election_id: "elec-123",
+    partylist_id: "party-1",
+    first_name: "Sam",
+    last_name: "Smith",
+    middle_name: null,
+    suffix: null,
+    image_url: null,
+    platform: null,
+    created_at: "",
+    updated_at: "",
+    is_deleted: false,
+    vote_count: 3864,
+    percentage: 49.5,
+    color_hex: "#2563eb",
+  },
+
+  // Secretary Candidates
+  {
+    id: "cand-5",
+    position_id: "pos-sec",
+    election_id: "elec-123",
+    partylist_id: "party-1",
+    first_name: "Alex",
+    last_name: "Garcia",
+    middle_name: null,
+    suffix: null,
+    image_url: null,
+    platform: null,
+    created_at: "",
+    updated_at: "",
+    is_deleted: false,
+    vote_count: 5100,
+    percentage: 65.3,
+    color_hex: "#2563eb",
+  },
+  {
+    id: "cand-6",
+    position_id: "pos-sec",
+    election_id: "elec-123",
+    partylist_id: null,
+    first_name: "Taylor",
+    last_name: "Wong",
+    middle_name: null,
+    suffix: null,
+    image_url: null,
+    platform: null,
+    created_at: "",
+    updated_at: "",
+    is_deleted: false,
+    vote_count: 2714,
+    percentage: 34.7,
+    color_hex: "#9333ea",
+  },
+
+  // ADDED: Treasurer Candidates
+  {
+    id: "cand-7",
+    position_id: "pos-treasurer",
+    election_id: "elec-123",
+    partylist_id: "party-2",
+    first_name: "Elena",
+    last_name: "Cruz",
+    middle_name: null,
+    suffix: null,
+    image_url: null,
+    platform: null,
+    created_at: "",
+    updated_at: "",
+    is_deleted: false,
+    vote_count: 4020,
+    percentage: 52.8,
+    color_hex: "#16a34a",
+  },
+  {
+    id: "cand-8",
+    position_id: "pos-treasurer",
+    election_id: "elec-123",
+    partylist_id: "party-1",
+    first_name: "David",
+    last_name: "Kim",
+    middle_name: null,
+    suffix: null,
+    image_url: null,
+    platform: null,
+    created_at: "",
+    updated_at: "",
+    is_deleted: false,
+    vote_count: 3594,
+    percentage: 47.2,
+    color_hex: "#2563eb",
   },
 ];
-
-// 5. Overall Stats
-export const electionStats = {
-  totalBallotsCast: 7814,
-  reportingPercentage: 84,
-  lastUpdated: "Just now",
-};

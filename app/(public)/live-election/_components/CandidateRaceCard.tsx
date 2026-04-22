@@ -13,7 +13,7 @@ interface CandidateResult {
 
 interface CandidateRaceCardProps {
   positionName: string;
-  statusText: string;
+  statusText?: string;
   candidates: CandidateResult[];
 }
 
@@ -26,12 +26,14 @@ export function CandidateRaceCard({
     <Card className="shadow-sm border-gray-200">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <CardTitle className="text-xl font-bold">{positionName}</CardTitle>
-        <Badge
-          variant="secondary"
-          className="bg-amber-100 text-amber-800 hover:bg-amber-100 font-medium"
-        >
-          {statusText}
-        </Badge>
+        {statusText && (
+          <Badge
+            variant="secondary"
+            className="bg-amber-100 text-amber-800 hover:bg-amber-100 font-medium"
+          >
+            {statusText}
+          </Badge>
+        )}
       </CardHeader>
       <CardContent className="space-y-8 pt-4">
         {candidates.map((candidate) => (

@@ -21,7 +21,6 @@ export function LiveElectionHeader({
 
   const handleRefresh = () => {
     setIsRefreshing(true);
-    // Simulate fetch, replace with actual Supabase revalidation later
     setTimeout(() => setIsRefreshing(false), 1000);
   };
 

@@ -23,13 +23,13 @@ export function LandingPageHeader() {
             priority
           />
           <span className="font-bold text-sm sm:text-base">
-            Student Organization Election System
+            <Link href="/landing">Student Organization Election System</Link>
           </span>
         </div>
 
         <div className="flex items-center gap-2 sm:gap-4">
-          {/* Live Election Updates Button - Conditionally Rendered & Always Green */}
-          {pathname !== "/live-election" && (
+          {/* CHANGED: Use .startsWith() to catch dynamic routes like /live-election/org-123 */}
+          {!pathname.startsWith("/live-election") && (
             <Button
               asChild
               className="bg-[#2e7d32] hover:bg-[#205e24] text-white flex items-center gap-2 px-3 py-1 sm:px-4 sm:py-2 rounded-md text-sm sm:text-base border-none shadow-sm"

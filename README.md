@@ -8,6 +8,7 @@ AG.010.001 | 2026-02-27 |
 AG.010.002 | 2026-03-22 |
 AG.010.003 | 2026-04-05 |
 AG.010.004 | 2026-04-13 |
+AG.010.005| 2026-04-22 |
 
 ## AG.010.001 Release Notes 
 
@@ -57,7 +58,21 @@ AG.010.004 | 2026-04-13 |
 
 ● Improved mobile responsiveness, unified global theming, added semantic status colors (e.g., green for verified, yellow for pending), and smoothed out the organization-switching experience.  
 
-● Fixed major election-related routing issues and transitioned multiple pages from static mockups to dynamic, database-driven interfaces. 
+● Fixed major election-related routing issues and transitioned multiple pages from static mockups to dynamic, database-driven interfaces.
+
+## AG.010.005 Release Notes
+
+● Added a complete system to create and manage candidate profiles, including their vision statements, key projects, and partylist affiliations.
+
+● Implemented full management tools for partylists, allowing you to easily organize groups and upload custom partylist logos.
+
+● Integrated a dedicated election payments table directly into the main payment system to verify and process transaction statuses.
+
+●  Introduced a searchable and filterable interface within Organization Management to view all current and past members.
+
+● Built a fully interactive Reports Management page to easily submit, filter, and track system bugs by severity and date.
+
+● Optimized the breadcrumb navigation by filtering out raw session IDs and fixing broken links to ensure smoother routing.
 
 ## Important Links
 

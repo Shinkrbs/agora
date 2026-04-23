@@ -2,33 +2,25 @@
 
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import {
-  MoreVertical,
   Pencil,
   Check,
   Clock,
   X,
-  CircleUser,
+  CircleUserRound,
+  Repeat2,
 } from "lucide-react";
 import Image from "next/image";
 import { ApprovalStatus } from "@/types/database";
 import { EditOrganizationDialog } from "./EditOrganizationDialog";
 import { ViewOrganizationDialog } from "./ViewMembersDialog";
-import { Organization, MemberDetails } from "@/types/database";
+import { Organization } from "@/types/database";
 import { useOrganizationMembers } from "../hooks/useOrganizationMembers";
+import { useOrganization } from "../../_components/OrganizationContext";
+import { toast } from "sonner";
 interface OrganizationCardProps {
-  id: string;
-  name: string;
-  shorthandName: string;
-  logoUrl?: string | null;
-  approvalStatus: ApprovalStatus;
+  organization: Organization;
 }
 
 const getStatusConfig = (status: ApprovalStatus) => {
@@ -60,17 +52,13 @@ const getStatusConfig = (status: ApprovalStatus) => {
   }
 };
 
-export function OrganizationCard({
-  id,
-  name,
-  shorthandName,
-  logoUrl,
-  approvalStatus,
-}: OrganizationCardProps) {
+export function OrganizationCard({ organization }: OrganizationCardProps) {
+  const { id, name, shorthand_name, logo_url, approval_status } = organization;
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const statusConfig = getStatusConfig(approvalStatus);
+  const { currentOrganization, setCurrentOrganization } = useOrganization();
+  const statusConfig = getStatusConfig(approval_status);
   const StatusIcon = statusConfig.icon;
-  const isApproved = approvalStatus === "approved";
+  const isApproved = approval_status === "approved";
   const {
     isViewDialogOpen,
     setIsViewDialogOpen,
@@ -79,6 +67,20 @@ export function OrganizationCard({
     handleOpenViewMembers,
   } = useOrganizationMembers(id);
 
+  const handleSwitchOrganization = () => {
+    if (!isApproved) {
+      return;
+    }
+
+    if (currentOrganization?.id === organization.id) {
+      toast.info(`${name} is already your active organization.`);
+      return;
+    }
+
+    setCurrentOrganization(organization);
+    toast.success(`Switched to ${name}`);
+  };
+
   return (
     <>
       <Card className="relative p-6 h-full hover:shadow-lg transition-shadow flex flex-col">
@@ -86,7 +88,7 @@ export function OrganizationCard({
           <div className="shrink-0">
             <div className="w-14 h-14 rounded-full bg-transparent overflow-hidden flex items-center justify-center ring-1 ring-slate-300 dark:ring-slate-700">
               <Image
-                src={logoUrl || "/logo.svg"}
+                src={logo_url || "/logo.svg"}
                 alt={`${name} logo`}
                 width={56}
                 height={56}
@@ -95,40 +97,40 @@ export function OrganizationCard({
             </div>
           </div>
 
-          <div className="ml-auto">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-8 w-8 hover:bg-slate-100 dark:hover:bg-slate-800"
-                >
-                  <MoreVertical className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuItem
-                  className="cursor-pointer"
-                  disabled={!isApproved}
-                  onClick={handleOpenViewMembers}
-                >
-                  <CircleUser className="h-4 w-4 mr-2" />
-                  View Members
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  className="cursor-pointer"
-                  disabled={!isApproved}
-                  onClick={() => setIsEditDialogOpen(true)}
-                >
-                  <Pencil className="h-4 w-4 mr-2" />
-                  Edit Organization
-                </DropdownMenuItem>
-
-                <DropdownMenuItem className="cursor-pointer">
-                  Switch to {name}
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+          <div className="ml-auto flex items-center gap-1">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 hover:bg-slate-100 dark:hover:bg-slate-800"
+              disabled={!isApproved}
+              onClick={handleOpenViewMembers}
+              aria-label="View members"
+              title="View members"
+            >
+              <CircleUserRound className="h-4 w-4 text-green-700 dark:text-white" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 hover:bg-slate-100 dark:hover:bg-slate-800"
+              disabled={!isApproved}
+              onClick={() => setIsEditDialogOpen(true)}
+              aria-label="Edit organization"
+              title="Edit organization"
+            >
+              <Pencil className="h-4 w-4 text-blue-700 dark:text-white" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 hover:bg-slate-100 dark:hover:bg-slate-800"
+              disabled={!isApproved}
+              onClick={handleSwitchOrganization}
+              aria-label={`Switch to ${name}`}
+              title={`Switch to ${name}`}
+            >
+              <Repeat2 className="h-4 w-4 text-slate-700 dark:text-white" />
+            </Button>
           </div>
         </div>
 
@@ -137,9 +139,9 @@ export function OrganizationCard({
             <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-50 line-clamp-2">
               {name}
             </h3>
-            {shorthandName && (
+            {shorthand_name && (
               <p className="text-sm text-slate-600 dark:text-slate-400">
-                {shorthandName}
+                {shorthand_name}
               </p>
             )}
           </div>
@@ -166,15 +168,15 @@ export function OrganizationCard({
         onClose={() => setIsEditDialogOpen(false)}
         organizationId={id}
         initialName={name}
-        initialShorthand={shorthandName}
-        initialLogoUrl={logoUrl}
+        initialShorthand={shorthand_name}
+        initialLogoUrl={logo_url}
       />
       <ViewOrganizationDialog
         isOpen={isViewDialogOpen}
         onClose={() => setIsViewDialogOpen(false)}
         name={name}
-        shorthandName={shorthandName}
-        logoUrl={logoUrl}
+        shorthandName={shorthand_name}
+        logoUrl={logo_url}
         members={members} // Pass the mock data here
         isLoading={isLoadingMembers}
       />

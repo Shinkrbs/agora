@@ -87,7 +87,8 @@ export function AddEditCandidateModal({
   // Initialize form when modal opens or candidate changes
   useEffect(() => {
     if (candidate && open) {
-      const platformData = (candidate.raw_candidate.platform as CandidatePlatform | null) || {
+      const platformData = (candidate.raw_candidate
+        .platform as CandidatePlatform | null) || {
         vision: "",
         key_projects: [],
       };
@@ -183,7 +184,9 @@ export function AddEditCandidateModal({
         <div className="space-y-6 py-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="first-name">First Name *</Label>
+              <Label htmlFor="first-name">
+                First Name <span className="text-destructive">*</span>
+              </Label>
               <Input
                 id="first-name"
                 value={formData.first_name}
@@ -195,7 +198,9 @@ export function AddEditCandidateModal({
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="last-name">Last Name *</Label>
+              <Label htmlFor="last-name">
+                Last Name <span className="text-destructive">*</span>
+              </Label>
               <Input
                 id="last-name"
                 value={formData.last_name}
@@ -239,7 +244,9 @@ export function AddEditCandidateModal({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="position">Position *</Label>
+            <Label htmlFor="position">
+              Position <span className="text-destructive">*</span>
+            </Label>
             <Select
               value={formData.position_id}
               onValueChange={(value) =>
@@ -326,7 +333,7 @@ export function AddEditCandidateModal({
                     size="icon"
                     onClick={() => {
                       const updated = formData.key_projects.filter(
-                        (_, i) => i !== index
+                        (_, i) => i !== index,
                       );
                       setFormData({ ...formData, key_projects: updated });
                     }}
@@ -397,7 +404,7 @@ export function DeleteCandidateDialog({
 
       if (result.success) {
         toast.success(
-          `Candidate "${candidate.full_name}" deleted successfully!`
+          `Candidate "${candidate.full_name}" deleted successfully!`,
         );
         onOpenChange(false);
         onSuccess();

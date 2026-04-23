@@ -21,13 +21,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Check, AlertCircle, MoreHorizontal } from "lucide-react";
+import { Check, AlertCircle, Pencil, Trash2 } from "lucide-react";
 import { CandidateTableRow } from "../_types/candidate-types";
 
 interface CandidateTableProps {
@@ -54,7 +48,8 @@ export function CandidateTable({
         header: "Candidate",
         cell: ({ row }) => {
           const candidate = row.original;
-          const initials = `${candidate.raw_candidate.first_name[0]}${candidate.raw_candidate.last_name[0]}`.toUpperCase();
+          const initials =
+            `${candidate.raw_candidate.first_name[0]}${candidate.raw_candidate.last_name[0]}`.toUpperCase();
 
           return (
             <div className="flex items-center gap-3">
@@ -117,30 +112,33 @@ export function CandidateTable({
           const candidate = row.original;
 
           return (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="h-8 w-8 p-0">
-                  <span className="sr-only">Open menu</span>
-                  <MoreHorizontal className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => onEdit(candidate)}>
-                  Edit
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => onDelete(candidate)}
-                  className="text-red-600"
-                >
-                  Delete
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <div className="flex items-center gap-1">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 hover:bg-slate-100 dark:hover:bg-slate-800"
+                onClick={() => onEdit(candidate)}
+                aria-label={`Edit ${candidate.full_name}`}
+                title="Edit candidate"
+              >
+                <Pencil className="h-4 w-4 text-slate-900 dark:text-white" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 hover:bg-slate-100 dark:hover:bg-slate-800"
+                onClick={() => onDelete(candidate)}
+                aria-label={`Delete ${candidate.full_name}`}
+                title="Delete candidate"
+              >
+                <Trash2 className="h-4 w-4 text-red-600 dark:text-red-400" />
+              </Button>
+            </div>
           );
         },
       },
     ],
-    [onEdit, onDelete]
+    [onEdit, onDelete],
   );
 
   const table = useReactTable({
@@ -167,7 +165,7 @@ export function CandidateTable({
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                   </TableHead>
                 ))}
@@ -200,7 +198,7 @@ export function CandidateTable({
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}

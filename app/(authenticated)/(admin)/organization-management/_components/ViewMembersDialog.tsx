@@ -79,7 +79,7 @@ export function ViewOrganizationDialog({
 
         <div className="flex-1 overflow-hidden flex flex-col space-y-4 mt-2">
           {/* Organization Info Header */}
-          <div className="shrink-0 flex items-center gap-3 bg-muted/50 p-3 rounded-lg border border-border">
+          <div className="shrink-0 flex items-center gap-3 p-3 rounded-lg border border-border bg-background">
             {logoUrl ? (
               <div className="shrink-0 w-10 h-10 rounded-md overflow-hidden border border-border bg-background">
                 <Image
@@ -91,7 +91,7 @@ export function ViewOrganizationDialog({
                 />
               </div>
             ) : (
-              <div className="shrink-0 w-10 h-10 rounded-md flex items-center justify-center border border-border bg-muted">
+              <div className="shrink-0 w-10 h-10 rounded-md flex items-center justify-center border border-border bg-background">
                 <Building2 className="w-5 h-5 text-muted-foreground" />
               </div>
             )}
@@ -142,10 +142,10 @@ export function ViewOrganizationDialog({
           </div>
 
           {/* Members Table */}
-          <div className="flex-1 overflow-hidden border border-border rounded-lg flex flex-col bg-card">
+          <div className="flex-1 overflow-hidden border border-border rounded-lg flex flex-col bg-background">
             <div className="overflow-y-auto h-full">
               <table className="w-full text-sm text-left whitespace-nowrap">
-                <thead className="bg-muted/50 sticky top-0 z-10 text-muted-foreground backdrop-blur-sm shadow-sm border-b border-border">
+                <thead className="sticky top-0 z-10 text-muted-foreground bg-background border-b border-border">
                   <tr>
                     <th className="px-4 py-3 font-medium">Member</th>
                     <th className="px-4 py-3 font-medium">Email</th>
@@ -157,10 +157,7 @@ export function ViewOrganizationDialog({
                 <tbody className="divide-y divide-border">
                   {filteredMembers.length > 0 ? (
                     filteredMembers.map((member) => (
-                      <tr
-                        key={member.id}
-                        className="hover:bg-muted/50 transition-colors"
-                      >
+                      <tr key={member.id} className="transition-colors">
                         <td className="px-4 py-3 flex items-center gap-3">
                           {member.avatar_url ? (
                             <img
@@ -182,10 +179,10 @@ export function ViewOrganizationDialog({
                         </td>
                         <td className="px-4 py-3">
                           <span
-                            className={`inline-flex items-center px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider
-                              ${String(member.role).toUpperCase() === "OWNER" ? "bg-primary/15 text-primary" : ""}
-                              ${String(member.role).toUpperCase() === "ADMIN" ? "bg-secondary text-secondary-foreground" : ""}
-                              ${String(member.role).toUpperCase() === "MEMBER" ? "bg-muted text-muted-foreground" : ""}
+                            className={`inline-flex items-center px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border
+                              ${String(member.role).toUpperCase() === "OWNER" ? "border-primary/30 text-primary" : ""}
+                              ${String(member.role).toUpperCase() === "ADMIN" ? "border-blue-500/30 text-blue-600 dark:text-blue-400" : ""}
+                              ${String(member.role).toUpperCase() === "MEMBER" ? "border-border text-foreground" : ""}
                             `}
                           >
                             {member.role}

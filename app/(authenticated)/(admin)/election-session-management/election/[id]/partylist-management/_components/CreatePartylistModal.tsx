@@ -121,7 +121,9 @@ export function CreatePartylistModal({
         <div className="space-y-6 py-4">
           {/* Name Field */}
           <div className="space-y-2">
-            <Label htmlFor="partylist-name">Partylist Name *</Label>
+            <Label htmlFor="partylist-name">
+              Partylist Name <span className="text-destructive">*</span>
+            </Label>
             <Input
               id="partylist-name"
               value={name}

@@ -43,6 +43,7 @@ import { sendVotingCode } from "../_actions/voter-actions";
 import { AddEditVoterModal } from "./AddEditVoterModal";
 import { ImportVotersModal } from "./ImportVotersModal";
 import { DeleteVoterModal } from "./DeleteVoterModal";
+import { BulkSendModal } from "./BulkSendButton";
 
 interface VoterTableProps {
   voters: VoterTableRow[];
@@ -111,7 +112,7 @@ export function VoterTable({ voters: initialVoters, electionId, onVoterAdded }: 
           // Update voter data to reflect the sent status
           setData((prevData) =>
             prevData.map((v) =>
-              v.id === voter.id ? { ...v, code_status: "sent" as VoterCodeStatus } : v
+              v.id === voter.id ? { ...v, code_status: "SENT" as VoterCodeStatus } : v
             )
           );
           // Clear message after 3 seconds
@@ -188,9 +189,9 @@ export function VoterTable({ voters: initialVoters, electionId, onVoterAdded }: 
           const status = row.getValue("code_status") as VoterCodeStatus;
           return (
             <Badge
-              variant={status === "voted" ? "default" : "secondary"}
+              variant={status === "VOTED" ? "default" : "secondary"}
               className={
-                status === "voted"
+                status === "VOTED"
                   ? "bg-green-600 hover:bg-green-700"
                   : "bg-yellow-100 text-yellow-800 hover:bg-yellow-200"
               }
@@ -300,14 +301,17 @@ export function VoterTable({ voters: initialVoters, electionId, onVoterAdded }: 
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="ALL">All Status</SelectItem>
-              <SelectItem value="sent">Sent</SelectItem>
-              <SelectItem value="voted">Voted</SelectItem>
-              <SelectItem value="unsent">Unsent</SelectItem>
-              <SelectItem value="expired">Expired</SelectItem>
+              <SelectItem value="SENT">Sent</SelectItem>
+              <SelectItem value="VOTED">Voted</SelectItem>
+              <SelectItem value="UNSENT">Unsent</SelectItem>
+              <SelectItem value="EXPIRED">Expired</SelectItem>
             </SelectContent>
           </Select>
         </div>
         <div className="flex gap-2">
+          <BulkSendModal
+            unsentVoters={data.filter((v) => v.code_status === "UNSENT")}
+          />
           <Button
             onClick={handleAddVoter}
             size="sm"

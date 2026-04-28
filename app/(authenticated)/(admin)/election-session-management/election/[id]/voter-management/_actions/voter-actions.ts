@@ -145,3 +145,67 @@ export async function sendVotingCode(voterId: string, votingCode: string, studen
         return { success: false, error: "An unexpected error occurred while sending the voting code." };
     }
 }
+
+export async function sendBatchedVotingCodesAction(
+  batch: { id: string; student_id: string; email: string; voting_code: string }[]
+): Promise<{ success: boolean; sentCount: number; failedCount: number; failedIds: string[] }> {
+  try {
+    const cookieStore = await cookies();
+    const supabase = await createClient(cookieStore);
+
+    const successfulIds: string[] = [];
+    const failedIds: string[] = [];
+
+    // Process each voter in the batch sequentially
+    for (const voter of batch) {
+      try {
+        // Send the voting code email
+        const emailResult = await sendVotingCodeEmail(
+          voter.email,
+          voter.student_id,
+          voter.voting_code
+        );
+
+        if (emailResult.success) {
+          successfulIds.push(voter.id);
+        } else {
+          failedIds.push(voter.id);
+          console.error(`Failed to send email to ${voter.email}:`, emailResult.error);
+        }
+      } catch (error) {
+        failedIds.push(voter.id);
+        console.error(`Error processing voter ${voter.id}:`, error);
+      }
+
+      // Rate limit protection: 200ms delay between each email
+      await new Promise((res) => setTimeout(res, 200));
+    }
+
+    // Bulk update successful voters to SENT status
+    if (successfulIds.length > 0) {
+      const { error: updateError } = await supabase
+        .from("voters")
+        .update({ code_status: "SENT" })
+        .in("id", successfulIds);
+
+      if (updateError) {
+        console.error("Error updating voter statuses:", updateError);
+      }
+    }
+
+    return {
+      success: failedIds.length === 0,
+      sentCount: successfulIds.length,
+      failedCount: failedIds.length,
+      failedIds,
+    };
+  } catch (error) {
+    console.error("Batch sending error:", error);
+    return {
+      success: false,
+      sentCount: 0,
+      failedCount: batch.length,
+      failedIds: batch.map((v) => v.id),
+    };
+  }
+}

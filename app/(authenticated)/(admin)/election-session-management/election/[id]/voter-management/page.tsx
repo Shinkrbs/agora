@@ -90,10 +90,10 @@ export default function VoterManagementPage({
   // Calculate statistics
   const totalVoters = voters.length;
   const votedCount = voters.filter(
-    (v) => v.code_status === "voted"
+    (v) => v.code_status === "VOTED"
   ).length;
   const pendingCount = voters.filter(
-    (v) => v.code_status === "sent"
+    (v) => v.code_status === "SENT"
   ).length;
   const turnoutPercentage =
     totalVoters > 0 ? Math.round((votedCount / totalVoters) * 100) : 0;

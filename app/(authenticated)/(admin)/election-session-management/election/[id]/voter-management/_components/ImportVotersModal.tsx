@@ -48,66 +48,78 @@ export function ImportVotersModal({
     setIsPending(true);
 
     try {
-      Papa.parse(selectedFile, {
+      // Read the file as text
+      const fileContent = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const text = e.target?.result;
+          if (typeof text === "string") {
+            resolve(text);
+          } else {
+            reject(new Error("Failed to read file"));
+          }
+        };
+        reader.onerror = () => reject(reader.error);
+        reader.readAsText(selectedFile);
+      });
+
+      // Parse the CSV content synchronously
+      const results = Papa.parse<Record<string, string>>(fileContent, {
         header: true,
         skipEmptyLines: true,
-        complete: async (results: Papa.ParseResult<Record<string, string>>) => {
-          try {
-            const parsedData = results.data;
-
-            if (!parsedData || parsedData.length === 0) {
-              setErrorMsg("CSV file is empty or has no valid data rows.");
-              setIsPending(false);
-              return;
-            }
-
-            const firstRow = parsedData[0];
-            if (!firstRow.student_id || !firstRow.email) {
-              setErrorMsg(
-                "CSV must contain 'student_id' and 'email' columns."
-              );
-              setIsPending(false);
-              return;
-            }
-
-            const sanitizedVoters = parsedData.map((row) => ({
-              student_id: row.student_id.trim(),
-              email: row.email.trim(),
-            }));
-
-            const result = await importVotersCSVAction(
-              electionId,
-              sanitizedVoters
-            );
-
-            if (!result.success) {
-              setErrorMsg(result.error || "Failed to import voters.");
-              setIsPending(false);
-              return;
-            }
-
-            setSelectedFile(null);
-            setErrorMsg(null);
-            setIsPending(false);
-            onClose();
-          } catch (error) {
-            console.error("Parse completion error:", error);
-            setErrorMsg("An error occurred while processing the CSV.");
-            setIsPending(false);
-          }
-        },
-        error: (error: Papa.ParseError) => {
-          console.error("Papa Parse error:", error);
-          setErrorMsg("Failed to parse CSV file. Please check the format.");
-          setIsPending(false);
-        },
+        dynamicTyping: false,
       });
+
+      if (results.errors && results.errors.length > 0) {
+        console.error("Papa Parse errors:", results.errors);
+        setErrorMsg("Failed to parse CSV file. Please check the format.");
+        setIsPending(false);
+        return;
+      }
+
+      const parsedData = results.data;
+
+      if (!parsedData || parsedData.length === 0) {
+        setErrorMsg("CSV file is empty or has no valid data rows.");
+        setIsPending(false);
+        return;
+      }
+
+      const firstRow = parsedData[0];
+      if (!firstRow.student_id || !firstRow.email) {
+        setErrorMsg(
+          "CSV must contain 'student_id' and 'email' columns."
+        );
+        setIsPending(false);
+        return;
+      }
+
+      const sanitizedVoters = parsedData.map((row) => ({
+        student_id: row.student_id.trim(),
+        email: row.email.trim(),
+      }));
+
+      const result = await importVotersCSVAction(
+        electionId,
+        sanitizedVoters
+      );
+
+      if (!result.success) {
+        setErrorMsg(result.error || "Failed to import voters.");
+        setIsPending(false);
+        return;
+      }
+
+      setSelectedFile(null);
+      setErrorMsg(null);
+      setIsPending(false);
+      onClose();
     } catch (error) {
-      console.error("File reading error:", error);
-      setErrorMsg("An error occurred while reading the file.");
+      console.error("Import error:", error);
+      setErrorMsg("An error occurred while importing the file.");
       setIsPending(false);
     }
-  };;
+  };
 
   const handleClose = () => {
     setSelectedFile(null);
@@ -116,7 +128,7 @@ export function ImportVotersModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-106.25">
         <DialogHeader>
           <DialogTitle>Import Voters from CSV</DialogTitle>
           <DialogDescription>

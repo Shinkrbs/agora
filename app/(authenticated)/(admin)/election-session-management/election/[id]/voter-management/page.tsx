@@ -1,49 +1,11 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, CheckCircle2, AlertCircle } from "lucide-react";
 import { VoterTable } from "./_components/VoterTable";
 import type { VoterTableRow } from "./_types/voter-types";
-
-// Mock data - replace with actual API call
-const mockVoters: VoterTableRow[] = [
-  {
-    id: "1",
-    student_id: "STU001",
-    email: "alice@example.com",
-    voting_code: "VOTE-ABC-123",
-    code_status: "sent",
-  },
-  {
-    id: "2",
-    student_id: "STU002",
-    email: "bob@example.com",
-    voting_code: "VOTE-DEF-456",
-    code_status: "voted",
-  },
-  {
-    id: "3",
-    student_id: "STU003",
-    email: "carol@example.com",
-    voting_code: "VOTE-GHI-789",
-    code_status: "sent",
-  },
-  {
-    id: "4",
-    student_id: "STU004",
-    email: "david@example.com",
-    voting_code: "VOTE-JKL-012",
-    code_status: "voted",
-  },
-  {
-    id: "5",
-    student_id: "STU005",
-    email: "emma@example.com",
-    voting_code: "VOTE-MNO-345",
-    code_status: "voted",
-  },
-];
+import { fetchVoters } from "./_queries/voter-queries";
 
 export default function VoterManagementPage({
   params,
@@ -53,13 +15,84 @@ export default function VoterManagementPage({
   }>;
 }) {
   const { id } = React.use(params);
+  const [voters, setVoters] = useState<VoterTableRow[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadVoters = async () => {
+      try {
+        setIsLoading(true);
+        const { data, error: fetchError } = await fetchVoters(id);
+
+        if (fetchError) {
+          setError(fetchError);
+          setVoters([]);
+          return;
+        }
+
+        if (data) {
+          // Transform Voter[] to VoterTableRow[]
+          const voterTableRows: VoterTableRow[] = data.map((voter) => ({
+            id: voter.id,
+            student_id: voter.student_id,
+            email: voter.email,
+            voting_code: voter.voting_code,
+            code_status: voter.code_status,
+          }));
+          setVoters(voterTableRows);
+        }
+      } catch (err) {
+        setError("Failed to load voters");
+        setVoters([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadVoters();
+  }, [id]);
+
+  const handleVoterAdded = () => {
+    // Reload voters when a new voter is added
+    const loadVoters = async () => {
+      try {
+        setIsLoading(true);
+        const { data, error: fetchError } = await fetchVoters(id);
+
+        if (fetchError) {
+          setError(fetchError);
+          setVoters([]);
+          return;
+        }
+
+        if (data) {
+          // Transform Voter[] to VoterTableRow[]
+          const voterTableRows: VoterTableRow[] = data.map((voter) => ({
+            id: voter.id,
+            student_id: voter.student_id,
+            email: voter.email,
+            voting_code: voter.voting_code,
+            code_status: voter.code_status,
+          }));
+          setVoters(voterTableRows);
+        }
+      } catch (err) {
+        setError("Failed to load voters");
+        setVoters([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    loadVoters();
+  };
 
   // Calculate statistics
-  const totalVoters = mockVoters.length;
-  const votedCount = mockVoters.filter(
+  const totalVoters = voters.length;
+  const votedCount = voters.filter(
     (v) => v.code_status === "voted"
   ).length;
-  const pendingCount = mockVoters.filter(
+  const pendingCount = voters.filter(
     (v) => v.code_status === "sent"
   ).length;
   const turnoutPercentage =
@@ -74,6 +107,15 @@ export default function VoterManagementPage({
           Manage voters and track voting status for election {id}
         </p>
       </div>
+
+      {/* Error Message */}
+      {error && (
+        <Card className="border-red-200 bg-red-50">
+          <CardContent className="pt-6">
+            <p className="text-red-800">{error}</p>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Summary Statistics */}
       <div className="grid gap-4 md:grid-cols-3">
@@ -126,7 +168,11 @@ export default function VoterManagementPage({
           <CardTitle>Voters List</CardTitle>
         </CardHeader>
         <CardContent>
-          <VoterTable voters={mockVoters} />
+          {isLoading ? (
+            <p className="text-muted-foreground">Loading voters...</p>
+          ) : (
+            <VoterTable voters={voters} electionId={id} onVoterAdded={handleVoterAdded} />
+          )}
         </CardContent>
       </Card>
     </div>

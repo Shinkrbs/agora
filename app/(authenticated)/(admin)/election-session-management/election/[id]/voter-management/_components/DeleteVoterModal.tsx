@@ -30,7 +30,6 @@ export function DeleteVoterModal({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Early return if voter is null to prevent crashes
   if (!voter) {
     return null;
   }
@@ -47,7 +46,6 @@ export function DeleteVoterModal({
         return;
       }
 
-      // Success - close modal and trigger refresh
       onSuccess?.();
       onClose();
     } catch (err) {

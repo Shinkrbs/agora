@@ -43,7 +43,6 @@ export function BulkSendModal({ unsentVoters }: BulkSendModalProps) {
       let totalFailed = 0;
       const allFailedIds: string[] = [];
 
-      // Process voters in batches
       for (let i = 0; i < unsentVoters.length; i += BATCH_SIZE) {
         const batch = unsentVoters.slice(i, i + BATCH_SIZE);
 
@@ -54,10 +53,8 @@ export function BulkSendModal({ unsentVoters }: BulkSendModalProps) {
           totalFailed += result.failedCount;
           allFailedIds.push(...result.failedIds);
 
-          // Update progress after each batch completes
           setProgress(totalSent + totalFailed);
 
-          // If the entire batch failed, stop and show error
           if (!result.success && result.failedCount === batch.length) {
             toast.error(`Failed to send batch starting at voter ${i + 1}`);
             break;
@@ -69,7 +66,6 @@ export function BulkSendModal({ unsentVoters }: BulkSendModalProps) {
         }
       }
 
-      // Show final results
       if (totalFailed === 0) {
         toast.success(`Successfully sent ${totalSent} voting codes!`);
         setIsComplete(true);
@@ -89,7 +85,7 @@ export function BulkSendModal({ unsentVoters }: BulkSendModalProps) {
   };
 
   const handleClose = () => {
-    if (isSending) return; // Prevent closing while sending
+    if (isSending) return;
     setIsOpen(false);
     setIsComplete(false);
     setProgress(0);
@@ -106,7 +102,6 @@ export function BulkSendModal({ unsentVoters }: BulkSendModalProps) {
 
   return (
     <>
-      {/* Trigger Button */}
       <Button
         onClick={() => setIsOpen(true)}
         disabled={unsentVoters.length === 0}
@@ -116,14 +111,12 @@ export function BulkSendModal({ unsentVoters }: BulkSendModalProps) {
         Distribute Unsent Codes
       </Button>
 
-      {/* Modal Dialog */}
       <Dialog open={isOpen} onOpenChange={handleClose}>
         <DialogContent
           onInteractOutside={(e) => {
             if (isSending) e.preventDefault();
           }}
         >
-          {/* Confirmation State */}
           {!isSending && !isComplete && (
             <>
               <DialogHeader>
@@ -169,7 +162,6 @@ export function BulkSendModal({ unsentVoters }: BulkSendModalProps) {
             </>
           )}
 
-          {/* Success State */}
           {isComplete && !isSending && (
             <>
               <DialogHeader>

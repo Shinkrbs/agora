@@ -48,7 +48,6 @@ export function ImportVotersModal({
     setIsPending(true);
 
     try {
-      // Read and parse CSV file
       Papa.parse(selectedFile, {
         header: true,
         skipEmptyLines: true,
@@ -56,14 +55,12 @@ export function ImportVotersModal({
           try {
             const parsedData = results.data;
 
-            // Validate that parsed data is not empty
             if (!parsedData || parsedData.length === 0) {
               setErrorMsg("CSV file is empty or has no valid data rows.");
               setIsPending(false);
               return;
             }
 
-            // Check first row for required properties
             const firstRow = parsedData[0];
             if (!firstRow.student_id || !firstRow.email) {
               setErrorMsg(
@@ -73,13 +70,11 @@ export function ImportVotersModal({
               return;
             }
 
-            // Sanitize data by trimming whitespace
             const sanitizedVoters = parsedData.map((row) => ({
               student_id: row.student_id.trim(),
               email: row.email.trim(),
             }));
 
-            // Call server action
             const result = await importVotersCSVAction(
               electionId,
               sanitizedVoters
@@ -91,7 +86,6 @@ export function ImportVotersModal({
               return;
             }
 
-            // Success: reset form and close modal
             setSelectedFile(null);
             setErrorMsg(null);
             setIsPending(false);

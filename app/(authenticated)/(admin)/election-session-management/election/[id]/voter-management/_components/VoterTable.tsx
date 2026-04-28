@@ -76,7 +76,6 @@ export function VoterTable({ voters: initialVoters, electionId, onVoterAdded }: 
   }, []);
 
   const handleEditVoter = useCallback((voter: VoterTableRow) => {
-    // Use setTimeout to allow DropdownMenu to close and clear its DOM locks first
     setTimeout(() => {
       setSelectedVoter(voter);
       setIsAddEditOpen(true);
@@ -84,7 +83,6 @@ export function VoterTable({ voters: initialVoters, electionId, onVoterAdded }: 
   }, []);
 
   const handleDeleteVoter = useCallback((voter: VoterTableRow) => {
-    // Use setTimeout to allow DropdownMenu to close and clear its DOM locks first
     setTimeout(() => {
       setSelectedVoter(voter);
       setIsDeleteOpen(true);
@@ -109,13 +107,11 @@ export function VoterTable({ voters: initialVoters, electionId, onVoterAdded }: 
             type: "success",
             text: `Voting code sent to ${voter.email}`,
           });
-          // Update voter data to reflect the sent status
           setData((prevData) =>
             prevData.map((v) =>
               v.id === voter.id ? { ...v, code_status: "SENT" as VoterCodeStatus } : v
             )
           );
-          // Clear message after 3 seconds
           setTimeout(() => setResendMessage(null), 3000);
         } else {
           setResendMessage({
@@ -271,7 +267,6 @@ export function VoterTable({ voters: initialVoters, electionId, onVoterAdded }: 
 
   return (
     <div className="space-y-4">
-      {/* Resend Code Feedback Message */}
       {resendMessage && (
         <div
           className={`p-3 rounded-md text-sm font-medium ${
@@ -403,7 +398,6 @@ export function VoterTable({ voters: initialVoters, electionId, onVoterAdded }: 
         </Button>
       </div>
 
-      {/* Modals - Rendered unconditionally to prevent Radix body lock issues */}
       <AddEditVoterModal
         isOpen={isAddEditOpen}
         onClose={() => setIsAddEditOpen(false)}

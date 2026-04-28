@@ -65,7 +65,6 @@ export function AddEditVoterModal({
       setIsLoading(true);
 
       if (isEditMode) {
-        // Call the editVoter server action
         if (!voter) {
           setError("Voter data is missing");
           return;
@@ -82,11 +81,9 @@ export function AddEditVoterModal({
           return;
         }
 
-        // Success - close modal and trigger refresh
         onSuccess?.();
         onClose();
       } else {
-        // Call the addVoter server action
         const result = await addVoter(
           electionId,
           formData.student_id,
@@ -98,7 +95,6 @@ export function AddEditVoterModal({
           return;
         }
 
-        // Success - close modal and trigger refresh
         onSuccess?.();
         onClose();
       }
@@ -112,7 +108,7 @@ export function AddEditVoterModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-106.25">
         <DialogHeader>
           <DialogTitle>
             {isEditMode ? "Edit Voter" : "Add New Voter"}

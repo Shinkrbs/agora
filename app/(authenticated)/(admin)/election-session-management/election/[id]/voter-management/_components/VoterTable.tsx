@@ -37,16 +37,19 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { VoterTableRow, VoterCodeStatus } from "../_types/voter-types";
+import { VoterTableRow } from "../_types/voter-types";
+import { VoterCodeStatus } from "@/types/database";
 import { AddEditVoterModal } from "./AddEditVoterModal";
 import { ImportVotersModal } from "./ImportVotersModal";
 import { DeleteVoterModal } from "./DeleteVoterModal";
 
 interface VoterTableProps {
   voters: VoterTableRow[];
+  electionId: string;
+  onVoterAdded?: () => void;
 }
 
-export function VoterTable({ voters: initialVoters }: VoterTableProps) {
+export function VoterTable({ voters: initialVoters, electionId, onVoterAdded }: VoterTableProps) {
   const [data, setData] = useState<VoterTableRow[]>(initialVoters);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -343,6 +346,8 @@ export function VoterTable({ voters: initialVoters }: VoterTableProps) {
         isOpen={isAddEditOpen}
         onClose={() => setIsAddEditOpen(false)}
         voter={selectedVoter ?? undefined}
+        electionId={electionId}
+        onSuccess={onVoterAdded}
       />
       <ImportVotersModal
         isOpen={isImportOpen}
@@ -352,6 +357,7 @@ export function VoterTable({ voters: initialVoters }: VoterTableProps) {
         isOpen={isDeleteOpen}
         onClose={() => setIsDeleteOpen(false)}
         voter={selectedVoter}
+        onSuccess={onVoterAdded}
       />
     </div>
   );

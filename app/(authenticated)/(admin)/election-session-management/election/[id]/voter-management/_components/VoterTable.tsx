@@ -39,6 +39,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { VoterTableRow } from "../_types/voter-types";
 import { VoterCodeStatus } from "@/types/database";
+import { sendVotingCode } from "../_actions/voter-actions";
 import { AddEditVoterModal } from "./AddEditVoterModal";
 import { ImportVotersModal } from "./ImportVotersModal";
 import { DeleteVoterModal } from "./DeleteVoterModal";
@@ -58,6 +59,8 @@ export function VoterTable({ voters: initialVoters, electionId, onVoterAdded }: 
     "ALL"
   );
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [resendingVoterId, setResendingVoterId] = useState<string | null>(null);
+  const [resendMessage, setResendMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
   // Modal states
   const [isAddEditOpen, setIsAddEditOpen] = useState(false);
@@ -87,10 +90,50 @@ export function VoterTable({ voters: initialVoters, electionId, onVoterAdded }: 
     }, 10);
   }, []);
 
-  const handleResendCode = useCallback((voter: VoterTableRow) => {
-    // Placeholder for resend code action
-    console.log("Resend code for voter:", voter.id);
-  }, []);
+  const handleResendCode = useCallback(
+    async (voter: VoterTableRow) => {
+      setResendingVoterId(voter.id);
+      setResendMessage(null);
+
+      try {
+        const result = await sendVotingCode(
+          voter.id,
+          voter.voting_code,
+          voter.student_id,
+          voter.email
+        );
+
+        if (result.success) {
+          setResendMessage({
+            type: "success",
+            text: `Voting code sent to ${voter.email}`,
+          });
+          // Update voter data to reflect the sent status
+          setData((prevData) =>
+            prevData.map((v) =>
+              v.id === voter.id ? { ...v, code_status: "sent" as VoterCodeStatus } : v
+            )
+          );
+          // Clear message after 3 seconds
+          setTimeout(() => setResendMessage(null), 3000);
+        } else {
+          setResendMessage({
+            type: "error",
+            text: result.error || "Failed to send voting code",
+          });
+        }
+      } catch (error) {
+        console.error("Error resending code:", error);
+        setResendMessage({
+          type: "error",
+          text: "An unexpected error occurred",
+        });
+      } finally {
+        setResendingVoterId(null);
+      }
+    },
+    []
+  );
 
   const handleAddVoter = useCallback(() => {
     setSelectedVoter(null);
@@ -173,8 +216,11 @@ export function VoterTable({ voters: initialVoters, electionId, onVoterAdded }: 
                 <DropdownMenuItem onClick={() => handleEditVoter(voter)}>
                   Edit
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleResendCode(voter)}>
-                  Resend Code
+                <DropdownMenuItem
+                  onClick={() => handleResendCode(voter)}
+                  disabled={resendingVoterId === voter.id}
+                >
+                  {resendingVoterId === voter.id ? "Sending..." : "Resend Code"}
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => handleDeleteVoter(voter)}
@@ -224,7 +270,19 @@ export function VoterTable({ voters: initialVoters, electionId, onVoterAdded }: 
 
   return (
     <div className="space-y-4">
-      {/* Header with filters and actions */}
+      {/* Resend Code Feedback Message */}
+      {resendMessage && (
+        <div
+          className={`p-3 rounded-md text-sm font-medium ${
+            resendMessage.type === "success"
+              ? "bg-green-50 text-green-800 border border-green-200"
+              : "bg-red-50 text-red-800 border border-red-200"
+          }`}
+        >
+          {resendMessage.text}
+        </div>
+      )}
+
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-col gap-3 flex-1 sm:flex-row sm:gap-4">
           <div className="relative flex-1">
@@ -352,6 +410,7 @@ export function VoterTable({ voters: initialVoters, electionId, onVoterAdded }: 
       <ImportVotersModal
         isOpen={isImportOpen}
         onClose={() => setIsImportOpen(false)}
+        electionId={electionId}
       />
       <DeleteVoterModal
         isOpen={isDeleteOpen}

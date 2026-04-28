@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Papa from "papaparse";
 import {
   Dialog,
   DialogContent,
@@ -13,18 +14,23 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, Loader2 } from "lucide-react";
+import { importVotersCSVAction } from "../_actions/voter-actions";
 
 interface ImportVotersModalProps {
   isOpen: boolean;
   onClose: () => void;
+  electionId: string;
 }
 
 export function ImportVotersModal({
   isOpen,
   onClose,
+  electionId,
 }: ImportVotersModalProps) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isPending, setIsPending] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -37,11 +43,77 @@ export function ImportVotersModal({
     if (!selectedFile) {
       return;
     }
-    // Placeholder for import action
-    console.log("Importing file:", selectedFile.name);
-    setSelectedFile(null);
-    onClose();
-  };
+
+    setErrorMsg(null);
+    setIsPending(true);
+
+    try {
+      // Read and parse CSV file
+      Papa.parse(selectedFile, {
+        header: true,
+        skipEmptyLines: true,
+        complete: async (results: Papa.ParseResult<Record<string, string>>) => {
+          try {
+            const parsedData = results.data;
+
+            // Validate that parsed data is not empty
+            if (!parsedData || parsedData.length === 0) {
+              setErrorMsg("CSV file is empty or has no valid data rows.");
+              setIsPending(false);
+              return;
+            }
+
+            // Check first row for required properties
+            const firstRow = parsedData[0];
+            if (!firstRow.student_id || !firstRow.email) {
+              setErrorMsg(
+                "CSV must contain 'student_id' and 'email' columns."
+              );
+              setIsPending(false);
+              return;
+            }
+
+            // Sanitize data by trimming whitespace
+            const sanitizedVoters = parsedData.map((row) => ({
+              student_id: row.student_id.trim(),
+              email: row.email.trim(),
+            }));
+
+            // Call server action
+            const result = await importVotersCSVAction(
+              electionId,
+              sanitizedVoters
+            );
+
+            if (!result.success) {
+              setErrorMsg(result.error || "Failed to import voters.");
+              setIsPending(false);
+              return;
+            }
+
+            // Success: reset form and close modal
+            setSelectedFile(null);
+            setErrorMsg(null);
+            setIsPending(false);
+            onClose();
+          } catch (error) {
+            console.error("Parse completion error:", error);
+            setErrorMsg("An error occurred while processing the CSV.");
+            setIsPending(false);
+          }
+        },
+        error: (error: Papa.ParseError) => {
+          console.error("Papa Parse error:", error);
+          setErrorMsg("Failed to parse CSV file. Please check the format.");
+          setIsPending(false);
+        },
+      });
+    } catch (error) {
+      console.error("File reading error:", error);
+      setErrorMsg("An error occurred while reading the file.");
+      setIsPending(false);
+    }
+  };;
 
   const handleClose = () => {
     setSelectedFile(null);
@@ -59,6 +131,12 @@ export function ImportVotersModal({
         </DialogHeader>
 
         <div className="grid gap-4 py-4">
+          {errorMsg && (
+            <div className="text-red-600 text-sm bg-red-50 p-3 rounded border border-red-200">
+              {errorMsg}
+            </div>
+          )}
+
           <Alert>
             <AlertCircle className="h-4 w-4" />
             <AlertDescription>
@@ -78,6 +156,7 @@ export function ImportVotersModal({
               accept=".csv"
               onChange={handleFileChange}
               className="cursor-pointer"
+              disabled={isPending}
             />
             {selectedFile && (
               <p className="text-sm text-muted-foreground">
@@ -88,11 +167,21 @@ export function ImportVotersModal({
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={handleClose}>
+          <Button variant="outline" onClick={handleClose} disabled={isPending}>
             Cancel
           </Button>
-          <Button onClick={handleImport} disabled={!selectedFile}>
-            Import
+          <Button 
+            onClick={handleImport} 
+            disabled={!selectedFile || isPending}
+          >
+            {isPending ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Importing...
+              </>
+            ) : (
+              "Import"
+            )}
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -3,6 +3,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import { generateVoterCode } from "../_utils/generate-voter-code";
+import { sendVotingCodeEmail } from "@/lib/mailer";
 
 export async function addVoter(electionId: string, studentId: string, email: string): Promise<{ success: boolean; error: string | null }> {
     try {
@@ -17,7 +18,7 @@ export async function addVoter(electionId: string, studentId: string, email: str
                 student_id: studentId,
                 email: email,
                 voting_code: votingCode,
-                code_status: "unsent",
+                code_status: "UNSENT",
             });
         
         if (error) {
@@ -45,7 +46,7 @@ export async function importVotersCSVAction(
       student_id: voter.student_id,
       email: voter.email,
       voting_code: generateVoterCode(),
-      code_status: "unsent",
+      code_status: "UNSENT",
     }));
 
     const { data, error } = await supabase
@@ -114,5 +115,33 @@ export async function deleteVoter(voterId: string): Promise<{ success: boolean; 
     } catch (err) {
         console.error("Unexpected error deleting voter:", err);
         return { success: false, error: "An unexpected error occurred while deleting the voter." };
+    }
+}
+
+export async function sendVotingCode(voterId: string, votingCode: string, studentId: string, email: string): Promise<{ success: boolean; error: string | null }> {
+    try {
+        const cookieStore = await cookies();
+        const supabase = await createClient(cookieStore);
+
+        const { success, error} = await sendVotingCodeEmail(email, studentId, votingCode);
+        if (!success) {
+            console.error("Error sending voting code email:", error);
+            return { success: false, error: "Failed to send voting code email." };
+        }
+
+        const { error: updateError } = await supabase
+            .from("voters")
+            .update({ code_status: "sent" })
+            .eq("id", voterId);
+        
+        if (updateError) {
+            console.error("Error updating voter code status:", updateError);
+            return { success: false, error: "Failed to update voter code status." };
+        }
+
+        return { success: true, error: null };
+    } catch (err) {
+        console.error("Unexpected error sending voting code:", err);
+        return { success: false, error: "An unexpected error occurred while sending the voting code." };
     }
 }

@@ -129,15 +129,10 @@ export async function sendVotingCode(voterId: string, votingCode: string, studen
             return { success: false, error: "Failed to send voting code email." };
         }
 
-        const { error: updateError } = await supabase
+        const { data: updatedVoter, error: updateError } = await supabase
             .from("voters")
             .update({ code_status: "sent" })
-            .eq("id", voterId);
-        
-        if (updateError) {
-            console.error("Error updating voter code status:", updateError);
-            return { success: false, error: "Failed to update voter code status." };
-        }
+            .eq("id", voterId).select().single();
 
         return { success: true, error: null };
     } catch (err) {
@@ -156,10 +151,8 @@ export async function sendBatchedVotingCodesAction(
     const successfulIds: string[] = [];
     const failedIds: string[] = [];
 
-    // Process each voter in the batch sequentially
     for (const voter of batch) {
       try {
-        // Send the voting code email
         const emailResult = await sendVotingCodeEmail(
           voter.email,
           voter.student_id,
@@ -177,11 +170,9 @@ export async function sendBatchedVotingCodesAction(
         console.error(`Error processing voter ${voter.id}:`, error);
       }
 
-      // Rate limit protection: 200ms delay between each email
       await new Promise((res) => setTimeout(res, 200));
     }
 
-    // Bulk update successful voters to SENT status
     if (successfulIds.length > 0) {
       const { error: updateError } = await supabase
         .from("voters")

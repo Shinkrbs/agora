@@ -65,8 +65,6 @@ export function ImportVotersModal({
               <p className="font-semibold mb-2">Required CSV Headers:</p>
               <ul className="text-sm space-y-1 ml-4 list-disc">
                 <li><code className="bg-muted px-1 py-0.5 rounded">student_id</code></li>
-                <li><code className="bg-muted px-1 py-0.5 rounded">first_name</code></li>
-                <li><code className="bg-muted px-1 py-0.5 rounded">last_name</code></li>
                 <li><code className="bg-muted px-1 py-0.5 rounded">email</code></li>
               </ul>
             </AlertDescription>

@@ -41,7 +41,7 @@ export function DeleteVoterModal({
         <AlertDialogHeader>
           <AlertDialogTitle>Delete Voter</AlertDialogTitle>
           <AlertDialogDescription>
-            Are you sure you want to delete <span className="font-semibold">{voter.full_name}</span>? This action cannot be undone.
+          Are you sure you want to delete the voter <span className="font-semibold">{voter.student_id}</span> ({voter.email})? This action cannot be undone.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

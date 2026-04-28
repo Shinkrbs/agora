@@ -27,8 +27,6 @@ export function AddEditVoterModal({
 }: AddEditVoterModalProps) {
   const [formData, setFormData] = useState({
     student_id: "",
-    first_name: "",
-    last_name: "",
     email: "",
   });
 
@@ -36,18 +34,13 @@ export function AddEditVoterModal({
 
   useEffect(() => {
     if (voter) {
-      const [firstName, lastName] = voter.full_name.split(" ");
       setFormData({
         student_id: voter.student_id,
-        first_name: firstName || "",
-        last_name: lastName || "",
         email: voter.email,
       });
     } else {
       setFormData({
         student_id: "",
-        first_name: "",
-        last_name: "",
         email: "",
       });
     }
@@ -91,34 +84,12 @@ export function AddEditVoterModal({
           </div>
 
           <div className="grid gap-2">
-            <Label htmlFor="first_name">First Name</Label>
-            <Input
-              id="first_name"
-              name="first_name"
-              placeholder="e.g., John"
-              value={formData.first_name}
-              onChange={handleInputChange}
-            />
-          </div>
-
-          <div className="grid gap-2">
-            <Label htmlFor="last_name">Last Name</Label>
-            <Input
-              id="last_name"
-              name="last_name"
-              placeholder="e.g., Doe"
-              value={formData.last_name}
-              onChange={handleInputChange}
-            />
-          </div>
-
-          <div className="grid gap-2">
             <Label htmlFor="email">Email</Label>
             <Input
               id="email"
               name="email"
               type="email"
-              placeholder="e.g., john@example.com"
+              placeholder="e.g., voter@example.com"
               value={formData.email}
               onChange={handleInputChange}
             />

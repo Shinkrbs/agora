@@ -11,42 +11,37 @@ const mockVoters: VoterTableRow[] = [
   {
     id: "1",
     student_id: "STU001",
-    full_name: "Alice Johnson",
     email: "alice@example.com",
     voting_code: "VOTE-ABC-123",
-    code_status: "PENDING",
+    code_status: "sent",
   },
   {
     id: "2",
     student_id: "STU002",
-    full_name: "Bob Smith",
     email: "bob@example.com",
     voting_code: "VOTE-DEF-456",
-    code_status: "VOTED",
+    code_status: "voted",
   },
   {
     id: "3",
     student_id: "STU003",
-    full_name: "Carol Davis",
     email: "carol@example.com",
     voting_code: "VOTE-GHI-789",
-    code_status: "PENDING",
+    code_status: "sent",
   },
   {
     id: "4",
     student_id: "STU004",
-    full_name: "David Brown",
     email: "david@example.com",
     voting_code: "VOTE-JKL-012",
-    code_status: "VOTED",
+    code_status: "voted",
   },
   {
     id: "5",
     student_id: "STU005",
-    full_name: "Emma Wilson",
     email: "emma@example.com",
     voting_code: "VOTE-MNO-345",
-    code_status: "VOTED",
+    code_status: "voted",
   },
 ];
 
@@ -62,10 +57,10 @@ export default function VoterManagementPage({
   // Calculate statistics
   const totalVoters = mockVoters.length;
   const votedCount = mockVoters.filter(
-    (v) => v.code_status === "VOTED"
+    (v) => v.code_status === "voted"
   ).length;
   const pendingCount = mockVoters.filter(
-    (v) => v.code_status === "PENDING"
+    (v) => v.code_status === "sent"
   ).length;
   const turnoutPercentage =
     totalVoters > 0 ? Math.round((votedCount / totalVoters) * 100) : 0;

@@ -101,11 +101,7 @@ export function VoterTable({ voters: initialVoters }: VoterTableProps) {
         header: "Student ID",
         cell: ({ row }) => <div className="font-medium">{row.getValue("student_id")}</div>,
       },
-      {
-        accessorKey: "full_name",
-        header: "Name",
-        cell: ({ row }) => <div>{row.getValue("full_name")}</div>,
-      },
+
       {
         accessorKey: "email",
         header: "Email",
@@ -146,9 +142,9 @@ export function VoterTable({ voters: initialVoters }: VoterTableProps) {
           const status = row.getValue("code_status") as VoterCodeStatus;
           return (
             <Badge
-              variant={status === "VOTED" ? "default" : "secondary"}
+              variant={status === "voted" ? "default" : "secondary"}
               className={
-                status === "VOTED"
+                status === "voted"
                   ? "bg-green-600 hover:bg-green-700"
                   : "bg-yellow-100 text-yellow-800 hover:bg-yellow-200"
               }
@@ -197,7 +193,6 @@ export function VoterTable({ voters: initialVoters }: VoterTableProps) {
       const matchesGlobal =
         !globalFilter ||
         voter.student_id.toLowerCase().includes(globalFilter.toLowerCase()) ||
-        voter.full_name.toLowerCase().includes(globalFilter.toLowerCase()) ||
         voter.email.toLowerCase().includes(globalFilter.toLowerCase());
 
       const matchesStatus =
@@ -232,7 +227,7 @@ export function VoterTable({ voters: initialVoters }: VoterTableProps) {
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
-              placeholder="Search by ID, name, or email..."
+              placeholder="Search by ID or email..."
               value={globalFilter}
               onChange={(e) => setGlobalFilter(e.target.value)}
               className="pl-10"
@@ -244,8 +239,10 @@ export function VoterTable({ voters: initialVoters }: VoterTableProps) {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="ALL">All Status</SelectItem>
-              <SelectItem value="PENDING">Pending</SelectItem>
-              <SelectItem value="VOTED">Voted</SelectItem>
+              <SelectItem value="sent">Sent</SelectItem>
+              <SelectItem value="voted">Voted</SelectItem>
+              <SelectItem value="unsent">Unsent</SelectItem>
+              <SelectItem value="expired">Expired</SelectItem>
             </SelectContent>
           </Select>
         </div>

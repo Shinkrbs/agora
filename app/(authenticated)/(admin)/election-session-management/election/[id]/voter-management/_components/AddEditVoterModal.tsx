@@ -13,22 +13,29 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { VoterTableRow } from "../_types/voter-types";
+import { addVoter, editVoter } from "../_actions/voter-actions";
 
 interface AddEditVoterModalProps {
   isOpen: boolean;
   onClose: () => void;
   voter?: VoterTableRow | null;
+  electionId: string;
+  onSuccess?: () => void;
 }
 
 export function AddEditVoterModal({
   isOpen,
   onClose,
   voter,
+  electionId,
+  onSuccess,
 }: AddEditVoterModalProps) {
   const [formData, setFormData] = useState({
     student_id: "",
     email: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const isEditMode = !!voter;
 
@@ -44,6 +51,7 @@ export function AddEditVoterModal({
         email: "",
       });
     }
+    setError(null);
   }, [voter, isOpen]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,9 +60,54 @@ export function AddEditVoterModal({
   };
 
   const handleSave = async () => {
-    // Placeholder for save action
-    console.log("Saving voter:", formData);
-    onClose();
+    try {
+      setError(null);
+      setIsLoading(true);
+
+      if (isEditMode) {
+        // Call the editVoter server action
+        if (!voter) {
+          setError("Voter data is missing");
+          return;
+        }
+
+        const result = await editVoter(
+          voter.id,
+          formData.student_id,
+          formData.email
+        );
+
+        if (!result.success) {
+          setError(result.error || "Failed to update voter");
+          return;
+        }
+
+        // Success - close modal and trigger refresh
+        onSuccess?.();
+        onClose();
+      } else {
+        // Call the addVoter server action
+        const result = await addVoter(
+          electionId,
+          formData.student_id,
+          formData.email
+        );
+
+        if (!result.success) {
+          setError(result.error || "Failed to add voter");
+          return;
+        }
+
+        // Success - close modal and trigger refresh
+        onSuccess?.();
+        onClose();
+      }
+    } catch (err) {
+      setError("An unexpected error occurred");
+      console.error("Error saving voter:", err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -72,6 +125,12 @@ export function AddEditVoterModal({
         </DialogHeader>
 
         <div className="grid gap-4 py-4">
+          {error && (
+            <div className="rounded-md bg-red-50 border border-red-200 p-3">
+              <p className="text-sm text-red-800">{error}</p>
+            </div>
+          )}
+
           <div className="grid gap-2">
             <Label htmlFor="student_id">Student ID</Label>
             <Input
@@ -80,6 +139,7 @@ export function AddEditVoterModal({
               placeholder="e.g., STU001"
               value={formData.student_id}
               onChange={handleInputChange}
+              disabled={isLoading}
             />
           </div>
 
@@ -92,16 +152,21 @@ export function AddEditVoterModal({
               placeholder="e.g., voter@example.com"
               value={formData.email}
               onChange={handleInputChange}
+              disabled={isLoading}
             />
           </div>
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={onClose}>
+          <Button variant="outline" onClick={onClose} disabled={isLoading}>
             Cancel
           </Button>
-          <Button onClick={handleSave}>
-            {isEditMode ? "Update Voter" : "Add Voter"}
+          <Button onClick={handleSave} disabled={isLoading}>
+            {isLoading
+              ? "Saving..."
+              : isEditMode
+                ? "Update Voter"
+                : "Add Voter"}
           </Button>
         </DialogFooter>
       </DialogContent>

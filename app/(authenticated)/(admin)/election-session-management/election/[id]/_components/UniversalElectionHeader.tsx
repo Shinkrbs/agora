@@ -8,6 +8,7 @@ import {
   Settings,
   Play,
   Download,
+  RefreshCw,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -57,6 +58,7 @@ export function UniversalElectionHeader({
 }: UniversalElectionHeaderProps) {
   const [editDetailsOpen, setEditDetailsOpen] = useState(false);
   const [launchPaymentOpen, setLaunchPaymentOpen] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const organization = useCurrentOrganization();
   const election: UniversalElectionHeaderProps = {
     electionId,
@@ -68,22 +70,47 @@ export function UniversalElectionHeader({
     isSetupComplete,
   };
 
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 300)); // Brief animation
+      window.location.reload();
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
+
   return (
     <div className="space-y-4 pb-2">
-      {/* Back Button */}
-      <NextLink
-        href="/election-session-management"
-        className="inline-flex w-fit"
-      >
+      {/* Navigation Buttons */}
+      <div className="flex items-center justify-between">
+        {/* Back Button */}
+        <NextLink
+          href="/election-session-management"
+          className="inline-flex w-fit"
+        >
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-8 px-2 text-muted-foreground hover:text-foreground"
+          >
+            <ArrowLeft className="mr-1 h-4 w-4" />
+            Back to Election Sessions
+          </Button>
+        </NextLink>
+
+        {/* Refresh Button */}
         <Button
           variant="ghost"
           size="sm"
           className="h-8 px-2 text-muted-foreground hover:text-foreground"
+          onClick={handleRefresh}
+          disabled={isRefreshing}
+          title="Refresh page"
         >
-          <ArrowLeft className="mr-1 h-4 w-4" />
-          Back to Election Sessions
+          <RefreshCw className={`h-4 w-4 ${isRefreshing ? "animate-spin" : ""}`} />
         </Button>
-      </NextLink>
+      </div>
 
       {/* Header Content */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">

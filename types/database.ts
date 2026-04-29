@@ -10,7 +10,7 @@ export type ElectionStatus =
   | "completed"
   | "cancelled"
   | "archived";
-export type VoterCodeStatus = "unused" | "used" | "revoked";
+export type VoterCodeStatus = "UNSENT" | "SENT" | "VOTED" | "EXPIRED";
 
 // ==========================================
 // USERS & ORGANIZATIONS

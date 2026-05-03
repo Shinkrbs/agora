@@ -3,28 +3,12 @@
 import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import { Position, Candidate, Partylist } from "@/types/database";
-
-export interface BallotData {
-  electionId: string;
-  positions: Array<{
-    id: string;
-    name: string;
-    seatCount: number;
-    candidates: Array<{
-      id: string;
-      firstName: string;
-      lastName: string;
-      partyName: string | null;
-      imageUrl: string | null;
-    }>;
-  }>;
-}
+import type { BallotData } from "@/types/ballot";
 
 export async function getBallot(electionId: string): Promise<BallotData | null> {
   try {
     const supabase = await createClient(await cookies());
 
-    // Fetch positions for the election
     const { data: positions, error: positionsError } = await supabase
       .from("positions")
       .select("*")
@@ -44,7 +28,6 @@ export async function getBallot(electionId: string): Promise<BallotData | null> 
       };
     }
 
-    // Fetch all candidates and partylists for this election
     const { data: candidates, error: candidatesError } = await supabase
       .from("candidates")
       .select("*")
@@ -68,7 +51,6 @@ export async function getBallot(electionId: string): Promise<BallotData | null> 
       return null;
     }
 
-    // Build a map of partylists for quick lookup
     const partylistsMap = (partylists || []).reduce(
       (acc, party) => {
         acc[party.id] = party;
@@ -77,7 +59,6 @@ export async function getBallot(electionId: string): Promise<BallotData | null> 
       {} as Record<string, Partylist>,
     );
 
-    // Transform positions with their candidates
     const ballotPositions = (positions as Position[]).map((position) => {
       const positionCandidates = (candidates as Candidate[])
         .filter((c) => c.position_id === position.id)

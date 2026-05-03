@@ -118,21 +118,26 @@ export async function deleteVoter(voterId: string): Promise<{ success: boolean; 
     }
 }
 
-export async function sendVotingCode(voterId: string, votingCode: string, studentId: string, email: string): Promise<{ success: boolean; error: string | null }> {
+export async function sendVotingCode(voterId: string, electionId: string, votingCode: string, studentId: string, email: string): Promise<{ success: boolean; error: string | null }> {
     try {
         const cookieStore = await cookies();
         const supabase = await createClient(cookieStore);
 
-        const { success, error} = await sendVotingCodeEmail(email, studentId, votingCode);
+        const { success, error} = await sendVotingCodeEmail(email, studentId, votingCode, electionId);
         if (!success) {
             console.error("Error sending voting code email:", error);
             return { success: false, error: "Failed to send voting code email." };
         }
 
-        const { data: updatedVoter, error: updateError } = await supabase
+        const { error: updateError } = await supabase
             .from("voters")
-            .update({ code_status: "sent" })
-            .eq("id", voterId).select().single();
+            .update({ code_status: "SENT" })
+            .eq("id", voterId);
+
+        if (updateError) {
+            console.error("Error updating voter status:", updateError);
+            return { success: false, error: "Failed to update voter status." };
+        }
 
         return { success: true, error: null };
     } catch (err) {
@@ -142,7 +147,7 @@ export async function sendVotingCode(voterId: string, votingCode: string, studen
 }
 
 export async function sendBatchedVotingCodesAction(
-  batch: { id: string; student_id: string; email: string; voting_code: string }[]
+  batch: { id: string; student_id: string; email: string; voting_code: string; election_id: string }[]
 ): Promise<{ success: boolean; sentCount: number; failedCount: number; failedIds: string[] }> {
   try {
     const cookieStore = await cookies();
@@ -156,7 +161,8 @@ export async function sendBatchedVotingCodesAction(
         const emailResult = await sendVotingCodeEmail(
           voter.email,
           voter.student_id,
-          voter.voting_code
+          voter.voting_code,
+          voter.election_id
         );
 
         if (emailResult.success) {

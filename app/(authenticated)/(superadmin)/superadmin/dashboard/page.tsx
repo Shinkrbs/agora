@@ -1,5 +1,6 @@
 import { LogoutButton } from "@/components/LogoutButton";
 import { KPICards } from "../../_components/KPICards";
+import { SystemHealth } from "../../_components/SystemHealth";
 export default function page() {
   return (
     <div className="flex flex-col gap-6 p-8">
@@ -12,6 +13,7 @@ export default function page() {
         </p>
       </div>
       <KPICards />
+      <SystemHealth />
     </div>
   );
 }

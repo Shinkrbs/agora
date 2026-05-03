@@ -1,6 +1,9 @@
 "use server";
 
 import { LandingPageHeader } from "../../landing/_components/LandingPageHeader";
+import { UpcomingElectionUI } from "./_components/UpcomingElectionUI";
+import { ActiveElectionUI } from "./_components/ActiveElectionUI";
+import { CompletedElectionUI } from "./_components/CompletedElectionUI";
 import { LiveElectionHeader } from "../_components/LiveElectionHeader";
 import { CandidateRaceCard } from "../_components/CandidateRaceCard";
 import { Button } from "@/components/ui/button";
@@ -18,18 +21,43 @@ interface ElectionDetailsPageProps {
   params: Promise<{ id: string }>;
 }
 
+// Helper function to determine election state
+function getElectionState(
+  election: { status: string; start_date: string | null; end_date: string | null }
+): "upcoming" | "active" | "completed" {
+  const now = new Date();
+  const startDate = election.start_date ? new Date(election.start_date) : null;
+  const endDate = election.end_date ? new Date(election.end_date) : null;
+
+  // Check explicit status first
+  if (election.status === "completed") {
+    return "completed";
+  }
+
+  if (election.status === "active") {
+    return "active";
+  }
+
+  // Fall back to date comparison
+  if (endDate && now > endDate) {
+    return "completed";
+  }
+
+  if (startDate && endDate && now >= startDate && now < endDate) {
+    return "active";
+  }
+
+  // Default to upcoming
+  return "upcoming";
+}
+
 export default async function ElectionDetailsPage({
   params,
 }: ElectionDetailsPageProps) {
   const { id: electionId } = await params;
 
   // Fetch election session data
-  const [currentElection, positions, partylists, stats] = await Promise.all([
-    getElectionSessionById(electionId),
-    getPositionsByElectionSessionId(electionId),
-    getPartylistsByElectionSessionId(electionId),
-    getElectionStats(electionId),
-  ]);
+  const currentElection = await getElectionSessionById(electionId);
 
   // If the election doesn't exist
   if (!currentElection) {
@@ -47,6 +75,24 @@ export default async function ElectionDetailsPage({
       </>
     );
   }
+
+  // Determine election state and render accordingly
+  const electionState = getElectionState(currentElection);
+
+  if (electionState === "upcoming") {
+    return <UpcomingElectionUI election={currentElection} />;
+  }
+
+  if (electionState === "completed") {
+    return <CompletedElectionUI title={currentElection.title} />;
+  }
+
+  // For active elections, render the detailed view with candidates
+  const [positions, partylists, stats] = await Promise.all([
+    getPositionsByElectionSessionId(electionId),
+    getPartylistsByElectionSessionId(electionId),
+    getElectionStats(electionId),
+  ]);
 
   // Build a map of partylists for quick lookup
   const partylistsMap = partylists?.reduce(
@@ -81,6 +127,15 @@ export default async function ElectionDetailsPage({
             reportingPercentage={stats?.reportingPercentage || 0}
             lastUpdated={stats?.lastUpdated || "N/A"}
           />
+
+          {/* Access Ballot CTA */}
+          <div className="flex justify-center py-8">
+            <Link href={`/live-election/${electionId}/vote`}>
+              <Button size="lg" className="px-8 py-6 text-lg font-semibold">
+                Access Ballot
+              </Button>
+            </Link>
+          </div>
 
           {/* Race Cards */}
           <div className="space-y-6 pt-4 border-t border-border">

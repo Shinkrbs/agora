@@ -9,7 +9,6 @@ interface BallotPageProps {
 export default async function BallotPage({ params }: BallotPageProps) {
   const { id: electionId } = await params;
 
-  // Fetch ballot data
   const ballot = await getBallot(electionId);
 
   if (!ballot) {

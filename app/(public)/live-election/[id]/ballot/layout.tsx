@@ -5,7 +5,6 @@ export default function BallotLayout({
 }) {
   return (
     <div className="min-h-screen bg-muted flex flex-col">
-      {/* Minimal Header */}
       <header className="bg-background border-b border-border shadow-sm">
         <div className="max-w-4xl mx-auto px-4 py-6">
           <div className="text-center">
@@ -19,14 +18,12 @@ export default function BallotLayout({
         </div>
       </header>
 
-      {/* Content Area */}
       <main className="flex-1 w-full">
         <div className="max-w-4xl mx-auto px-4 py-8">
           {children}
         </div>
       </main>
 
-      {/* Footer */}
       <footer className="bg-background border-t border-border">
         <div className="max-w-4xl mx-auto px-4 py-4 text-center">
           <p className="text-xs text-muted-foreground">

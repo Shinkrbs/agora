@@ -1,7 +1,7 @@
 "use client";
 
 import { ElectionSession } from "@/types/database";
-import { LandingPageHeader } from "../../landing/_components/LandingPageHeader";
+import { LandingPageHeader } from "@/app/(public)/landing/_components/LandingPageHeader";
 
 interface UpcomingElectionUIProps {
   election: ElectionSession;
@@ -18,7 +18,6 @@ export function UpcomingElectionUI({ election }: UpcomingElectionUIProps) {
             Voting has not started yet
           </p>
           
-          {/* Placeholder for countdown timer */}
           <div className="mt-8 p-6 bg-secondary rounded-lg border border-border">
             <p className="text-sm text-muted-foreground mb-2">
               Voting begins:
@@ -28,7 +27,6 @@ export function UpcomingElectionUI({ election }: UpcomingElectionUIProps) {
                 ? new Date(election.start_date).toLocaleString()
                 : "TBA"}
             </div>
-            {/* Countdown timer component would go here */}
           </div>
         </div>
       </div>

@@ -22,11 +22,9 @@ export async function authenticateVoter(
     const cookieStore = await cookies();
     const supabase = await createClient(cookieStore);
 
-    // Normalize the voting code by removing hyphens
     const normalizedCode = votingCode.replace(/-/g, "");
     const normalizedStudentId = studentId.trim();
 
-    // Query for the voter
     const { data: voters, error: queryError } = await supabase
       .from("voters")
       .select("*")
@@ -39,7 +37,6 @@ export async function authenticateVoter(
       return { success: false, error: "Database error occurred" };
     }
 
-    // Find voter with matching voting code (also normalize for comparison)
     voter = voters?.find((v: Voter) => {
       const normalizedVoterCode = v.voting_code.replace(/-/g, "");
       return normalizedVoterCode === normalizedCode;
@@ -52,7 +49,6 @@ export async function authenticateVoter(
       };
     }
 
-    // Check if already voted
     if (voter.code_status === "VOTED") {
       return {
         success: false,
@@ -60,7 +56,6 @@ export async function authenticateVoter(
       };
     }
 
-    // Check if code status is SENT
     if (voter.code_status !== "SENT") {
       return {
         success: false,
@@ -75,12 +70,11 @@ export async function authenticateVoter(
     };
   }
 
-  // If validation passed, set cookie and redirect (outside try-catch to avoid catching redirect error)
   const cookieStore = await cookies();
   cookieStore.set("agora_voter_session", voter!.id, {
-    httpOnly: true, // Prevents JavaScript access
-    secure: process.env.NODE_ENV === "production", // HTTPS only in production
-    maxAge: 60 * 60, // 1 hour expiration
+    httpOnly: true, 
+    secure: process.env.NODE_ENV === "production", 
+    maxAge: 60 * 60, 
   });
 
   redirect(`/live-election/${electionId}/ballot`);

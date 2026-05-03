@@ -27,13 +27,11 @@ export default async function LiveElectionIndexPage() {
     );
   }
 
-  // Fetch stats for all elections in parallel
   const statsPromises = activeElections.map((election: ElectionSession) =>
     getElectionStats(election.id),
   );
   const statsResults = await Promise.all(statsPromises);
 
-  // Build a map of election stats
   const electionStats = activeElections.reduce(
     (
       acc: Record<

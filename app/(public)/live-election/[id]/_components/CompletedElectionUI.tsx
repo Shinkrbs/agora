@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
-import { LandingPageHeader } from "../../landing/_components/LandingPageHeader";
+import { LandingPageHeader } from "@/app/(public)/landing/_components/LandingPageHeader";
 
 interface CompletedElectionUIProps {
   title: string;

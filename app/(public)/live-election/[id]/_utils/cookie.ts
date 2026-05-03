@@ -2,7 +2,6 @@ import crypto from "crypto";
 
 const ENCRYPTION_KEY = process.env.VOTER_SESSION_KEY || "default-key-do-not-use-in-production";
 
-// Derive a consistent 32-byte key from the ENCRYPTION_KEY
 function getKey(): Buffer {
   return crypto.createHash("sha256").update(ENCRYPTION_KEY).digest();
 }
@@ -15,7 +14,6 @@ export function encryptVoterId(voterId: string): string {
   let encrypted = cipher.update(voterId, "utf8", "hex");
   encrypted += cipher.final("hex");
 
-  // Return IV + encrypted data (separated by colon for easy parsing)
   return `${iv.toString("hex")}:${encrypted}`;
 }
 

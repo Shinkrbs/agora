@@ -9,7 +9,7 @@ import {
   InputOTP,
   InputOTPGroup,
   InputOTPSeparator,
-  InputOTPSlot,
+  InputOTPSlot, 
 } from "@/components/ui/input-otp";
 import { authenticateVoter } from "../../_actions/vote-auth";
 import { Loader2 } from "lucide-react";
@@ -42,7 +42,6 @@ export function VoteAuthForm({
       );
 
       if (result.success) {
-        // Redirect to ballot
         router.push(`/live-election/${electionId}/ballot`);
       } else {
         setError(result.error || "Authentication failed");
@@ -58,7 +57,6 @@ export function VoteAuthForm({
   return (
     <div className="min-h-screen bg-background text-foreground flex items-center justify-center p-4">
       <div className="w-full max-w-md space-y-8">
-        {/* Header */}
         <div className="space-y-2 text-center">
           <h1 className="text-3xl font-bold tracking-tight">Access Your Ballot</h1>
           <p className="text-muted-foreground">
@@ -66,9 +64,7 @@ export function VoteAuthForm({
           </p>
         </div>
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Student ID */}
           <div className="space-y-2">
             <Label htmlFor="student-id" className="font-medium">
               Student ID
@@ -88,7 +84,6 @@ export function VoteAuthForm({
             </p>
           </div>
 
-          {/* Voting Code with InputOTP */}
           <div className="space-y-2">
             <Label htmlFor="voting-code" className="font-medium">
               Voting Code
@@ -120,14 +115,12 @@ export function VoteAuthForm({
             </div>
           </div>
 
-          {/* Error Message */}
           {error && (
             <div className="p-4 bg-destructive/10 border border-destructive/30 rounded-lg">
               <p className="text-sm font-medium text-destructive">{error}</p>
             </div>
           )}
 
-          {/* Submit Button */}
           <Button
             type="submit"
             size="lg"
@@ -144,7 +137,6 @@ export function VoteAuthForm({
             )}
           </Button>
 
-          {/* Helper Text */}
           <p className="text-xs text-center text-muted-foreground">
             Your session will expire in 1 hour for security purposes.
           </p>

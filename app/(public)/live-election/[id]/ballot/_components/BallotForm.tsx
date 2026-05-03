@@ -1,13 +1,15 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { AlertCircle, ChevronDown, ChevronUp } from "lucide-react";
-import type { BallotData } from "../_queries/get-ballot";
+import { BallotData } from "@/types/ballot";
+import { submitBallotAction } from "../../_actions/submit-ballot";
 
 interface BallotPageProps {
   ballot: BallotData;
@@ -18,6 +20,7 @@ interface VoteState {
 }
 
 export function BallotContent({ ballot }: BallotPageProps) {
+  const router = useRouter();
   const [votes, setVotes] = useState<VoteState>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [expandedPosition, setExpandedPosition] = useState<string | null>(
@@ -60,14 +63,11 @@ export function BallotContent({ ballot }: BallotPageProps) {
     setIsSubmitting(true);
 
     try {
-      // Mock submission logic
-      console.log("Ballot submitted with votes:", votes);
-      
-      // In a real implementation, this would call an action to save votes
-      alert("Ballot submitted successfully! (Mock submission)");
+      await submitBallotAction(ballot.electionId, votes);
+      router.push(`/live-election/${ballot.electionId}?success=true`);
     } catch (error) {
-      console.error("Error submitting ballot:", error);
-      alert("Error submitting ballot. Please try again.");
+      const errorMessage = error instanceof Error ? error.message : "An unexpected error occurred";
+      alert(`Error submitting ballot: ${errorMessage}`);
     } finally {
       setIsSubmitting(false);
     }
@@ -84,7 +84,6 @@ export function BallotContent({ ballot }: BallotPageProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
-      {/* Instructions */}
       <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
         <p className="text-sm text-blue-900 dark:text-blue-100">
           <strong>Voting Instructions:</strong> Select one candidate per position (unless
@@ -92,7 +91,6 @@ export function BallotContent({ ballot }: BallotPageProps) {
         </p>
       </div>
 
-      {/* Positions */}
       <div className="space-y-4">
         {ballot.positions.length > 0 ? (
           ballot.positions.map((position) => {
@@ -107,7 +105,6 @@ export function BallotContent({ ballot }: BallotPageProps) {
 
             return (
               <Card key={position.id} className="shadow-sm">
-                {/* Position Header - Clickable */}
                 <button
                   type="button"
                   onClick={() =>
@@ -151,19 +148,17 @@ export function BallotContent({ ballot }: BallotPageProps) {
                         </CardDescription>
                       </div>
                       {isExpanded ? (
-                        <ChevronUp className="h-5 w-5 text-muted-foreground flex-shrink-0 mt-1" />
+                        <ChevronUp className="h-5 w-5 text-muted-foreground shrink-0 mt-1" />
                       ) : (
-                        <ChevronDown className="h-5 w-5 text-muted-foreground flex-shrink-0 mt-1" />
+                        <ChevronDown className="h-5 w-5 text-muted-foreground shrink-0 mt-1" />
                       )}
                     </div>
                   </CardHeader>
                 </button>
 
-                {/* Position Content */}
                 {isExpanded && (
                   <CardContent className="space-y-4 border-t border-border pt-4">
                     {isMultiVote ? (
-                      // Checkbox group for multi-vote
                       <div className="space-y-3">
                         {position.candidates.map((candidate) => {
                           const isSelected = Array.isArray(selectedVotes)
@@ -205,7 +200,6 @@ export function BallotContent({ ballot }: BallotPageProps) {
                         })}
                       </div>
                     ) : (
-                      // Radio group for single vote
                       <RadioGroup
                         value={(votes[position.id] as string) || ""}
                         onValueChange={(value) =>
@@ -258,7 +252,6 @@ export function BallotContent({ ballot }: BallotPageProps) {
         )}
       </div>
 
-      {/* Review Message */}
       {ballot.positions.length > 0 && (
         <div className="bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
           <p className="text-sm text-amber-900 dark:text-amber-100">
@@ -268,7 +261,6 @@ export function BallotContent({ ballot }: BallotPageProps) {
         </div>
       )}
 
-      {/* Submit Button */}
       <div className="flex gap-4">
         <Button
           type="submit"

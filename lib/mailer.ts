@@ -23,7 +23,6 @@ export async function sendVotingCodeEmail(
 ): Promise<{ success: boolean; error?: unknown }> {
   console.log("Election Id: ", electionId);
   try {
-    // Construct the voting URL with magic link
     const isDev = process.env.NODE_ENV === 'development';
     const baseUrl = isDev ? 'http://localhost:3000' : 'https://soes-nine.vercel.app';
     const voteUrl = `${baseUrl}/live-election/${electionId}/vote?id=${studentId}`;

@@ -14,8 +14,11 @@ export function KPICards() {
         <CardContent>
           <div className="text-2xl font-bold">1,248</div>
           <p className="flex items-center text-xs text-muted-foreground mt-1">
-            <TrendingUp className="w-3 h-3 mr-1" />
-            +12% from last month
+            <span className="flex items-center text-primary font-medium mr-1">
+              <TrendingUp className="w-3 h-3 mr-1" />
+              +12%
+            </span>
+            from last month
           </p>
         </CardContent>
       </Card>
@@ -29,9 +32,12 @@ export function KPICards() {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">432</div>
-          <p className="flex items-center text-xs text-muted-foreground mt-1 ">
-            <TrendingDown className="w-3 h-3 mr-1" />
-            -4% from last month
+          <p className="flex items-center text-xs text-muted-foreground mt-1">
+            <span className="flex items-center text-destructive font-medium mr-1">
+              <TrendingDown className="w-3 h-3 mr-1" />
+              -4%
+            </span>
+            from last month
           </p>
         </CardContent>
       </Card>

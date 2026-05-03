@@ -77,9 +77,15 @@ export function UserManagementTabs() {
                     </p>
                   </div>
                   <div className="flex gap-2">
-                    <Button variant="outline" size="sm">
+                    {/* Themed the Decline button to use your global --destructive color */}
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="border-destructive/30 text-destructive hover:bg-destructive/10 hover:text-destructive"
+                    >
                       Decline
                     </Button>
+                    {/* Approve naturally uses your global --primary green */}
                     <Button size="sm">Approve</Button>
                   </div>
                 </div>

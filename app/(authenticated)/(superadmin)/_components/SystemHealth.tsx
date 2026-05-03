@@ -61,7 +61,7 @@ export function SystemHealth() {
             <CardTitle className="text-base">Website Status</CardTitle>
             <Badge
               variant="outline"
-              className="bg-emerald-500/10 text-emerald-500 border-emerald-500/20"
+              className="bg-primary/10 text-primary border-primary/20"
             >
               <CheckCircle2 className="w-3 h-3 mr-1" />
               Operational
@@ -105,7 +105,7 @@ export function SystemHealth() {
                   <AlertCircle
                     className={`w-5 h-5 mt-0.5 ${
                       log.severity === "High"
-                        ? "text-rose-500"
+                        ? "text-destructive"
                         : log.severity === "Medium"
                           ? "text-amber-500"
                           : "text-blue-500"

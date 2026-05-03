@@ -14,10 +14,8 @@ export default function SuperAdminDashboard() {
         </p>
       </div>
 
-      {/* KPI Section */}
       <KPICards />
 
-      {/* Main Grid for Health and Management */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
         <div className="col-span-4">
           <UserManagementTabs />

@@ -2,7 +2,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Building2, Vote, TrendingUp, TrendingDown } from "lucide-react";
 
 export function KPICards() {
-  // In a real app, fetch this data from your database here
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
       <Card>
@@ -14,7 +13,7 @@ export function KPICards() {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">1,248</div>
-          <p className="flex items-center text-xs text-muted-foreground mt-1 text-emerald-500">
+          <p className="flex items-center text-xs text-muted-foreground mt-1">
             <TrendingUp className="w-3 h-3 mr-1" />
             +12% from last month
           </p>
@@ -30,7 +29,7 @@ export function KPICards() {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">432</div>
-          <p className="flex items-center text-xs text-muted-foreground mt-1 text-rose-500">
+          <p className="flex items-center text-xs text-muted-foreground mt-1 ">
             <TrendingDown className="w-3 h-3 mr-1" />
             -4% from last month
           </p>

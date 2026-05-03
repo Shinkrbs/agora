@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 
 const pendingApprovals = [
@@ -38,67 +38,78 @@ const recentActivities = [
 
 export function UserManagementTabs() {
   return (
-    <Card className="h-full">
-      <CardHeader>
-        <CardTitle>Access Management</CardTitle>
-        <CardDescription>
-          Handle approvals and monitor admin actions.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Tabs defaultValue="pending" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 mb-4">
-            <TabsTrigger value="pending">Pending Approvals</TabsTrigger>
-            <TabsTrigger value="activity">Recent Activity</TabsTrigger>
-          </TabsList>
+    <div className="flex flex-col h-full gap-4">
+      <div>
+        <h3 className="text-lg font-medium tracking-tight">
+          User and Access Management Summaries
+        </h3>
+        <p className="text-sm text-muted-foreground">
+          Review pending approvals and recent administrator activities.
+        </p>
+      </div>
 
-          <TabsContent value="pending" className="space-y-4">
-            {pendingApprovals.map((item) => (
-              <div
-                key={item.id}
-                className="flex items-center justify-between p-4 border rounded-lg"
-              >
-                <div className="space-y-1">
-                  <p className="text-sm font-medium leading-none">
-                    {item.name}
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    {item.type} • Requested {item.date}
-                  </p>
-                </div>
-                <div className="flex gap-2">
-                  <Button variant="outline" size="sm">
-                    Decline
-                  </Button>
-                  <Button size="sm">Approve</Button>
-                </div>
-              </div>
-            ))}
-          </TabsContent>
+      <Card className="flex-1">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-base">Access Management</CardTitle>
+          <CardDescription>
+            Handle approvals and monitor admin actions.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Tabs defaultValue="pending" className="w-full">
+            <TabsList className="grid w-full grid-cols-2 mb-4">
+              <TabsTrigger value="pending">Pending Approvals</TabsTrigger>
+              <TabsTrigger value="activity">Recent Activity</TabsTrigger>
+            </TabsList>
 
-          <TabsContent value="activity" className="space-y-4">
-            {recentActivities.map((activity) => (
-              <div
-                key={activity.id}
-                className="flex items-center gap-4 p-4 border rounded-lg bg-muted/20"
-              >
-                <Avatar className="w-8 h-8">
-                  <AvatarFallback>{activity.admin.charAt(0)}</AvatarFallback>
-                </Avatar>
-                <div className="space-y-1">
-                  <p className="text-sm font-medium leading-none">
-                    <span className="text-primary">{activity.admin}</span>{" "}
-                    {activity.action}
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    {activity.time}
-                  </p>
+            <TabsContent value="pending" className="space-y-4">
+              {pendingApprovals.map((item) => (
+                <div
+                  key={item.id}
+                  className="flex items-center justify-between p-4 border rounded-lg"
+                >
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium leading-none">
+                      {item.name}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      {item.type} • Requested {item.date}
+                    </p>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button variant="outline" size="sm">
+                      Decline
+                    </Button>
+                    <Button size="sm">Approve</Button>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </TabsContent>
-        </Tabs>
-      </CardContent>
-    </Card>
+              ))}
+            </TabsContent>
+
+            <TabsContent value="activity" className="space-y-4">
+              {recentActivities.map((activity) => (
+                <div
+                  key={activity.id}
+                  className="flex items-center gap-4 p-4 border rounded-lg bg-muted/20"
+                >
+                  <Avatar className="w-8 h-8">
+                    <AvatarFallback>{activity.admin.charAt(0)}</AvatarFallback>
+                  </Avatar>
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium leading-none">
+                      <span className="text-primary">{activity.admin}</span>{" "}
+                      {activity.action}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      {activity.time}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </TabsContent>
+          </Tabs>
+        </CardContent>
+      </Card>
+    </div>
   );
 }

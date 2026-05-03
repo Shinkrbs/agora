@@ -38,6 +38,7 @@ export default function VoterManagementPage({
             student_id: voter.student_id,
             email: voter.email,
             voting_code: voter.voting_code,
+            election_id: id,
             code_status: voter.code_status,
           }));
           setVoters(voterTableRows);
@@ -73,6 +74,7 @@ export default function VoterManagementPage({
             student_id: voter.student_id,
             email: voter.email,
             voting_code: voter.voting_code,
+            election_id: id,
             code_status: voter.code_status,
           }));
           setVoters(voterTableRows);

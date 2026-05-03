@@ -97,6 +97,7 @@ export function VoterTable({ voters: initialVoters, electionId, onVoterAdded }: 
       try {
         const result = await sendVotingCode(
           voter.id,
+          electionId,
           voter.voting_code,
           voter.student_id,
           voter.email

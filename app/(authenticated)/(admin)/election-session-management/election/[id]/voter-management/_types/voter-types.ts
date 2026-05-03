@@ -5,5 +5,6 @@ export interface VoterTableRow {
   student_id: string;
   email: string;
   voting_code: string;
+  election_id: string;
   code_status: VoterCodeStatus;
 }

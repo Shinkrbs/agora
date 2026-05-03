@@ -153,29 +153,28 @@ export interface Voter {
 export interface Vote {
   id: string;
   voter_id: string;
+  election_id: string;
   candidate_id: string;
+  position_id: string;
   created_at: string;
   is_deleted: boolean;
 }
 
-// 1. Define the shape of the objects inside your JSONB array
 export interface PositionTemplateItem {
   name: string;
   seat_count: number;
 }
 
-// 2. Define the main Template record
 export interface PositionTemplate {
   id: string;
   organization_id: string;
   name: string;
-  positions: PositionTemplateItem[]; // The JSONB column maps directly to this array
+  positions: PositionTemplateItem[]; 
   created_at: string;
   updated_at: string;
   is_deleted: boolean;
 }
 
-// Profile attributes
 export type UserProfileEditable = Pick<
   User,
   | "avatar_url"

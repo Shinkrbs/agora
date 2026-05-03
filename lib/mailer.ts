@@ -12,14 +12,21 @@ const transporter = nodemailer.createTransport({
  * @param recipientEmail - The voter's email address
  * @param studentId - The voter's student ID
  * @param votingCode - The generated voting code
+ * @param electionId - The election ID for constructing the voting URL
  * @returns Object with success status and optional error
  */
 export async function sendVotingCodeEmail(
   recipientEmail: string,
   studentId: string,
-  votingCode: string
+  votingCode: string,
+  electionId: string
 ): Promise<{ success: boolean; error?: unknown }> {
+  console.log("Election Id: ", electionId);
   try {
+    const isDev = process.env.NODE_ENV === 'development';
+    const baseUrl = isDev ? 'http://localhost:3000' : 'https://soes-nine.vercel.app';
+    const voteUrl = `${baseUrl}/live-election/${electionId}/vote?id=${studentId}`;
+
     const mailOptions = {
       from: `"Agora Election Committee" <${process.env.SMTP_EMAIL}>`,
       to: recipientEmail,
@@ -71,6 +78,13 @@ export async function sendVotingCodeEmail(
                 </div>
               </div>
 
+              <!-- Vote Now Button -->
+              <div style="text-align: center; margin: 32px 0;">
+                <a href="${voteUrl}" style="display: inline-block; padding: 14px 28px; background-color: #667eea; color: #ffffff; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 16px; text-align: center;">
+                  Access Ballot
+                </a>
+              </div>
+
               <!-- Security Warning -->
               <div style="background-color: #fef3c7; border: 1px solid #fcd34d; border-radius: 4px; padding: 16px; margin: 32px 0;">
                 <p style="margin: 0; font-size: 14px; color: #92400e;">
@@ -86,7 +100,7 @@ export async function sendVotingCodeEmail(
                 <p style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #333;">Next Steps:</p>
                 <ol style="margin: 8px 0; padding-left: 20px; color: #555; font-size: 14px;">
                   <li style="margin: 6px 0;">Save or bookmark this email for reference.</li>
-                  <li style="margin: 6px 0;">Use your Student ID and Voting Code when prompted during the election.</li>
+                  <li style="margin: 6px 0;">Click the "Access Ballot" button above or go to the public election page. Your Student ID will be pre-filled for your convenience.</li>
                   <li style="margin: 6px 0;">If you did not sign up for this election, please contact the election committee immediately.</li>
                 </ol>
               </div>

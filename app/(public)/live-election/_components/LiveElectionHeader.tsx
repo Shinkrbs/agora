@@ -39,7 +39,6 @@ export function LiveElectionHeader({
           <span>Last updated: {lastUpdated}</span>
         </div>
 
-        {/* FIX: Ensure this is strictly text-foreground so it is dark in light mode, light in dark mode */}
         <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground">
           {title}
         </h1>
@@ -47,7 +46,6 @@ export function LiveElectionHeader({
 
       <div className="flex items-center gap-6">
         <div className="text-right">
-          {/* FIX: Use text-muted-foreground instead of hardcoded grays */}
           <div className="text-sm text-muted-foreground">
             Total Ballots Cast
           </div>

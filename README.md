@@ -9,6 +9,7 @@ AG.010.002 | 2026-03-22 |
 AG.010.003 | 2026-04-05 |
 AG.010.004 | 2026-04-13 |
 AG.010.005| 2026-04-22 |
+AG.010.006| 2026-05-05 |
 
 ## AG.010.001 Release Notes 
 
@@ -73,6 +74,16 @@ AG.010.005| 2026-04-22 |
 ● Built a fully interactive Reports Management page to easily submit, filter, and track system bugs by severity and date.
 
 ● Optimized the breadcrumb navigation by filtering out raw session IDs and fixing broken links to ensure smoother routing.
+
+## AG.010.006 Release Notes
+
+● Voters can now securely authenticate using unique voting codes and submit their votes through a fully functional ballot that supports both single and multi-seat positions.
+
+● Added a dynamic, real-time dashboard allowing users to track polling data, candidate races, and election statuses (upcoming, active, completed) across multiple organizations.
+
+● Administrators now have a dedicated dashboard to track turnout percentages and perform individual voter management tasks (add, edit, soft-delete).
+
+● Introduced a CSV upload tool for mass voter registration, paired with a secure, rate-limited automated email system to batch-send voting codes directly to students.
 
 ## Important Links
 

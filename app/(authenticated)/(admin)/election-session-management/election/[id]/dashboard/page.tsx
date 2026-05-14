@@ -1,9 +1,8 @@
 import React from "react";
 import { fetchElection } from "../_queries/fetch-election";
 import { fetchRecentVotes } from "../_queries/fetch-recent-votes";
-import { DraftDashboardUI, ActiveDashboardUI, LoadingSpinner } from "../_components";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { DraftDashboardUI, ActiveDashboardUI } from "../_components";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default async function ElectionDashboardPage({
   params,
@@ -48,7 +47,7 @@ export default async function ElectionDashboardPage({
   }
 
   // Render Active State
-  if (election.status === "active" || election.status === "scheduled") {
+  if (election.status === "active" || election.status === "scheduled" || election.status === "completed") {
     // Fetch recent votes for the activity ticker
     const recentVotes = await fetchRecentVotes(electionId, 5);
 
@@ -61,33 +60,6 @@ export default async function ElectionDashboardPage({
           <p className="text-muted-foreground mt-1">Live monitoring and management</p>
         </div>
         <ActiveDashboardUI election={election} recentVotes={recentVotes} />
-      </div>
-    );
-  }
-
-  // Render Completed State
-  if (election.status === "completed") {
-    return (
-      <div className="space-y-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Election Completed</CardTitle>
-            <CardDescription>This election has concluded.</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <p className="text-sm text-muted-foreground">
-              {election.title || "Your election"} has been completed. View detailed results and reports to analyze the outcomes.
-            </p>
-            <div className="flex gap-3">
-              <Button asChild>
-                <a href={`/election/${electionId}/reports`}>View Reports</a>
-              </Button>
-              <Button asChild variant="outline">
-                <a href="/admin">Back to Elections</a>
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
       </div>
     );
   }

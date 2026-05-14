@@ -68,6 +68,9 @@ export const ActiveDashboardUI: React.FC<ActiveDashboardUIProps> = ({
 
         setTimeRemaining(`${hours}h ${minutes}m ${seconds}s`);
         setIsUrgent(hours < 1);
+      } else if (election.status === "completed") {
+        setTimeRemaining("Election Finished");
+        setIsUrgent(false);
       } else {
         setTimeRemaining("N/A");
         setIsUrgent(false);

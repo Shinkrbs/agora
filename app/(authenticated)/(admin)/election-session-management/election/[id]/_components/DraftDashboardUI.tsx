@@ -13,12 +13,11 @@ interface DraftDashboardUIProps {
 }
 
 export const DraftDashboardUI: React.FC<DraftDashboardUIProps> = ({ election }) => {
-  // Calculate setup completion percentage
   const setupSteps = [
-    election.startDate !== null && election.endDate !== null, // Schedule
-    election.totalPositions > 0, // Positions
-    election.totalCandidates > 0, // Candidates
-    election.totalVoters > 0, // Electorate
+    election.startDate !== null && election.endDate !== null, 
+    election.totalPositions > 0, 
+    election.totalCandidates > 0, 
+    election.totalVoters > 0, 
   ];
 
   const completedSteps = setupSteps.filter(Boolean).length;
@@ -26,9 +25,7 @@ export const DraftDashboardUI: React.FC<DraftDashboardUIProps> = ({ election }) 
 
   return (
     <div className="space-y-6">
-      {/* Metrics Row */}
       <div className="grid gap-4 md:grid-cols-4">
-        {/* Status Card */}
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
@@ -42,7 +39,6 @@ export const DraftDashboardUI: React.FC<DraftDashboardUIProps> = ({ election }) 
           </CardContent>
         </Card>
 
-        {/* Positions Card */}
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
@@ -54,7 +50,6 @@ export const DraftDashboardUI: React.FC<DraftDashboardUIProps> = ({ election }) 
           </CardContent>
         </Card>
 
-        {/* Candidates Card */}
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
@@ -66,7 +61,6 @@ export const DraftDashboardUI: React.FC<DraftDashboardUIProps> = ({ election }) 
           </CardContent>
         </Card>
 
-        {/* Voters Card */}
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
@@ -79,14 +73,12 @@ export const DraftDashboardUI: React.FC<DraftDashboardUIProps> = ({ election }) 
         </Card>
       </div>
 
-      {/* Path to Launch Checklist */}
       <Card>
         <CardHeader>
           <CardTitle>Path to Launch</CardTitle>
           <CardDescription>Complete all setup steps to launch your election</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          {/* Progress Bar */}
           <div className="space-y-2">
             <div className="flex justify-between">
               <span className="text-sm font-medium">Setup Progress</span>
@@ -95,30 +87,25 @@ export const DraftDashboardUI: React.FC<DraftDashboardUIProps> = ({ election }) 
             <Progress value={completionPercentage} className="h-2" />
           </div>
 
-          {/* Checklist Items */}
           <div className="space-y-3">
-            {/* Schedule */}
             <ChecklistItem
               title="Schedule"
               description="Set election start and end dates"
               isComplete={setupSteps[0]}
             />
 
-            {/* Positions */}
             <ChecklistItem
               title="Positions"
               description="Create election positions"
               isComplete={setupSteps[1]}
             />
 
-            {/* Candidates */}
             <ChecklistItem
               title="Candidates"
               description="Add candidates to positions"
               isComplete={setupSteps[2]}
             />
 
-            {/* Electorate */}
             <ChecklistItem
               title="Electorate"
               description="Upload voter list"
@@ -128,7 +115,6 @@ export const DraftDashboardUI: React.FC<DraftDashboardUIProps> = ({ election }) 
         </CardContent>
       </Card>
 
-      {/* Launch Gate */}
       <Card className={!election.isSetupComplete ? "opacity-60" : ""}>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -150,9 +136,8 @@ export const DraftDashboardUI: React.FC<DraftDashboardUIProps> = ({ election }) 
           ) : election.paymentStatus === "verified" ? (
             <div className="space-y-3">
               <p className="text-sm text-muted-foreground">
-                Your payment has been verified. You're all set to launch the election!
+                Your payment has been verified. You&apos;re all set to launch the election!
               </p>
-              <LaunchPaymentModal electionId={election.id} />
             </div>
           ) : (
             <p className="text-sm text-muted-foreground">

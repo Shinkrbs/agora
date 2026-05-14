@@ -6,7 +6,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { CheckCircle, Circle, Lock } from "lucide-react";
-import { LaunchPaymentModal } from "./index";
 
 interface DraftDashboardUIProps {
   election: ElectionHeaderData;

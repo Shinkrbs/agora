@@ -9,7 +9,7 @@ const getSupabaseClient = async () => {
     return createClient(cookieStore);
 };
 
-const voterCount = async (supabase: ReturnType<typeof createClient>, electionId: string): Promise<number> => {
+const voterCount = async (supabase: Awaited<ReturnType<typeof createClient>>, electionId: string): Promise<number> => {
     try {
         const { data, error } = await supabase.from("voters").select("id", { count: "exact" }).eq("election_id", electionId);
         if (error) {
@@ -23,7 +23,7 @@ const voterCount = async (supabase: ReturnType<typeof createClient>, electionId:
     }
 };
 
-const candidateCount = async (supabase: ReturnType<typeof createClient>, electionId: string): Promise<number> => {
+const candidateCount = async (supabase: Awaited<ReturnType<typeof createClient>>, electionId: string): Promise<number> => {
     try {
         const { data, error } = await supabase.from("candidates").select("id", { count: "exact" }).eq("election_id", electionId);
         if (error) {
@@ -37,7 +37,7 @@ const candidateCount = async (supabase: ReturnType<typeof createClient>, electio
     }
 };
 
-const positionCount = async (supabase: ReturnType<typeof createClient>, electionId: string): Promise<number> => {
+const positionCount = async (supabase: Awaited<ReturnType<typeof createClient>>, electionId: string): Promise<number> => {
     try {
         const { data, error } = await supabase.from("positions").select("id", { count: "exact" }).eq("election_id", electionId);
         if (error) {
@@ -51,7 +51,7 @@ const positionCount = async (supabase: ReturnType<typeof createClient>, election
     }
 };
 
-const paymentStatus = async (supabase: ReturnType<typeof createClient>, electionId: string): Promise<PaymentStatus> => {
+const paymentStatus = async (supabase: Awaited<ReturnType<typeof createClient>>, electionId: string): Promise<PaymentStatus> => {
     try {
         const { data, error } = await supabase.from("election_payments").select("status").eq("election_id", electionId).maybeSingle();
         if (error) {
@@ -64,7 +64,7 @@ const paymentStatus = async (supabase: ReturnType<typeof createClient>, election
     }
 };
 
-const votedCount = async (supabase: ReturnType<typeof createClient>, electionId: string): Promise<number> => {
+const votedCount = async (supabase: Awaited<ReturnType<typeof createClient>>, electionId: string): Promise<number> => {
     try {
         const { data, error } = await supabase
             .from("voters")
@@ -82,7 +82,7 @@ const votedCount = async (supabase: ReturnType<typeof createClient>, electionId:
     }
 };
 
-const sentCount = async (supabase: ReturnType<typeof createClient>, electionId: string): Promise<number> => {
+const sentCount = async (supabase: Awaited<ReturnType<typeof createClient>>, electionId: string): Promise<number> => {
     try {
         const { data, error } = await supabase
             .from("voters")

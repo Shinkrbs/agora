@@ -1,4 +1,3 @@
-import React from "react";
 import { fetchElection } from "../_queries/fetch-election";
 import { fetchRecentVotes } from "../_queries/fetch-recent-votes";
 import { DraftDashboardUI, ActiveDashboardUI } from "../_components";

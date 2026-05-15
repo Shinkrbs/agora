@@ -18,6 +18,7 @@ export async function fetchRecentVotes(
       .from("votes")
       .select("id, created_at")
       .eq("election_id", electionId)
+      .eq("is_deleted", false)
       .order("created_at", { ascending: false })
       .limit(limit);
 

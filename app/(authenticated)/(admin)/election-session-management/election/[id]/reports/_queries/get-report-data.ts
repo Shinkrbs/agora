@@ -2,11 +2,6 @@ import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import {
   ElectionSession,
-  Position,
-  Candidate,
-  Partylist,
-  Vote,
-  Voter,
 } from "@/types/database";
 
 export interface CandidateWithVotes {

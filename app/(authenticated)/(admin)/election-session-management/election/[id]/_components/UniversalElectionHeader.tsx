@@ -173,13 +173,6 @@ export function UniversalElectionHeader({
                 Launch Election
               </Button>
             )}
-
-            {status === "completed" && (
-              <Button variant="outline" className="gap-2">
-                <Download className="h-4 w-4" />
-                Download Final Report
-              </Button>
-            )}
           </div>
 
           {/* Status Badges */}

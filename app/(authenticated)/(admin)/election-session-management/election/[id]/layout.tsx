@@ -62,10 +62,6 @@ export default function ElectionLayout({
     }
   }, [electionId]);
 
-  useEffect(() => {
-    setIsLoading(false);
-  }, [pathname]);
-
   const activeTab =
     tabs.find((tab) => pathname.includes(tab.href))?.value || "dashboard";
   const activeTabConfig =

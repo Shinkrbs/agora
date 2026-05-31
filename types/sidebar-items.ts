@@ -1,4 +1,4 @@
-import { LayoutDashboard, UserCog, FileUser, Vote, Building2, Settings, type LucideIcon, ClipboardList} from "lucide-react";
+import { LayoutDashboard, UserCog, Vote, Building2, Settings, type LucideIcon, ClipboardList} from "lucide-react";
 
 export type SidebarItem = {
   title: string;

@@ -46,11 +46,6 @@ export const superAdminSidebarItems: SidebarItem[] = [
     icon: UserCog,
   },
   {
-    title: "Reports Management",
-    href: "/reports-management",
-    icon: FileUser,
-  },
-  {
     title: "Settings",
     href: "/superadmin/settings",
     icon: Settings,

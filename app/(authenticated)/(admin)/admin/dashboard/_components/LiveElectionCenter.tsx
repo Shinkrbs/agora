@@ -65,20 +65,20 @@ export function LiveElectionCenter({
   }, [endDate, totalVoters, votedCount]);
 
   return (
-    <Card className="relative overflow-hidden bg-linear-to-r from-green-50 to-emerald-50 border-2 border-green-400 shadow-lg mb-8">
+    <Card className="relative overflow-hidden bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-950 dark:to-emerald-950 border-2 border-green-400 dark:border-green-600 shadow-lg mb-8">
       {/* Subtle animated background accent */}
-      <div className="absolute top-0 right-0 w-40 h-40 bg-green-200 rounded-full blur-3xl opacity-20 -mr-20 -mt-20" />
+      <div className="absolute top-0 right-0 w-40 h-40 bg-green-200 dark:bg-green-700 rounded-full blur-3xl opacity-20 -mr-20 -mt-20" />
 
       <div className="relative p-8">
         <div className="flex items-start justify-between gap-6">
           <div className="flex-1">
             {/* Live Indicator and Title */}
             <div className="flex items-center gap-3 mb-4">
-              <div className="flex items-center gap-2 bg-green-500 text-white px-3 py-1 rounded-full animate-pulse">
+              <div className="flex items-center gap-2 bg-green-500 dark:bg-green-600 text-white px-3 py-1 rounded-full animate-pulse">
                 <div className="w-2 h-2 bg-white rounded-full" />
                 <span className="text-sm font-semibold">LIVE</span>
               </div>
-              <h2 className="text-2xl font-bold text-gray-900 truncate">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-50 truncate">
                 {title}
               </h2>
             </div>
@@ -86,31 +86,31 @@ export function LiveElectionCenter({
             {/* Stats Row */}
             <div className="grid grid-cols-3 gap-4 mb-6">
               {/* Time Remaining */}
-              <div className="bg-white bg-opacity-70 rounded-lg p-3">
-                <p className="text-xs text-gray-600 font-medium mb-1">
+              <div className="bg-white dark:bg-gray-800 bg-opacity-70 dark:bg-opacity-50 rounded-lg p-3">
+                <p className="text-xs text-gray-600 dark:text-gray-400 font-medium mb-1">
                   Time Remaining
                 </p>
-                <p className="text-lg font-bold text-gray-900">
+                <p className="text-lg font-bold text-gray-900 dark:text-gray-50">
                   {timeRemaining}
                 </p>
               </div>
 
               {/* Voted Count */}
-              <div className="bg-white bg-opacity-70 rounded-lg p-3">
-                <p className="text-xs text-gray-600 font-medium mb-1">
+              <div className="bg-white dark:bg-gray-800 bg-opacity-70 dark:bg-opacity-50 rounded-lg p-3">
+                <p className="text-xs text-gray-600 dark:text-gray-400 font-medium mb-1">
                   Votes Cast
                 </p>
-                <p className="text-lg font-bold text-gray-900">
+                <p className="text-lg font-bold text-gray-900 dark:text-gray-50">
                   {votedCount.toLocaleString()}
                 </p>
               </div>
 
               {/* Total Registered */}
-              <div className="bg-white bg-opacity-70 rounded-lg p-3">
-                <p className="text-xs text-gray-600 font-medium mb-1">
+              <div className="bg-white dark:bg-gray-800 bg-opacity-70 dark:bg-opacity-50 rounded-lg p-3">
+                <p className="text-xs text-gray-600 dark:text-gray-400 font-medium mb-1">
                   Total Registered
                 </p>
-                <p className="text-lg font-bold text-gray-900">
+                <p className="text-lg font-bold text-gray-900 dark:text-gray-50">
                   {totalVoters.toLocaleString()}
                 </p>
               </div>
@@ -119,16 +119,16 @@ export function LiveElectionCenter({
             {/* Turnout Progress */}
             <div className="mb-4">
               <div className="flex justify-between items-center mb-2">
-                <p className="text-sm font-semibold text-gray-700">
+                <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                   Voter Turnout
                 </p>
-                <span className="text-sm font-bold text-green-600">
+                <span className="text-sm font-bold text-green-600 dark:text-green-400">
                   {turnoutPercentage.toFixed(1)}%
                 </span>
               </div>
               <Progress
                 value={turnoutPercentage}
-                className="h-3 bg-gray-200"
+                className="h-3 bg-gray-200 dark:bg-gray-700"
               />
             </div>
           </div>
@@ -136,7 +136,7 @@ export function LiveElectionCenter({
           {/* CTA Button */}
           <Button
             onClick={() => router.push(`/dashboard/elections/${electionId}`)}
-            className="shrink-0 h-fit bg-green-600 hover:bg-green-700 text-white flex items-center gap-2"
+            className="shrink-0 h-fit bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-600 text-white flex items-center gap-2"
             size="lg"
           >
             <Zap className="w-4 h-4" />

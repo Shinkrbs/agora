@@ -20,22 +20,22 @@ export function StatsGrid({
       label: "Elections Hosted",
       value: totalElectionsHosted,
       icon: Trophy,
-      color: "bg-blue-100",
-      iconColor: "text-blue-600",
+      color: "bg-blue-100 dark:bg-blue-950",
+      iconColor: "text-blue-600 dark:text-blue-400",
     },
     {
       label: "Electorate Reached",
       value: totalElectorateReached,
       icon: Users,
-      color: "bg-purple-100",
-      iconColor: "text-purple-600",
+      color: "bg-purple-100 dark:bg-purple-950",
+      iconColor: "text-purple-600 dark:text-purple-400",
     },
     {
       label: "Votes Processed",
       value: totalVotesProcessed,
       icon: CheckCircle2,
-      color: "bg-green-100",
-      iconColor: "text-green-600",
+      color: "bg-green-100 dark:bg-green-950",
+      iconColor: "text-green-600 dark:text-green-400",
     },
   ];
 
@@ -47,10 +47,10 @@ export function StatsGrid({
           <Card key={stat.label} className="p-6 hover:shadow-lg transition-shadow">
             <div className="flex items-start justify-between">
               <div className="flex-1">
-                <p className="text-sm font-medium text-gray-600 mb-2">
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">
                   {stat.label}
                 </p>
-                <p className="text-3xl font-bold text-gray-900">
+                <p className="text-3xl font-bold text-gray-900 dark:text-gray-50">
                   {stat.value.toLocaleString()}
                 </p>
               </div>

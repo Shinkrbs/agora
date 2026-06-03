@@ -25,7 +25,7 @@ export function ConfigurationGrid() {
       description: "Define standard ballot positions",
       icon: LayoutTemplate,
       href: "/position-templates",
-      color: "text-blue-600",
+      color: "text-blue-600 dark:text-blue-400",
     },
     {
       id: "members",
@@ -33,7 +33,7 @@ export function ConfigurationGrid() {
       description: "Manage officer access and roles",
       icon: Users,
       href: "/organization-management",
-      color: "text-green-600",
+      color: "text-green-600 dark:text-green-400",
     },
   ];
 
@@ -44,7 +44,7 @@ export function ConfigurationGrid() {
         return (
           <Card
             key={item.id}
-            className="p-6 hover:shadow-lg transition-shadow hover:border-gray-400 cursor-pointer group"
+            className="p-6 hover:shadow-lg transition-shadow hover:border-gray-400 dark:hover:border-gray-600 cursor-pointer group"
           >
             <Button
               variant="ghost"
@@ -54,10 +54,10 @@ export function ConfigurationGrid() {
               <div className={`${item.color} mb-3 group-hover:scale-110 transition-transform`}>
                 <Icon className="w-8 h-8" />
               </div>
-              <h3 className="text-base font-semibold text-gray-900 text-left">
+              <h3 className="text-base font-semibold text-gray-900 dark:text-gray-50 text-left">
                 {item.label}
               </h3>
-              <p className="text-sm text-gray-600 mt-1 text-left">
+              <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 text-left">
                 {item.description}
               </p>
             </Button>

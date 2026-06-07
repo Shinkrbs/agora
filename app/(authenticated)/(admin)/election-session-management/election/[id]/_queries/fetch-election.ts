@@ -4,6 +4,8 @@ import { ElectionHeaderData } from "../_types/election-header";
 import { getCurrentUser } from "@/lib/queries/users-queries";
 import { PaymentStatus } from "@/types/database";
 
+export const dynamic = 'force-dynamic'
+
 const getSupabaseClient = async () => {
     const cookieStore = await cookies();
     return createClient(cookieStore);
@@ -155,7 +157,6 @@ export async function fetchElection(electionId: string): Promise<{ data: Electio
             votedCount: voted,
             sentCount: sent,
         };
-
         return { data: election, message: "Election fetched successfully", error: null };
     } catch (error) {
         console.error("Error fetching election:", error);

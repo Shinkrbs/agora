@@ -16,7 +16,7 @@ import { LoadingSpinner } from "./_components";
 import { use, useEffect, useState } from "react";
 import { ElectionHeaderData } from "./_types/election-header";
 import { fetchElectionAction } from "./_actions/fetch-election-action";
-import { toast } from "sonner"
+import { toast } from "sonner";
 
 interface ElectionLayoutProps {
   children: React.ReactNode;
@@ -37,6 +37,7 @@ export default function ElectionLayout({
   children,
   params,
 }: ElectionLayoutProps) {
+  // isLoading should ONLY track the initial header data fetch, not navigation
   const [isLoading, setIsLoading] = useState(true);
   const { id: electionId } = use(params);
   const pathname = usePathname();
@@ -52,7 +53,6 @@ export default function ElectionLayout({
         toast.error("Error fetching election data: " + response.error);
         setElectionData(null);
       } else {
-        toast.success("Election data fetched successfully");
         setElectionData(response.data);
       }
       setIsLoading(false);
@@ -70,7 +70,8 @@ export default function ElectionLayout({
   const handleTabChange = (value: string) => {
     const selectedTab = tabs.find((tab) => tab.value === value);
     if (!selectedTab) return;
-    setIsLoading(true);
+    
+    // REMOVED: setIsLoading(true) -> Let Next.js handle sub-route transitions smoothly
     router.push(
       `/election-session-management/election/${electionId}/${selectedTab.href}`,
     );

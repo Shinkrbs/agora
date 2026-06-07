@@ -106,7 +106,7 @@ export default function VoterManagementPage({
       <div>
         <h1 className="text-3xl font-bold tracking-tight">Voter Management</h1>
         <p className="text-muted-foreground mt-2">
-          Manage voters and track voting status for election {id}
+          Manage voters and track voting status
         </p>
       </div>
 

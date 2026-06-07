@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import { generateVoterCode } from "../_utils/generate-voter-code";
 import { sendVotingCodeEmail } from "@/lib/mailer";
+import { revalidatePath } from "next/cache";
 
 export async function addVoter(electionId: string, studentId: string, email: string): Promise<{ success: boolean; error: string | null }> {
     try {
@@ -25,7 +26,7 @@ export async function addVoter(electionId: string, studentId: string, email: str
             console.error("Error adding voter:", error);
             return { success: false, error: error.message };
         }
-
+        revalidatePath(`/admin/election-session-management/election/${electionId}/voter-management`);
         return { success: true, error: null };
     } catch (err) {
         console.error("Unexpected error adding voter:", err);
@@ -81,7 +82,7 @@ export async function importVotersCSVAction(
       }
       throw new Error(error.message);
     }
-
+    revalidatePath(`/admin/election-session-management/election/${electionId}/voter-management`);
     return { 
       success: true, 
       message: `Successfully imported ${data.length} voters.` 
@@ -93,7 +94,7 @@ export async function importVotersCSVAction(
   }
 }
 
-export async function editVoter(voterId: string, studentId: string, email: string): Promise<{ success: boolean; error: string | null }> {
+export async function editVoter(voterId: string, studentId: string, email: string, electionId: string): Promise<{ success: boolean; error: string | null }> {
     try {
         const cookieStore = await cookies();
         const supabase = await createClient(cookieStore);
@@ -111,6 +112,7 @@ export async function editVoter(voterId: string, studentId: string, email: strin
             return { success: false, error: error.message };
         }
 
+        revalidatePath(`/admin/election-session-management/election/${electionId}/voter-management`);
         return { success: true, error: null };
     } catch (err) {
         console.error("Unexpected error editing voter:", err);
@@ -118,7 +120,7 @@ export async function editVoter(voterId: string, studentId: string, email: strin
     }
 }
 
-export async function deleteVoter(voterId: string): Promise<{ success: boolean; error: string | null }> {
+export async function deleteVoter(voterId: string, electionId: string): Promise<{ success: boolean; error: string | null }> {
     try {
         const cookieStore = await cookies();
         const supabase = await createClient(cookieStore);
@@ -132,7 +134,7 @@ export async function deleteVoter(voterId: string): Promise<{ success: boolean; 
             console.error("Error deleting voter:", error);
             return { success: false, error: error.message };
         }
-
+        revalidatePath(`/admin/election-session-management/election/${electionId}/voter-management`);
         return { success: true, error: null };
     } catch (err) {
         console.error("Unexpected error deleting voter:", err);
@@ -160,7 +162,7 @@ export async function sendVotingCode(voterId: string, electionId: string, voting
             console.error("Error updating voter status:", updateError);
             return { success: false, error: "Failed to update voter status." };
         }
-
+        revalidatePath(`/admin/election-session-management/election/${electionId}/voter-management`);
         return { success: true, error: null };
     } catch (err) {
         console.error("Unexpected error sending voting code:", err);
@@ -211,7 +213,7 @@ export async function sendBatchedVotingCodesAction(
         console.error("Error updating voter statuses:", updateError);
       }
     }
-
+    revalidatePath(`/admin/election-session-management/election/${batch[0].election_id}/voter-management`);
     return {
       success: failedIds.length === 0,
       sentCount: successfulIds.length,

@@ -41,6 +41,28 @@ export async function importVotersCSVAction(
     const cookieStore = await cookies();
     const supabase = await createClient(cookieStore);
 
+    // Check for existing voters in this election
+    const studentIds = parsedVoters.map(v => v.student_id);
+    const { data: existingVoters, error: queryError } = await supabase
+      .from("voters")
+      .select("student_id, email")
+      .eq("election_id", electionId)
+      .in("student_id", studentIds)
+      .eq("is_deleted", false);
+
+    if (queryError) {
+      console.error("Error checking existing voters:", queryError);
+      return { success: false, error: "Failed to validate voter data." };
+    }
+
+    if (existingVoters && existingVoters.length > 0) {
+      const existingIds = existingVoters.map(v => v.student_id);
+      return { 
+        success: false, 
+        error: `The following Student IDs already exist in this election: ${existingIds.join(", ")}. Please remove duplicates and try again.` 
+      };
+    }
+
     const votersToInsert = parsedVoters.map((voter) => ({
       election_id: electionId,
       student_id: voter.student_id,
@@ -55,7 +77,7 @@ export async function importVotersCSVAction(
       .select(); 
     if (error) {
       if (error.code === "23505") {
-        return { success: false, error: "One or more Student IDs already exist in this election." };
+        return { success: false, error: "One or more Student IDs or emails already exist in this election." };
       }
       throw new Error(error.message);
     }

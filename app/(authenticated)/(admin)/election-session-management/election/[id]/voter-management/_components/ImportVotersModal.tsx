@@ -23,6 +23,53 @@ interface ImportVotersModalProps {
   electionId: string;
 }
 
+function checkForDuplicateEntries(voters: { student_id: string; email: string }[]): {
+  hasDuplicates: boolean;
+  message: string;
+} {
+  const studentIdSet = new Set<string>();
+  const emailSet = new Set<string>();
+  const duplicateStudentIds: string[] = [];
+  const duplicateEmails: string[] = [];
+
+  for (const voter of voters) {
+    if (studentIdSet.has(voter.student_id)) {
+      if (!duplicateStudentIds.includes(voter.student_id)) {
+        duplicateStudentIds.push(voter.student_id);
+      }
+    } else {
+      studentIdSet.add(voter.student_id);
+    }
+
+    if (emailSet.has(voter.email)) {
+      if (!duplicateEmails.includes(voter.email)) {
+        duplicateEmails.push(voter.email);
+      }
+    } else {
+      emailSet.add(voter.email);
+    }
+  }
+
+  if (duplicateStudentIds.length > 0 || duplicateEmails.length > 0) {
+    let message = "Duplicate entries found in CSV file:\n\n";
+    
+    if (duplicateStudentIds.length > 0) {
+      message += `Duplicate Student IDs: ${duplicateStudentIds.join(", ")}\n`;
+    }
+    
+    if (duplicateEmails.length > 0) {
+      message += `Duplicate Emails: ${duplicateEmails.join(", ")}`;
+    }
+
+    return {
+      hasDuplicates: true,
+      message: message.trim(),
+    };
+  }
+
+  return { hasDuplicates: false, message: "" };
+}
+
 export function ImportVotersModal({
   isOpen,
   onClose,
@@ -98,6 +145,14 @@ export function ImportVotersModal({
         student_id: row.student_id.trim(),
         email: row.email.trim(),
       }));
+
+      // Check for duplicates within the CSV file
+      const duplicateCheck = checkForDuplicateEntries(sanitizedVoters);
+      if (duplicateCheck.hasDuplicates) {
+        setErrorMsg(duplicateCheck.message);
+        setIsPending(false);
+        return;
+      }
 
       const result = await importVotersCSVAction(
         electionId,

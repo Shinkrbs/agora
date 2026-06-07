@@ -13,7 +13,7 @@ const getSupabaseClient = async () => {
 
 const voterCount = async (supabase: Awaited<ReturnType<typeof createClient>>, electionId: string): Promise<number> => {
     try {
-        const { data, error } = await supabase.from("voters").select("id", { count: "exact" }).eq("election_id", electionId);
+        const { data, error } = await supabase.from("voters").select("id", { count: "exact" }).eq("election_id", electionId).eq("is_deleted", false);
         if (error) {
             console.error("Error checking voter data:", error);
             return 0;
@@ -27,7 +27,7 @@ const voterCount = async (supabase: Awaited<ReturnType<typeof createClient>>, el
 
 const candidateCount = async (supabase: Awaited<ReturnType<typeof createClient>>, electionId: string): Promise<number> => {
     try {
-        const { data, error } = await supabase.from("candidates").select("id", { count: "exact" }).eq("election_id", electionId);
+        const { data, error } = await supabase.from("candidates").select("id", { count: "exact" }).eq("election_id", electionId).eq("is_deleted", false);
         if (error) {
             console.error("Error checking candidate data:", error);
             return 0;

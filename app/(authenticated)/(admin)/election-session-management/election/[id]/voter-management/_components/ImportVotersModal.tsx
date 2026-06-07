@@ -16,6 +16,7 @@ import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle, Loader2 } from "lucide-react";
 import { importVotersCSVAction } from "../_actions/voter-actions";
+import { toast } from "sonner";
 
 interface ImportVotersModalProps {
   isOpen: boolean;
@@ -119,6 +120,7 @@ export function ImportVotersModal({
 
       if (results.errors && results.errors.length > 0) {
         console.error("Papa Parse errors:", results.errors);
+        toast.error("Failed to parse CSV file. Please check the format.");  
         setErrorMsg("Failed to parse CSV file. Please check the format.");
         setIsPending(false);
         return;
@@ -127,6 +129,7 @@ export function ImportVotersModal({
       const parsedData = results.data;
 
       if (!parsedData || parsedData.length === 0) {
+        toast.error("CSV file is empty or has no valid data rows.");
         setErrorMsg("CSV file is empty or has no valid data rows.");
         setIsPending(false);
         return;
@@ -134,6 +137,7 @@ export function ImportVotersModal({
 
       const firstRow = parsedData[0];
       if (!firstRow.student_id || !firstRow.email) {
+        toast.error("CSV file is missing required headers.");
         setErrorMsg(
           "CSV must contain 'student_id' and 'email' columns."
         );
@@ -149,6 +153,7 @@ export function ImportVotersModal({
       // Check for duplicates within the CSV file
       const duplicateCheck = checkForDuplicateEntries(sanitizedVoters);
       if (duplicateCheck.hasDuplicates) {
+        toast.error("Duplicate entries found in CSV file. Please fix them and try again.");
         setErrorMsg(duplicateCheck.message);
         setIsPending(false);
         return;
@@ -161,14 +166,17 @@ export function ImportVotersModal({
 
       if (!result.success) {
         setErrorMsg(result.error || "Failed to import voters.");
+        toast.error(result.error || "Failed to import voters.");
         setIsPending(false);
         return;
       }
 
+      toast.success("Voters imported successfully!");
       setSelectedFile(null);
       setErrorMsg(null);
       setIsPending(false);
       onClose();
+      window.location.reload(); // Force reload to update the voter list
     } catch (error) {
       console.error("Import error:", error);
       setErrorMsg("An error occurred while importing the file.");
@@ -216,7 +224,7 @@ export function ImportVotersModal({
               type="file"
               accept=".csv"
               onChange={handleFileChange}
-              className="cursor-pointer"
+              className="cursor-pointer border-2 border-primary bg-primary/5 hover:bg-primary/10 transition-colors"
               disabled={isPending}
             />
             {selectedFile && (

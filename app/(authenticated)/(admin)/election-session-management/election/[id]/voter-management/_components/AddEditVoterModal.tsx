@@ -98,7 +98,8 @@ export function AddEditVoterModal({
         const result = await editVoter(
           voter.id,
           formData.student_id,
-          formData.email
+          formData.email,
+          electionId
         );
 
         if (!result.success) {

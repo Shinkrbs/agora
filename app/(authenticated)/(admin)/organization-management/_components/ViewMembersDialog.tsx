@@ -1,5 +1,6 @@
 "use client";
-
+import { useEffect } from "react";
+import { isOwner as checkIsOwner } from "../_queries/organization-management-queries";
 import { useState } from "react";
 import {
   Dialog,
@@ -18,11 +19,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Building2, UserCircle, Search, Filter } from "lucide-react";
+import { Building2, UserCircle, Search, Filter, X } from "lucide-react";
 import Image from "next/image";
 import { MemberDetails } from "@/types/database"; // Must match the OrganizationCard import!
+import { toast } from "sonner";
+import { kickMember } from "../_queries/organization-management-queries";
 
-interface ViewOrganizationDialogProps {
+export interface ViewOrganizationDialogProps {
   isOpen: boolean;
   onClose: () => void;
   name: string;
@@ -30,6 +33,8 @@ interface ViewOrganizationDialogProps {
   logoUrl?: string | null;
   members: MemberDetails[];
   isLoading?: boolean;
+  id: string; // Added organization ID for ownership check
+  inviteCode: string; // Added invite code for sharing
 }
 
 type FilterStatus = "all" | "active" | "kicked";
@@ -41,9 +46,41 @@ export function ViewOrganizationDialog({
   shorthandName,
   logoUrl,
   members,
+  id: organizationId,
+  inviteCode,
 }: ViewOrganizationDialogProps) {
   const [searchQuery, setSearchQuery] = useState("");
-  const [filterStatus, setFilterStatus] = useState<FilterStatus>("all");
+  const [filterStatus, setFilterStatus] = useState<FilterStatus>("active");
+  const [owner, setOwner] = useState(false); // You can set this based on your logic, e.g., from props or a hook
+  const [kickingMemberId, setKickingMemberId] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Example logic to determine if the user is an owner (you can replace this with your actual logic)
+    const checkOwnership = async () => {
+      const response = await checkIsOwner(organizationId); // You need to have organizationId available in this component
+      setOwner(response);
+    };
+
+    checkOwnership();
+  }, [organizationId]);
+
+  const handleKickMember = async (memberId: string, memberName: string) => {
+    setKickingMemberId(memberId);
+    try {
+      const result = await kickMember(organizationId, memberId);
+      if (result.success) {
+        toast.success(`${memberName} has been kicked from the organization.`);
+        // Optionally refresh the members list here
+      } else {
+        toast.error(result.message);
+      }
+    } catch (error) {
+      console.error("Error kicking member:", error);
+      toast.error("An error occurred while kicking the member.");
+    } finally {
+      setKickingMemberId(null);
+    }
+  };
 
   const filteredMembers = members.filter((member) => {
     const fullName = `${member.first_name} ${member.last_name}`.toLowerCase();
@@ -66,7 +103,7 @@ export function ViewOrganizationDialog({
       {/* Replaced Card with DialogContent. 
         Kept the resize, custom dimensions, and flex layouts for the dynamic table height.
       */}
-      <DialogContent className="sm:max-w-[1200px] w-[95vw] h-[85vh] max-h-[95vh] min-w-[320px] min-h-[400px] p-6 md:p-8 flex flex-col bg-card text-card-foreground border-border shadow-lg resize overflow-hidden">
+      <DialogContent className="sm:max-w-300 w-[95vw] h-[85vh] max-h-[95vh] min-w-[320px] min-h-100 p-6 md:p-8 flex flex-col bg-card text-card-foreground border-border shadow-lg resize overflow-hidden">
         {/* Replaced manual h2/p with accessible DialogHeader components */}
         <DialogHeader className="shrink-0 text-left">
           <DialogTitle className="text-2xl font-semibold text-foreground">
@@ -104,6 +141,19 @@ export function ViewOrganizationDialog({
                 {name || "N/A"} {shorthandName && `(${shorthandName})`}
               </p>
             </div>
+            <div className="ml-auto flex items-center gap-2">
+              {owner && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    navigator.clipboard.writeText(inviteCode);
+                    toast.success("Invite code copied to clipboard!");}}
+                >
+                  Copy Invite Code
+                </Button>
+              )}    
+            </div>
           </div>
 
           {/* Search and Filter Controls */}
@@ -119,7 +169,7 @@ export function ViewOrganizationDialog({
               />
             </div>
 
-            <div className="relative shrink-0 w-full sm:w-[180px]">
+            <div className="relative shrink-0 w-full sm:w-45">
               <div className="absolute left-3 top-1/2 -translate-y-1/2 z-10 pointer-events-none">
                 <Filter className="h-4 w-4 text-muted-foreground" />
               </div>
@@ -152,6 +202,7 @@ export function ViewOrganizationDialog({
                     <th className="px-4 py-3 font-medium">Role</th>
                     <th className="px-4 py-3 font-medium">Joined Date</th>
                     <th className="px-4 py-3 font-medium">Kicked Date</th>
+                    {owner && <th className="px-4 py-3 font-medium">Actions</th>}
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border">
@@ -210,12 +261,28 @@ export function ViewOrganizationDialog({
                             <span className="italic opacity-50">-</span>
                           )}
                         </td>
+                        {owner && (
+                          <td className="px-4 py-3">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-8 hover:bg-red-100 dark:hover:bg-red-950"
+                              onClick={() => handleKickMember(member.id, `${member.first_name} ${member.last_name}`)}
+                              disabled={member.kicked_at !== null || kickingMemberId === member.id}
+                              aria-label={`Kick ${member.first_name} ${member.last_name}`}
+                              title={member.kicked_at ? "Member already kicked" : "Kick member"}
+                            >
+                              <X className="h-4 w-4 text-red-600 dark:text-red-400 mr-1" />
+                              Kick
+                            </Button>
+                          </td>
+                        )}
                       </tr>
                     ))
                   ) : (
                     <tr>
                       <td
-                        colSpan={5}
+                        colSpan={owner ? 6 : 5}
                         className="px-4 py-8 text-center text-muted-foreground"
                       >
                         {searchQuery || filterStatus !== "all" ? (

@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { VoterTableRow } from "../_types/voter-types";
 import { addVoter, editVoter } from "../_actions/voter-actions";
+import { toast } from "sonner";
 
 interface AddEditVoterModalProps {
   isOpen: boolean;
@@ -21,6 +22,7 @@ interface AddEditVoterModalProps {
   voter?: VoterTableRow | null;
   electionId: string;
   onSuccess?: () => void;
+  voterList: VoterTableRow[];
 }
 
 export function AddEditVoterModal({
@@ -29,6 +31,7 @@ export function AddEditVoterModal({
   voter,
   electionId,
   onSuccess,
+  voterList,
 }: AddEditVoterModalProps) {
   const [formData, setFormData] = useState({
     student_id: "",
@@ -64,6 +67,28 @@ export function AddEditVoterModal({
       setError(null);
       setIsLoading(true);
 
+        // Check for duplicate student_id or email in the current voter list
+      const isDuplicateStudentId = voterList.some(
+        (v) =>
+          v.student_id === formData.student_id &&
+          (!isEditMode || v.id !== voter?.id) // Exclude current voter in edit mode
+      );
+      const isDuplicateEmail = voterList.some(
+        (v) =>
+          v.email === formData.email &&
+          (!isEditMode || v.id !== voter?.id) // Exclude current voter in edit mode
+      );
+
+      if (isDuplicateStudentId) {
+        setError("A voter with the same Student ID already exists");
+        return;
+      }
+
+      if (isDuplicateEmail) {
+        setError("A voter with the same Email already exists");
+        return;
+      }
+
       if (isEditMode) {
         if (!voter) {
           setError("Voter data is missing");
@@ -92,9 +117,10 @@ export function AddEditVoterModal({
 
         if (!result.success) {
           setError(result.error || "Failed to add voter");
+          toast.error(result.error || "Failed to add voter");
           return;
         }
-
+        toast.success("Voter added successfully");
         onSuccess?.();
         onClose();
       }

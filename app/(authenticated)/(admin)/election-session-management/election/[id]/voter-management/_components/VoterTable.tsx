@@ -405,6 +405,7 @@ export function VoterTable({ voters: initialVoters, electionId, onVoterAdded }: 
         voter={selectedVoter ?? undefined}
         electionId={electionId}
         onSuccess={onVoterAdded}
+        voterList={data}
       />
       <ImportVotersModal
         isOpen={isImportOpen}

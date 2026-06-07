@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { VoterTableRow } from "../_types/voter-types";
 import { deleteVoter } from "../_actions/voter-actions";
+import { toast } from "sonner";
 
 interface DeleteVoterModalProps {
   isOpen: boolean;
@@ -43,9 +44,10 @@ export function DeleteVoterModal({
 
       if (!result.success) {
         setError(result.error || "Failed to delete voter");
+        toast.error(result.error || "Failed to delete voter");
         return;
       }
-
+      toast.success("Voter deleted successfully");
       onSuccess?.();
       onClose();
     } catch (err) {

@@ -53,7 +53,7 @@ const getStatusConfig = (status: ApprovalStatus) => {
 };
 
 export function OrganizationCard({ organization }: OrganizationCardProps) {
-  const { id, name, shorthand_name, logo_url, approval_status } = organization;
+  const { id, name, shorthand_name, logo_url, approval_status, invite_code } = organization;
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const { currentOrganization, setCurrentOrganization } = useOrganization();
   const statusConfig = getStatusConfig(approval_status);
@@ -179,6 +179,8 @@ export function OrganizationCard({ organization }: OrganizationCardProps) {
         logoUrl={logo_url}
         members={members} // Pass the mock data here
         isLoading={isLoadingMembers}
+        id={id}
+        inviteCode={invite_code}
       />
     </>
   );

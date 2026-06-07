@@ -35,12 +35,14 @@ export function DeleteVoterModal({
     return null;
   }
 
+  const isVoted = voter.code_status === "VOTED";
+
   const handleDelete = async () => {
     try {
       setError(null);
       setIsLoading(true);
 
-      const result = await deleteVoter(voter.id);
+      const result = await deleteVoter(voter.id, voter.election_id);
 
       if (!result.success) {
         setError(result.error || "Failed to delete voter");
@@ -64,7 +66,15 @@ export function DeleteVoterModal({
         <AlertDialogHeader>
           <AlertDialogTitle>Delete Voter</AlertDialogTitle>
           <AlertDialogDescription>
-            Are you sure you want to delete the voter <span className="font-semibold">{voter.student_id}</span> ({voter.email})? This action cannot be undone.
+            {isVoted ? (
+              <div>
+                Cannot delete voter <span className="font-semibold">{voter.student_id}</span> ({voter.email}). This voter has already voted and cannot be removed.
+              </div>
+            ) : (
+              <div>
+                Are you sure you want to delete the voter <span className="font-semibold">{voter.student_id}</span> ({voter.email})? This action cannot be undone.
+              </div>
+            )}
             {error && (
               <div className="mt-3 rounded-md bg-red-50 border border-red-200 p-2">
                 <p className="text-sm text-red-800">{error}</p>
@@ -73,14 +83,18 @@ export function DeleteVoterModal({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={isLoading}>Cancel</AlertDialogCancel>
-          <AlertDialogAction
-            onClick={handleDelete}
-            disabled={isLoading}
-            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-          >
-            {isLoading ? "Deleting..." : "Delete"}
-          </AlertDialogAction>
+          <AlertDialogCancel disabled={isLoading}>
+            {isVoted ? "Close" : "Cancel"}
+          </AlertDialogCancel>
+          {!isVoted && (
+            <AlertDialogAction
+              onClick={handleDelete}
+              disabled={isLoading}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {isLoading ? "Deleting..." : "Delete"}
+            </AlertDialogAction>
+          )}
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

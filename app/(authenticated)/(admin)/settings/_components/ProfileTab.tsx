@@ -31,6 +31,15 @@ export function ProfileTab({ organization }: ProfileTabProps) {
   });
 
   useEffect(() => {
+    setUiState({
+      name: organization.name,
+      shorthandName: organization.shorthand_name,
+      logoFile: null,
+      logoPreview: organization.logo_url || null,
+    });
+  }, [organization]);
+
+  useEffect(() => {
     if (state.success === true) {
       toast.success(state.message);
     } else if (state.success === false) {

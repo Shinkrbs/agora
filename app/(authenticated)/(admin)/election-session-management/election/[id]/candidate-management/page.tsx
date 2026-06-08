@@ -13,6 +13,8 @@ import {
 import { CandidateTableRow } from "./_types/candidate-types";
 import { fetchCandidatesAction, fetchPositionsAction, fetchPartylistsAction } from "./_actions/fetch-candidate-action";
 import type { Position, Partylist } from "./_queries/candidate-queries";
+import { ElectionSession } from "@/types/database";
+import { fetchElectionSessionAction } from "@/lib/actions/elections";
 
 export default function CandidateManagementPage({
   params,
@@ -39,16 +41,18 @@ export default function CandidateManagementPage({
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [selectedCandidate, setSelectedCandidate] =
     useState<CandidateTableRow | null>(null);
+  const [election, setElection] = useState<ElectionSession | null>(null);
 
   // Fetch all data on mount
   useEffect(() => {
     const fetchAllData = async () => {
       setIsLoading(true);
       try {
-        const [candidatesRes, positionsRes, partylistsRes] = await Promise.all([
+        const [candidatesRes, positionsRes, partylistsRes, electionRes] = await Promise.all([
           fetchCandidatesAction(id),
           fetchPositionsAction(id),
           fetchPartylistsAction(id),
+          fetchElectionSessionAction(id),
         ]);
 
         if (candidatesRes.data) {
@@ -68,6 +72,12 @@ export default function CandidateManagementPage({
           setPartylists(partylistsRes.data);
         } else {
           toast.error(partylistsRes.error || "Failed to load partylists");
+        }
+
+        if (electionRes.data) {
+          setElection(electionRes.data);
+        } else {
+          toast.error(electionRes.error || "Failed to load election session");
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -158,7 +168,7 @@ export default function CandidateManagementPage({
               Manage candidates for election
             </p>
           </div>
-          <Button onClick={handleAddCandidate} disabled={isLoading} className="gap-2">
+          <Button onClick={handleAddCandidate} disabled={isLoading || election?.status === "completed"} className="gap-2">
             <Plus className="h-4 w-4" />
             Add Candidate
           </Button>
@@ -171,7 +181,6 @@ export default function CandidateManagementPage({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="max-w-sm"
-            disabled={isLoading}
           />
         </div>
 
@@ -182,6 +191,7 @@ export default function CandidateManagementPage({
           onEdit={handleEditCandidate}
           onDelete={handleDeleteCandidate}
           onSearch={setSearchQuery}
+          election={election}
         />
       </div>
 

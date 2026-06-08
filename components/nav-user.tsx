@@ -27,13 +27,23 @@ type NavUserProps = {
   role: "admin" | "superadmin";
 };
 
-export function NavUser({ user }: NavUserProps) {
-  const { isMobile } = useSidebar();
+export function NavUser({ user, role }: NavUserProps) {
+  const { isMobile, setOpenMobile } = useSidebar();
   const router = useRouter();
+  const initials =
+    user.name
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((part) => part[0]?.toUpperCase())
+      .join("") || "U";
 
   // Handle logout
   const handleLogout = async () => {
     try {
+      if (isMobile) {
+        setOpenMobile(false);
+      }
       await logoutUser();
       router.replace("/login");
       router.refresh();
@@ -52,8 +62,12 @@ export function NavUser({ user }: NavUserProps) {
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage src={user.avatar_url} alt={user.name} />
-                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                {user.avatar_url ? (
+                  <AvatarImage src={user.avatar_url} alt={user.name} />
+                ) : null}
+                <AvatarFallback className="rounded-lg">
+                  {initials}
+                </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">{user.name}</span>
@@ -71,8 +85,12 @@ export function NavUser({ user }: NavUserProps) {
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={user.avatar_url} alt={user.name} />
-                  <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                  {user.avatar_url ? (
+                    <AvatarImage src={user.avatar_url} alt={user.name} />
+                  ) : null}
+                  <AvatarFallback className="rounded-lg">
+                    {initials}
+                  </AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-medium">{user.name}</span>
@@ -82,7 +100,16 @@ export function NavUser({ user }: NavUserProps) {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem onClick={() => router.push(`/profile`)}>
+              <DropdownMenuItem
+                onClick={() => {
+                  if (isMobile) {
+                    setOpenMobile(false);
+                  }
+                  router.push(
+                    role === "superadmin" ? "/superadmin/profile" : "/profile",
+                  );
+                }}
+              >
                 <UserRoundPen />
                 Profile
               </DropdownMenuItem>

@@ -27,10 +27,12 @@ export default async function SuperadminLayout({
   }));
   return (
     <SidebarProvider>
-      <AppSidebar />
-      <main className="min-h-svh flex-1">
+      <AppSidebar user={user} />
+      <main className="min-h-svh min-w-0 flex-1 overflow-x-hidden">
         <SuperadminHeaderClient breadcrumbItems={breadcrumbItems} />
-        <section className="p-3 md:p-1">{children}</section>
+        <section className="min-w-0 overflow-x-hidden p-4 md:p-6">
+          {children}
+        </section>
       </main>
     </SidebarProvider>
   );

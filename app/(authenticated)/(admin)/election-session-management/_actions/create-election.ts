@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getCurrentUser } from "@/lib/queries/users-queries";
 import { isMemberOfOrganization } from "../_queries/election-sessions";
 import { fetchPositionTemplatebyId } from "../_queries/fetch-position-template"; // Adjust path as needed
+import { revalidatePath } from "next/cache";
 
 export async function createElectionAction(
   prevState: any,
@@ -36,7 +37,7 @@ export async function createElectionAction(
 
     // 1. Fetch the selected template to get the positions
     const { data: template, error: templateError } = await fetchPositionTemplatebyId(validatedData.position_template_id);
-    
+
     if (templateError || !template) {
       console.error("Failed to fetch template:", templateError);
       throw new Error("Failed to load the selected position template.");
@@ -71,7 +72,7 @@ export async function createElectionAction(
       console.error("Failed to create positions:", positionError);
       throw new Error(positionError.message);
     }
-
+    revalidatePath("/election-session-management")
     return {
       message: "Election created successfully",
       error: null,

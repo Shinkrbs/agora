@@ -7,11 +7,12 @@ import { fetchPartylists } from "./_actions/fetch-partylists-action";
 import { editPartylist } from "./_actions/edit-partylist";
 import { PartylistWithCandidateCount } from "./_types/partylist-types";
 import { PartylistCard, DeletePartylistModal, EditPartylistModal, CreatePartylistModal } from "./_components";
-import { Candidate } from "@/types/database";
+import { Candidate, ElectionSession } from "@/types/database";
 import { fetchCandidatesAction } from "@/lib/actions/candidates";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useOrganization } from "@/app/(authenticated)/(admin)/_components/OrganizationContext";
+import { fetchElectionSessionAction } from "@/lib/actions/elections";
 
 export default function PartylistManagementPage({
   params,
@@ -30,8 +31,18 @@ export default function PartylistManagementPage({
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedPartylist, setSelectedPartylist] = useState<PartylistWithCandidateCount | null>(null);
+  const [election, setElection] = useState<ElectionSession | null>(null);
 
   useEffect(() => {
+    async function fetchElection() {
+      setIsLoading(true);
+      const electionData = await fetchElectionSessionAction(id);
+      if (electionData.data) {
+        setElection(electionData.data);
+      } else {
+        toast.error(electionData.error || "Failed to load election data");
+      }
+    }
     async function handleFetchPartylists() {
       setIsLoading(true);
       const partylistsData = await fetchPartylists(id);
@@ -51,6 +62,7 @@ export default function PartylistManagementPage({
       }
       setIsLoading(false);
     }
+    fetchElection();
     handleFetchPartylists();
     handleFetchCandidates();
   }, [id]);
@@ -166,7 +178,7 @@ export default function PartylistManagementPage({
           />
           <Button
             onClick={() => setCreateModalOpen(true)}
-            disabled={isLoading || !currentOrganization}
+            disabled={isLoading || !currentOrganization || election?.status === "completed"}
             className="gap-2"
           >
             <Plus className="h-4 w-4" />
@@ -194,6 +206,7 @@ export default function PartylistManagementPage({
                 partylist={partylist}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
+                election={election}
               />
             ))}
           </div>

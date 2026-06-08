@@ -41,15 +41,30 @@ export function EditDetailsModal({
   const message = state?.message || null;
   const router = useRouter();
 
+  // Determine if the election is already live or completed
+  const isLive = election.status === "active" || election.status === "completed";
+
+  // Pre-format the dates for the inputs
+  const startDateValue = election.startDate
+    ? new Date(election.startDate).toISOString().split("T")[0]
+    : "";
+    
+  const endDateValue = election.endDate
+    ? new Date(election.endDate).toISOString().split("T")[0]
+    : "";
+
   useEffect(() => {
-    router.refresh();
+    // Only trigger the router refresh and close timer IF there is a success message
     if (state?.message) {
+      router.refresh();
+      
       const timer = setTimeout(() => {
         onOpenChange(false);
       }, 1000); 
+      
       return () => clearTimeout(timer);
     }
-  }, [state?.message, onOpenChange]);
+  }, [state?.message, onOpenChange, router]);
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -72,6 +87,7 @@ export function EditDetailsModal({
                   name="title"
                   defaultValue={election.title || ""}
                   placeholder="Enter election title"
+                  required
                 />
               </div>
 
@@ -82,13 +98,24 @@ export function EditDetailsModal({
                   id="start-date"
                   name="start-date"
                   type="date"
-                  defaultValue={
-                    election.startDate
-                      ? new Date(election.startDate).toISOString().split("T")[0]
-                      : ""
-                  }
+                  defaultValue={startDateValue}
                   required
+                  disabled={isLive} // Disable if active/completed
                 />
+                
+                {/* 
+                  When an input is disabled, it doesn't submit its value to the FormData. 
+                  This hidden input ensures the server action still receives the start-date.
+                */}
+                {isLive && (
+                  <input type="hidden" name="start-date" value={startDateValue} />
+                )}
+                
+                {isLive && (
+                  <p className="text-xs text-muted-foreground mt-1">
+                    The start date cannot be changed because the election is already live.
+                  </p>
+                )}
               </div>
 
               {/* End Date */}
@@ -98,11 +125,7 @@ export function EditDetailsModal({
                   id="end-date"
                   name="end-date"
                   type="date"
-                  defaultValue={
-                    election.endDate
-                      ? new Date(election.endDate).toISOString().split("T")[0]
-                      : ""
-                  }
+                  defaultValue={endDateValue}
                   required
                 />
               </div>

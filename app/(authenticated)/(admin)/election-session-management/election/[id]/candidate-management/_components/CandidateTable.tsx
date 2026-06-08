@@ -20,9 +20,9 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Check, AlertCircle, Pencil, Trash2 } from "lucide-react";
 import { CandidateTableRow } from "../_types/candidate-types";
+import { ElectionSession } from "@/types/database";
 
 interface CandidateTableProps {
   data: CandidateTableRow[];
@@ -30,6 +30,7 @@ interface CandidateTableProps {
   onEdit: (candidate: CandidateTableRow) => void;
   onDelete: (candidate: CandidateTableRow) => void;
   onSearch: (query: string) => void;
+  election: ElectionSession | null;
 }
 
 export function CandidateTable({
@@ -38,6 +39,7 @@ export function CandidateTable({
   onEdit,
   onDelete,
   onSearch,
+  election,
 }: CandidateTableProps) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
@@ -120,6 +122,7 @@ export function CandidateTable({
                 onClick={() => onEdit(candidate)}
                 aria-label={`Edit ${candidate.full_name}`}
                 title="Edit candidate"
+                disabled={election?.status === "completed"}
               >
                 <Pencil className="h-4 w-4 text-slate-900 dark:text-white" />
               </Button>
@@ -130,6 +133,7 @@ export function CandidateTable({
                 onClick={() => onDelete(candidate)}
                 aria-label={`Delete ${candidate.full_name}`}
                 title="Delete candidate"
+                disabled={election?.status === "completed"}
               >
                 <Trash2 className="h-4 w-4 text-red-600 dark:text-red-400" />
               </Button>

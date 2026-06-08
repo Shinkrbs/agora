@@ -7,7 +7,6 @@ import {
   Calendar,
   Settings,
   Play,
-  Download,
   RefreshCw,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -153,14 +152,15 @@ export function UniversalElectionHeader({
           {/* Action Buttons */}
           <div className="flex flex-wrap gap-2">
             {/* Edit Details Button */}
-            <Button
-              size="icon"
-              variant="outline"
-              onClick={() => setEditDetailsOpen(true)}
-              title="Edit election details"
-            >
+            {election.status !== "completed" && (
+              <Button
+                size="icon"
+                variant="outline"
+                onClick={() => setEditDetailsOpen(true)}
+                title="Edit election details"
+              >
               <Settings className="h-4 w-4" />
-            </Button>
+            </Button>)}
 
             {/* Primary Action Button */}
             {status === "draft" && (

@@ -1,7 +1,5 @@
 "use client";
-import { useEffect } from "react";
-import { isOwner as checkIsOwner } from "../_queries/organization-management-queries";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -19,11 +17,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Building2, UserCircle, Search, Filter, X } from "lucide-react";
+import { Building2, UserCircle, Search, Filter, X, ArrowRightLeft, ShieldAlert } from "lucide-react";
 import Image from "next/image";
-import { MemberDetails } from "@/types/database"; // Must match the OrganizationCard import!
+import { MemberDetails, OrgMemberRole } from "@/types/database"; 
 import { toast } from "sonner";
 import { kickMember } from "../_queries/organization-management-queries";
+import { getUserOrganizationRole, updateOrganizationMemberRole, transferOwnership } from "../_actions/organization-member-role";
+import { createClient } from "@/lib/supabase/client";
 
 export interface ViewOrganizationDialogProps {
   isOpen: boolean;
@@ -33,8 +33,8 @@ export interface ViewOrganizationDialogProps {
   logoUrl?: string | null;
   members: MemberDetails[];
   isLoading?: boolean;
-  id: string; // Added organization ID for ownership check
-  inviteCode: string; // Added invite code for sharing
+  id: string; 
+  inviteCode: string; 
 }
 
 type FilterStatus = "all" | "active" | "kicked";
@@ -51,34 +51,76 @@ export function ViewOrganizationDialog({
 }: ViewOrganizationDialogProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterStatus, setFilterStatus] = useState<FilterStatus>("active");
-  const [owner, setOwner] = useState(false); // You can set this based on your logic, e.g., from props or a hook
-  const [kickingMemberId, setKickingMemberId] = useState<string | null>(null);
+  const [currentUserRole, setCurrentUserRole] = useState<OrgMemberRole | null>(null);
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  const [processingId, setProcessingId] = useState<string | null>(null);
 
   useEffect(() => {
-    // Example logic to determine if the user is an owner (you can replace this with your actual logic)
-    const checkOwnership = async () => {
-      const response = await checkIsOwner(organizationId); // You need to have organizationId available in this component
-      setOwner(response);
+    const fetchUserContext = async () => {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        setCurrentUserId(user.id);
+        const role = await getUserOrganizationRole(user.id, organizationId);
+        setCurrentUserRole(role);
+      }
     };
 
-    checkOwnership();
-  }, [organizationId]);
+    if (isOpen) {
+      fetchUserContext();
+    }
+  }, [isOpen, organizationId]);
 
-  const handleKickMember = async (memberId: string, memberName: string) => {
-    setKickingMemberId(memberId);
+  const handleKickMember = async (memberRecordId: string, memberName: string) => {
+    setProcessingId(memberRecordId);
     try {
-      const result = await kickMember(organizationId, memberId);
+      const result = await kickMember(organizationId, memberRecordId);
       if (result.success) {
-        toast.success(`${memberName} has been kicked from the organization.`);
-        // Optionally refresh the members list here
+        toast.success(`${memberName} has been kicked.`);
       } else {
         toast.error(result.message);
       }
     } catch (error) {
-      console.error("Error kicking member:", error);
       toast.error("An error occurred while kicking the member.");
     } finally {
-      setKickingMemberId(null);
+      setProcessingId(null);
+    }
+  };
+
+  const handleRoleChange = async (memberRecordId: string, newRole: OrgMemberRole) => {
+    setProcessingId(memberRecordId);
+    try {
+      const result = await updateOrganizationMemberRole(memberRecordId, organizationId, newRole);
+      if (result.success) {
+        toast.success(`Role updated to ${newRole}.`);
+      } else {
+        toast.error(result.message);
+      }
+    } catch (error) {
+      toast.error("An error occurred while updating the role.");
+    } finally {
+      setProcessingId(null);
+    }
+  };
+
+  const handleTransferOwnership = async (memberRecordId: string, memberName: string) => {
+    if (!confirm(`Are you absolutely sure you want to transfer ownership to ${memberName}? You will be demoted to Admin.`)) {
+        return;
+    }
+    
+    setProcessingId(memberRecordId);
+    try {
+      const result = await transferOwnership(memberRecordId, organizationId);
+      if (result.success) {
+        toast.success(result.message);
+        setCurrentUserRole("admin"); // Update local state immediately
+      } else {
+        toast.error(result.message);
+      }
+    } catch (error) {
+      toast.error("An error occurred while transferring ownership.");
+    } finally {
+      setProcessingId(null);
     }
   };
 
@@ -98,19 +140,28 @@ export function ViewOrganizationDialog({
     return matchesSearch && matchesFilter;
   });
 
+  // Security Helper Functions for the UI
+  const canEditRole = (targetRole: string) => {
+    if (currentUserRole === "owner" && targetRole !== "owner") return true;
+    if (currentUserRole === "admin" && targetRole !== "owner") return true;
+    return false;
+  };
+
+  const canKick = (targetRole: string) => {
+    if (currentUserRole === "owner" && targetRole !== "owner") return true;
+    if (currentUserRole === "admin" && targetRole === "member") return true;
+    return false;
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      {/* Replaced Card with DialogContent. 
-        Kept the resize, custom dimensions, and flex layouts for the dynamic table height.
-      */}
       <DialogContent className="sm:max-w-300 w-[95vw] h-[85vh] max-h-[95vh] min-w-[320px] min-h-100 p-6 md:p-8 flex flex-col bg-card text-card-foreground border-border shadow-lg resize overflow-hidden">
-        {/* Replaced manual h2/p with accessible DialogHeader components */}
         <DialogHeader className="shrink-0 text-left">
           <DialogTitle className="text-2xl font-semibold text-foreground">
             Organization Members
           </DialogTitle>
           <DialogDescription className="text-sm text-muted-foreground mt-1">
-            View the list of members currently in this organization.
+            View and manage the members of this organization.
           </DialogDescription>
         </DialogHeader>
 
@@ -142,13 +193,14 @@ export function ViewOrganizationDialog({
               </p>
             </div>
             <div className="ml-auto flex items-center gap-2">
-              {owner && (
+              {currentUserRole === "owner" && (
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={() => {
                     navigator.clipboard.writeText(inviteCode);
-                    toast.success("Invite code copied to clipboard!");}}
+                    toast.success("Invite code copied to clipboard!");
+                  }}
                 >
                   Copy Invite Code
                 </Button>
@@ -175,9 +227,7 @@ export function ViewOrganizationDialog({
               </div>
               <Select
                 value={filterStatus}
-                onValueChange={(value) =>
-                  setFilterStatus(value as FilterStatus)
-                }
+                onValueChange={(value) => setFilterStatus(value as FilterStatus)}
               >
                 <SelectTrigger className="w-full pl-9 bg-background border-input">
                   <SelectValue placeholder="Filter status..." />
@@ -201,17 +251,26 @@ export function ViewOrganizationDialog({
                     <th className="px-4 py-3 font-medium">Email</th>
                     <th className="px-4 py-3 font-medium">Role</th>
                     <th className="px-4 py-3 font-medium">Joined Date</th>
-                    <th className="px-4 py-3 font-medium">Kicked Date</th>
-                    {owner && <th className="px-4 py-3 font-medium">Actions</th>}
+                    <th className="px-4 py-3 font-medium">Status</th>
+                    {(currentUserRole === "owner" || currentUserRole === "admin") && (
+                      <th className="px-4 py-3 font-medium text-right">Actions</th>
+                    )}
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border">
                   {filteredMembers.length > 0 ? (
-                    filteredMembers.map((member) => (
-                      <tr key={member.id} className="transition-colors">
+                    filteredMembers.map((member) => {
+                      const isSelf = member.user_id === currentUserId;
+                      const isKicked = member.kicked_at !== null;
+                      const editableRole = !isSelf && !isKicked && canEditRole(member.role);
+                      const kickable = !isSelf && !isKicked && canKick(member.role);
+                      const isProcessing = processingId === member.id;
+
+                      return (
+                      <tr key={member.id} className="transition-colors hover:bg-muted/50">
                         <td className="px-4 py-3 flex items-center gap-3">
                           {member.avatar_url ? (
-                            <img
+                            <Image
                               src={member.avatar_url}
                               alt={`${member.first_name} avatar`}
                               width={28}
@@ -221,75 +280,101 @@ export function ViewOrganizationDialog({
                           ) : (
                             <UserCircle className="w-7 h-7 text-muted-foreground" />
                           )}
-                          <span className="font-medium text-foreground">
-                            {member.first_name} {member.last_name}
-                          </span>
+                          <div className="flex flex-col">
+                            <span className="font-medium text-foreground">
+                              {member.first_name} {member.last_name}
+                              {isSelf && <span className="ml-2 text-xs text-muted-foreground font-normal">(You)</span>}
+                            </span>
+                          </div>
                         </td>
                         <td className="px-4 py-3 text-muted-foreground">
                           {member.email}
                         </td>
                         <td className="px-4 py-3">
-                          <span
-                            className={`inline-flex items-center px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border
-                              ${String(member.role).toUpperCase() === "OWNER" ? "border-primary/30 text-primary" : ""}
-                              ${String(member.role).toUpperCase() === "ADMIN" ? "border-blue-500/30 text-blue-600 dark:text-blue-400" : ""}
-                              ${String(member.role).toUpperCase() === "MEMBER" ? "border-border text-foreground" : ""}
-                            `}
-                          >
-                            {member.role}
-                          </span>
-                        </td>
-                        <td className="px-4 py-3 text-muted-foreground">
-                          {new Date(member.joined_at).toLocaleDateString(
-                            undefined,
-                            { year: "numeric", month: "short", day: "numeric" },
+                          {editableRole ? (
+                            <Select
+                              disabled={isProcessing}
+                              defaultValue={member.role}
+                              onValueChange={(val) => handleRoleChange(member.id, val as OrgMemberRole)}
+                            >
+                              <SelectTrigger className="w-27.5 h-8 text-xs font-semibold uppercase tracking-wider">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="admin">ADMIN</SelectItem>
+                                <SelectItem value="member">MEMBER</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          ) : (
+                            <span
+                              className={`inline-flex items-center px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border
+                                ${String(member.role).toUpperCase() === "OWNER" ? "border-primary/30 text-primary bg-primary/10" : ""}
+                                ${String(member.role).toUpperCase() === "ADMIN" ? "border-blue-500/30 text-blue-600 bg-blue-500/10" : ""}
+                                ${String(member.role).toUpperCase() === "MEMBER" ? "border-border text-foreground bg-muted" : ""}
+                              `}
+                            >
+                              {member.role}
+                            </span>
                           )}
                         </td>
                         <td className="px-4 py-3 text-muted-foreground">
-                          {member.kicked_at ? (
-                            <span className="text-destructive font-medium">
-                              {new Date(member.kicked_at).toLocaleDateString(
-                                undefined,
-                                {
-                                  year: "numeric",
-                                  month: "short",
-                                  day: "numeric",
-                                },
-                              )}
+                          {new Date(member.joined_at).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" })}
+                        </td>
+                        <td className="px-4 py-3">
+                          {isKicked ? (
+                            <span className="inline-flex items-center text-xs font-medium text-destructive">
+                              <ShieldAlert className="w-3 h-3 mr-1" />
+                              Kicked
                             </span>
                           ) : (
-                            <span className="italic opacity-50">-</span>
+                            <span className="inline-flex items-center text-xs font-medium text-green-600 dark:text-green-400">
+                              Active
+                            </span>
                           )}
                         </td>
-                        {owner && (
-                          <td className="px-4 py-3">
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="h-8 hover:bg-red-100 dark:hover:bg-red-950"
-                              onClick={() => handleKickMember(member.id, `${member.first_name} ${member.last_name}`)}
-                              disabled={member.kicked_at !== null || kickingMemberId === member.id}
-                              aria-label={`Kick ${member.first_name} ${member.last_name}`}
-                              title={member.kicked_at ? "Member already kicked" : "Kick member"}
-                            >
-                              <X className="h-4 w-4 text-red-600 dark:text-red-400 mr-1" />
-                              Kick
-                            </Button>
+                        
+                        {(currentUserRole === "owner" || currentUserRole === "admin") && (
+                          <td className="px-4 py-3 text-right">
+                            <div className="flex items-center justify-end gap-2">
+                              {currentUserRole === "owner" && member.role === "admin" && !isKicked && (
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  className="h-8"
+                                  disabled={isProcessing}
+                                  onClick={() => handleTransferOwnership(member.id, `${member.first_name} ${member.last_name}`)}
+                                >
+                                  <ArrowRightLeft className="w-3 h-3 mr-1" />
+                                  Make Owner
+                                </Button>
+                              )}
+                              
+                              {kickable && (
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  className="h-8 hover:bg-red-100 dark:hover:bg-red-950 text-red-600"
+                                  onClick={() => handleKickMember(member.id, `${member.first_name} ${member.last_name}`)}
+                                  disabled={isProcessing}
+                                >
+                                  <X className="h-4 w-4 mr-1" />
+                                  Kick
+                                </Button>
+                              )}
+                            </div>
                           </td>
                         )}
                       </tr>
-                    ))
+                    )})
                   ) : (
                     <tr>
                       <td
-                        colSpan={owner ? 6 : 5}
+                        colSpan={8}
                         className="px-4 py-8 text-center text-muted-foreground"
                       >
-                        {searchQuery || filterStatus !== "all" ? (
-                          <>No members found matching your search or filter.</>
-                        ) : (
-                          <>No members found.</>
-                        )}
+                        {searchQuery || filterStatus !== "all" 
+                          ? "No members found matching your search or filter."
+                          : "No members found."}
                       </td>
                     </tr>
                   )}
@@ -298,7 +383,6 @@ export function ViewOrganizationDialog({
             </div>
           </div>
 
-          {/* Optional: DialogFooter could go here, but this bottom area is fine too */}
           <div className="shrink-0 pt-4 flex justify-end">
             <Button type="button" onClick={onClose} variant="outline">
               Close

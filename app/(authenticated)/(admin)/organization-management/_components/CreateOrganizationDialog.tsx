@@ -7,6 +7,7 @@ import { CreateOrganizationStage1 } from "./CreateOrganizationStage1";
 import { CreateOrganizationStage2 } from "./CreateOrganizationStage2";
 import { CreateOrganizationStage3 } from "./CreateOrganizationStage3";
 import { submitForm } from "../_actions/create-organization";
+import { toast } from "sonner";
 
 interface CreateOrganizationDialogProps {
   isOpen: boolean;
@@ -49,7 +50,10 @@ function CreateOrganizationDialogContent({
 
   useEffect(() => {
     if (state.success) {
+      toast.success("Organization created successfully!");
       onClose();
+    } else {
+      toast.error(state.message || "Failed to create organization. Please try again.");
     }
   }, [state.success, onClose]);
 

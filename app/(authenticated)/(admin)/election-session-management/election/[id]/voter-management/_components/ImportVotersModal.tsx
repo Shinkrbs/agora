@@ -96,7 +96,6 @@ export function ImportVotersModal({
     setIsPending(true);
 
     try {
-      // Read the file as text
       const fileContent = await new Promise<string>((resolve, reject) => {
         const reader = new FileReader();
         reader.onload = (e) => {
@@ -111,7 +110,6 @@ export function ImportVotersModal({
         reader.readAsText(selectedFile);
       });
 
-      // Parse the CSV content synchronously
       const results = Papa.parse<Record<string, string>>(fileContent, {
         header: true,
         skipEmptyLines: true,
@@ -135,22 +133,47 @@ export function ImportVotersModal({
         return;
       }
 
+      // 1. STRICT HEADER VALIDATION: Use 'in' to check if the column exists at all
       const firstRow = parsedData[0];
-      if (!firstRow.student_id || !firstRow.email) {
+      if (!("student_id" in firstRow) || !("email" in firstRow)) {
         toast.error("CSV file is missing required headers.");
-        setErrorMsg(
-          "CSV must contain 'student_id' and 'email' columns."
-        );
+        setErrorMsg("CSV must contain exactly 'student_id' and 'email' as column headers.");
         setIsPending(false);
         return;
       }
 
-      const sanitizedVoters = parsedData.map((row) => ({
-        student_id: row.student_id.trim(),
-        email: row.email.trim(),
-      }));
+      const sanitizedVoters: { student_id: string; email: string }[] = [];
+      const incompleteRows: number[] = [];
 
-      // Check for duplicates within the CSV file
+      // 2. CONTENT VALIDATION: Check for empty cells in the rows
+      for (let i = 0; i < parsedData.length; i++) {
+        const row = parsedData[i];
+        
+        const studentId = row.student_id ? String(row.student_id).trim() : "";
+        const email = row.email ? String(row.email).trim() : "";
+
+        if (!studentId || !email) {
+          // Add 2 because index 0 is row 2 in a spreadsheet (row 1 is the header)
+          incompleteRows.push(i + 2);
+        } else {
+          sanitizedVoters.push({ student_id: studentId, email });
+        }
+      }
+
+      // 3. ACCURATE ERROR REPORTING: Tell the user exactly which rows are missing data
+      if (incompleteRows.length > 0) {
+        const maxDisplay = 5;
+        const rowList = incompleteRows.slice(0, maxDisplay).join(", ");
+        const moreSuffix = incompleteRows.length > maxDisplay ? ` and ${incompleteRows.length - maxDisplay} more` : "";
+        
+        const errorMessage = `Incomplete data found. Both 'student_id' and 'email' must be filled out. Please fix row(s): ${rowList}${moreSuffix}.`;
+        
+        toast.error("Incomplete entries found in CSV.");
+        setErrorMsg(errorMessage);
+        setIsPending(false);
+        return;
+      }
+
       const duplicateCheck = checkForDuplicateEntries(sanitizedVoters);
       if (duplicateCheck.hasDuplicates) {
         toast.error("Duplicate entries found in CSV file. Please fix them and try again.");
@@ -176,7 +199,7 @@ export function ImportVotersModal({
       setErrorMsg(null);
       setIsPending(false);
       onClose();
-      window.location.reload(); // Force reload to update the voter list
+      window.location.reload(); 
     } catch (error) {
       console.error("Import error:", error);
       setErrorMsg("An error occurred while importing the file.");
@@ -186,6 +209,7 @@ export function ImportVotersModal({
 
   const handleClose = () => {
     setSelectedFile(null);
+    setErrorMsg(null); 
     onClose();
   };
 
@@ -201,7 +225,7 @@ export function ImportVotersModal({
 
         <div className="grid gap-4 py-4">
           {errorMsg && (
-            <div className="text-red-600 text-sm bg-red-50 p-3 rounded border border-red-200">
+            <div className="text-red-600 text-sm bg-red-50 p-3 rounded border border-red-200 whitespace-pre-wrap">
               {errorMsg}
             </div>
           )}

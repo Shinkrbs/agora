@@ -67,6 +67,13 @@ export function AddEditVoterModal({
       setError(null);
       setIsLoading(true);
 
+      const incompleteFields = Object.entries(formData).filter(([_, value]) => !value.trim());
+      if (incompleteFields.length > 0) {
+        setError("Please fill in all required fields");
+        toast.error("Please fill in all required fields");
+        return;
+      }
+
         // Check for duplicate student_id or email in the current voter list
       const isDuplicateStudentId = voterList.some(
         (v) =>

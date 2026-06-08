@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useCurrentOrganization } from "@/app/(authenticated)/(admin)/_components/OrganizationContext";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Plus, Building2 } from "lucide-react";
 import {
   LiveElectionCenter,
   StatsGrid,
@@ -49,11 +50,30 @@ export default function DashboardPage() {
     fetchStats();
   }, [organization?.id]);
 
-  // Show loading state if organization hasn't loaded
+  // Fallback UI when the user is not part of any organization
   if (!organization) {
     return (
-      <div className="min-h-svh space-y-8 bg-background p-8 text-foreground">
-        <DashboardSkeleton />
+      <div className="flex flex-col items-center justify-center min-h-[80vh] bg-gray-50 p-6 text-center">
+        <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-200 max-w-md w-full">
+          <div className="w-16 h-16 bg-gray-100 text-gray-500 rounded-full flex items-center justify-center mx-auto mb-6">
+            <Building2 className="w-8 h-8" />
+          </div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            No Organization Found
+          </h2>
+          <p className="text-sm text-gray-500 mb-8">
+            You are currently not a part of any organization. To access the dashboard, you need to create a new organization or wait for an invitation.
+          </p>
+          <div className="flex flex-col gap-3">
+            <Button 
+              onClick={() => router.push("/organization-management")} 
+              className="w-full flex items-center gap-2"
+            >
+              <Plus className="w-4 h-4" /> 
+              Create Organization
+            </Button>
+          </div>
+        </div>
       </div>
     );
   }

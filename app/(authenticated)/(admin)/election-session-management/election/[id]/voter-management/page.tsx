@@ -6,6 +6,8 @@ import { Users, CheckCircle2, AlertCircle } from "lucide-react";
 import { VoterTable } from "./_components/VoterTable";
 import type { VoterTableRow } from "./_types/voter-types";
 import { fetchVoters } from "./_queries/voter-queries";
+import { ElectionSession } from "@/types/database";
+import { fetchElectionSessionAction } from "@/lib/actions/elections";
 
 export default function VoterManagementPage({
   params,
@@ -18,22 +20,30 @@ export default function VoterManagementPage({
   const [voters, setVoters] = useState<VoterTableRow[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [election, setElection] = useState<ElectionSession | null>(null);
 
+  // COMBINED FETCH: Runs both requests in parallel and only stops loading when BOTH finish.
   useEffect(() => {
-    const loadVoters = async () => {
+    const loadData = async () => {
       try {
         setIsLoading(true);
-        const { data, error: fetchError } = await fetchVoters(id);
+        setError(null);
 
-        if (fetchError) {
-          setError(fetchError);
-          setVoters([]);
-          return;
+        const [electionResponse, votersResponse] = await Promise.all([
+          fetchElectionSessionAction(id),
+          fetchVoters(id)
+        ]);
+
+        if (electionResponse.error) {
+          setError(electionResponse.error);
+        } else {
+          setElection(electionResponse.data || null);
         }
 
-        if (data) {
-          // Transform Voter[] to VoterTableRow[]
-          const voterTableRows: VoterTableRow[] = data.map((voter) => ({
+        if (votersResponse.error) {
+          setError(votersResponse.error);
+        } else if (votersResponse.data) {
+          const voterTableRows: VoterTableRow[] = votersResponse.data.map((voter) => ({
             id: voter.id,
             student_id: voter.student_id,
             email: voter.email,
@@ -44,31 +54,26 @@ export default function VoterManagementPage({
           setVoters(voterTableRows);
         }
       } catch (err) {
-        setError("Failed to load voters");
-        setVoters([]);
+        setError("Failed to load page data");
       } finally {
         setIsLoading(false);
       }
     };
 
-    loadVoters();
+    loadData();
   }, [id]);
 
   const handleVoterAdded = () => {
-    // Reload voters when a new voter is added
     const loadVoters = async () => {
       try {
-        setIsLoading(true);
         const { data, error: fetchError } = await fetchVoters(id);
 
         if (fetchError) {
           setError(fetchError);
-          setVoters([]);
           return;
         }
 
         if (data) {
-          // Transform Voter[] to VoterTableRow[]
           const voterTableRows: VoterTableRow[] = data.map((voter) => ({
             id: voter.id,
             student_id: voter.student_id,
@@ -81,24 +86,15 @@ export default function VoterManagementPage({
         }
       } catch (err) {
         setError("Failed to load voters");
-        setVoters([]);
-      } finally {
-        setIsLoading(false);
       }
     };
     loadVoters();
   };
 
-  // Calculate statistics
   const totalVoters = voters.length;
-  const votedCount = voters.filter(
-    (v) => v.code_status === "VOTED"
-  ).length;
-  const pendingCount = voters.filter(
-    (v) => v.code_status === "SENT"
-  ).length;
-  const turnoutPercentage =
-    totalVoters > 0 ? Math.round((votedCount / totalVoters) * 100) : 0;
+  const votedCount = voters.filter((v) => v.code_status === "VOTED").length;
+  const pendingCount = voters.filter((v) => v.code_status === "SENT").length;
+  const turnoutPercentage = totalVoters > 0 ? Math.round((votedCount / totalVoters) * 100) : 0;
 
   return (
     <div className="space-y-6">
@@ -173,7 +169,7 @@ export default function VoterManagementPage({
           {isLoading ? (
             <p className="text-muted-foreground">Loading voters...</p>
           ) : (
-            <VoterTable voters={voters} electionId={id} onVoterAdded={handleVoterAdded} />
+            <VoterTable voters={voters} electionId={id} onVoterAdded={handleVoterAdded} election={election} />
           )}
         </CardContent>
       </Card>

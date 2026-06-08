@@ -1,5 +1,5 @@
 export type UserRole = "admin" | "superadmin";
-export type OrgMemberRole = "owner" | "editor" | "viewer" | "member";
+export type OrgMemberRole = "owner" | "admin" | "member";
 
 export type ApprovalStatus = "pending" | "approved" | "rejected";
 export type PaymentStatus = "unpaid" | "pending" | "verified" | "rejected";

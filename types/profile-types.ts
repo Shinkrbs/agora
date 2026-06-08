@@ -9,6 +9,7 @@ export type ProfileFieldErrors = Partial<
     | "middle_name"
     | "suffix"
     | "email"
+    | "currentPassword"
     | "newPassword"
     | "confirmPassword",
     string[]

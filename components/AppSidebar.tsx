@@ -11,29 +11,40 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import logo from "@/public/logo.svg";
-import { NavUserWrapper } from "./NavUserWrapper";
+import { NavUser } from "./nav-user";
 import type { SidebarProfile } from "@/types/sidebar-items";
 import { getCurrentUser } from "@/lib/queries/users-queries";
 import { SidebarNavItems } from "./SidebarNavItems";
+import type { User } from "@/types/database";
 
-export async function AppSidebar() {
-  // Fetch the current user data
-  const user = await getCurrentUser();
+type AppSidebarProps = {
+  user?: User | null;
+};
+
+export async function AppSidebar({ user: providedUser }: AppSidebarProps) {
+  const user = providedUser ?? (await getCurrentUser());
   // Map user data to match SideProfile structure
+  const fullName = [user?.first_name, user?.last_name]
+    .filter(Boolean)
+    .join(" ")
+    .trim();
   const sidebarProfile: SidebarProfile = {
-    name: user?.first_name + " " + user?.last_name,
-    email: user?.email || "",
-    avatar_url: user?.avatar_url || "/default-avatar.png", // Fallback avatar
+    name: fullName || user?.email || "Guest",
+    email: user?.email || "guest@example.com",
+    avatar_url: user?.avatar_url ?? undefined,
   };
 
   const role = user?.role === "superadmin" ? "superadmin" : "admin";
   return (
-    <Sidebar className="flex flex-col h-full" collapsible="icon">
+    <Sidebar
+      className="flex h-full flex-col overflow-hidden"
+      collapsible="icon"
+    >
       <SidebarHeader className="shrink-0">
         <SidebarMenuItem>
           <SidebarMenuButton size="lg" asChild>
             <Link
-              href={`/${user?.role}/dashboard`}
+              href={`/${role}/dashboard`}
               className="flex items-center gap-2"
             >
               <div className="flex aspect-square size-8 items-center justify-center rounded-lg">
@@ -60,7 +71,7 @@ export async function AppSidebar() {
       <div className="px-2">
         <SidebarSeparator className="mx-0" />
       </div>
-      <SidebarContent className="flex-1 overflow-y-auto">
+      <SidebarContent className="flex-1 min-h-0 overflow-y-auto pb-2">
         <SidebarGroup>
           <SidebarNavItems role={role} />
         </SidebarGroup>
@@ -68,12 +79,12 @@ export async function AppSidebar() {
       <div className="px-2">
         <SidebarSeparator className="mx-0" />
       </div>
-      <SidebarFooter>
-        <NavUserWrapper
+      <SidebarFooter className="sticky bottom-0 z-10 mt-auto shrink-0 border-t border-sidebar-border/60 bg-sidebar pb-2 pt-2">
+        <NavUser
           user={{
             name: sidebarProfile.name ?? "Guest",
             email: sidebarProfile.email ?? "guest@example.com",
-            avatar_url: sidebarProfile.avatar_url ?? "/avatars/default.png",
+            avatar_url: sidebarProfile.avatar_url,
           }}
           role={role}
         />

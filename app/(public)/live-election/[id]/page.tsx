@@ -1,6 +1,6 @@
 "use server";
 
-import { LandingPageHeader } from "../../landing/_components/LandingPageHeader";
+import LandingPageHeader from "../../landing/_components/LandingPageHeader";
 import { UpcomingElectionUI } from "./_components/UpcomingElectionUI";
 import { CompletedElectionUI } from "./_components/CompletedElectionUI";
 import { LiveElectionHeader } from "../_components/LiveElectionHeader";
@@ -21,9 +21,11 @@ interface ElectionDetailsPageProps {
 }
 
 // Helper function to determine election state
-function getElectionState(
-  election: { status: string; start_date: string | null; end_date: string | null }
-): "upcoming" | "active" | "completed" {
+function getElectionState(election: {
+  status: string;
+  start_date: string | null;
+  end_date: string | null;
+}): "upcoming" | "active" | "completed" {
   const now = new Date();
   const startDate = election.start_date ? new Date(election.start_date) : null;
   const endDate = election.end_date ? new Date(election.end_date) : null;
@@ -94,13 +96,14 @@ export default async function ElectionDetailsPage({
   ]);
 
   // Build a map of partylists for quick lookup
-  const partylistsMap = partylists?.reduce(
-    (acc, party) => {
-      acc[party.id] = party;
-      return acc;
-    },
-    {} as Record<string, typeof partylists[number]>,
-  ) || {};
+  const partylistsMap =
+    partylists?.reduce(
+      (acc, party) => {
+        acc[party.id] = party;
+        return acc;
+      },
+      {} as Record<string, (typeof partylists)[number]>,
+    ) || {};
 
   return (
     <>
@@ -144,7 +147,10 @@ export default async function ElectionDetailsPage({
                   const candidatesWithVotes =
                     await getCandidatesWithVotesForPosition(position.id);
 
-                  if (!candidatesWithVotes || candidatesWithVotes.length === 0) {
+                  if (
+                    !candidatesWithVotes ||
+                    candidatesWithVotes.length === 0
+                  ) {
                     return null;
                   }
 

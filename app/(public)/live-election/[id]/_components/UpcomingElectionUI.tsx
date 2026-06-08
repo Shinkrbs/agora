@@ -1,7 +1,7 @@
 "use client";
 
 import { ElectionSession } from "@/types/database";
-import { LandingPageHeader } from "@/app/(public)/landing/_components/LandingPageHeader";
+import LandingPageHeader from "@/app/(public)/landing/_components/LandingPageHeader";
 
 interface UpcomingElectionUIProps {
   election: ElectionSession;
@@ -17,11 +17,9 @@ export function UpcomingElectionUI({ election }: UpcomingElectionUIProps) {
           <p className="text-lg text-muted-foreground">
             Voting has not started yet
           </p>
-          
+
           <div className="mt-8 p-6 bg-secondary rounded-lg border border-border">
-            <p className="text-sm text-muted-foreground mb-2">
-              Voting begins:
-            </p>
+            <p className="text-sm text-muted-foreground mb-2">Voting begins:</p>
             <div className="text-2xl font-semibold text-foreground">
               {election.start_date
                 ? new Date(election.start_date).toLocaleString()

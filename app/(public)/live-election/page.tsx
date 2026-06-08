@@ -1,4 +1,4 @@
-import { LandingPageHeader } from "../landing/_components/LandingPageHeader";
+import LandingPageHeader from "../landing/_components/LandingPageHeader";
 import { OrganizationCards } from "./_components/OrganizationCard";
 import { fetchLiveElections } from "./_queries/fetch-elections";
 import { getElectionStats } from "@/lib/queries/elections-queries";

@@ -1,39 +1,81 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
+import { Menu, X } from "lucide-react";
+
 import { ModeToggle } from "@/components/ModeToggle";
+import { Button } from "@/components/ui/button";
 
-export function LandingPageHeader() {
+export default function LandingPageHeader() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10);
+    };
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
-      <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-8">
-        <div className="flex items-center gap-3">
-          <Image
-            src="/logo.svg"
-            alt="SOES Logo"
-            width={32}
-            height={32}
-            className="h-8 w-8 object-contain"
-            priority
-          />
-          <span className="font-bold text-sm sm:text-base">
-            <Link href="/landing">Student Organization Election System</Link>
-          </span>
-        </div>
+    <header
+      className={`sticky top-0 z-50 h-20 w-full border-b px-4 py-5 transition-all duration-300 sm:px-8 md:px-20 ${
+        scrolled
+          ? "bg-background/80 shadow-md backdrop-blur-md"
+          : "bg-background"
+      }`}
+    >
+      <div className="flex h-full items-center justify-between">
+        <Link href="/landing" className="flex items-center gap-2">
+          <Image src="/logo.svg" height={50} width={50} alt="SOES logo" />
+          <span className="text-lg font-bold text-foreground">SOES</span>
+        </Link>
 
-        <div className="flex items-center gap-2 sm:gap-4">
+        <div className="hidden items-center gap-2 md:flex">
           <ModeToggle />
-
           <Button
             asChild
-            className="bg-[#2e7d32] hover:bg-[#205e24] text-white px-3 py-1 sm:px-4 sm:py-2 rounded-md text-sm sm:text-base border-none"
+            className="bg-green-700 font-bold text-white hover:bg-green-900"
           >
-            <Link href="/login">Log in</Link>
+            <Link href="/signup">Get Started</Link>
+          </Button>
+          <Button asChild variant="outline" className="font-bold">
+            <Link href="/login">Log In</Link>
+          </Button>
+        </div>
+
+        <div className="flex items-center md:hidden">
+          <ModeToggle />
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setIsMenuOpen((current) => !current)}
+            aria-label="Toggle navigation menu"
+          >
+            {isMenuOpen ? <X /> : <Menu />}
           </Button>
         </div>
       </div>
+
+      {isMenuOpen ? (
+        <div className="mt-4 flex flex-col gap-4 rounded-md border bg-background p-4 md:hidden">
+          <Button
+            asChild
+            className="w-full bg-green-800 font-bold text-white hover:bg-green-900"
+          >
+            <Link href="/signup">Get Started</Link>
+          </Button>
+          <Button asChild variant="outline" className="w-full font-bold">
+            <Link href="/login">Log In</Link>
+          </Button>
+        </div>
+      ) : null}
     </header>
   );
 }

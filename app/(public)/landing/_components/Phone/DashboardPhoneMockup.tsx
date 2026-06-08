@@ -1,25 +1,25 @@
 import Tilt from "react-parallax-tilt";
-import {BarChart2, Users, LaptopMinimalCheck } from "lucide-react";
+import { BarChart2, Users, LaptopMinimalCheck } from "lucide-react";
 
 export function DashboardPhoneMockup() {
   return (
-    <div className="relative flex justify-center lg:justify-end">
+    <div className="relative flex justify-center">
       {/* Background glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-primary/20 blur-[80px] rounded-full pointer-events-none"></div>
-      
+      <div className="pointer-events-none absolute left-1/2 top-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/60 blur-[80px]"></div>
+
       {/* Tilt Wrapper */}
-      <Tilt 
-        tiltReverse={true} 
-        tiltMaxAngleX={5} 
+      <Tilt
+        tiltReverse={true}
+        tiltMaxAngleX={5}
         tiltMaxAngleY={5}
         transitionSpeed={1500}
-        className="relative w-full max-w-[320px]"
+        className="relative inline-block"
       >
         {/* Phone container */}
-        <div className="w-full bg-card border-[8px] border-border rounded-[2.5rem] shadow-2xl overflow-hidden">
-          <div className="bg-primary h-full w-full p-6 text-primary-foreground rounded-[1.8rem] flex flex-col">
-            <h3 className="font-semibold text-lg mb-6">Election Dashboard</h3>
-            <div className="space-y-4 flex-1">
+        <div className="w-75 overflow-hidden rounded-[2.5rem] border-8 border-border bg-card shadow-2xl">
+          <div className="flex h-135 w-full flex-col rounded-[1.8rem] bg-primary p-6 text-primary-foreground">
+            <h3 className="mb-6 text-lg font-semibold">Election Dashboard</h3>
+            <div className="flex-1 space-y-4">
               <div className="bg-background/10 rounded-xl p-4 border border-background/20 shadow-sm backdrop-blur-sm">
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-sm opacity-80">Total Votes</span>
@@ -52,5 +52,5 @@ export function DashboardPhoneMockup() {
       </Tilt>
     </div>
   );
-// Add this interface and default export to the very bottom of your Phone.tsx file!
+  // Add this interface and default export to the very bottom of your Phone.tsx file!
 }

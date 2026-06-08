@@ -30,8 +30,8 @@ export function ConfirmEmailCard() {
             Check your email
           </CardTitle>
           <CardDescription className="px-2 text-sm md:text-base">
-            We&apos;ve sent a confirmation link to your email address. Confirm it to
-            finish creating your SOES account.
+            We&apos;ve sent a confirmation link to your email address. Confirm
+            it to finish creating your SOES account.
           </CardDescription>
         </div>
       </CardHeader>
@@ -41,7 +41,10 @@ export function ConfirmEmailCard() {
             If you do not see the message, check your spam or junk folder.
           </div>
 
-          <Button asChild className="h-11 w-full bg-green-700 text-white hover:bg-green-800">
+          <Button
+            asChild
+            className="h-11 w-full bg-green-700 text-white hover:bg-green-800"
+          >
             <Link href="/login">Try to login</Link>
           </Button>
 

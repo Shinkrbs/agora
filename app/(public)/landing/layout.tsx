@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import { ThemeProvider } from "@/components/themeprovider";
-import { LandingPageHeader } from "./_components/LandingPageHeader";
+import LandingPageHeader from "./_components/LandingPageHeader";
 import LandingPageFooter from "./_components/LandingPageFooter";
 
 export const metadata: Metadata = {
@@ -15,16 +14,8 @@ export default function RootLayout({
 }>) {
   return (
     <div>
-        <LandingPageHeader />
-        {/* 3. Wrap your entire app in the ThemeProvider */}
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
+      <LandingPageHeader />
+      {children}
       <LandingPageFooter />
     </div>
   );

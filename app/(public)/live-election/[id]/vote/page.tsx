@@ -1,4 +1,4 @@
-import { LandingPageHeader } from "../../../landing/_components/LandingPageHeader";
+import LandingPageHeader from "../../../landing/_components/LandingPageHeader";
 import { VoteAuthForm } from "./_components/VoteAuthForm";
 
 interface VoteAuthPageProps {
@@ -16,8 +16,8 @@ export default async function VoteAuthPage({
   return (
     <>
       <LandingPageHeader />
-      <VoteAuthForm 
-        electionId={electionId} 
+      <VoteAuthForm
+        electionId={electionId}
         initialStudentId={studentIdFromUrl || ""}
       />
     </>

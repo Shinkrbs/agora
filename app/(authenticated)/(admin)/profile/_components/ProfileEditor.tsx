@@ -302,6 +302,20 @@ export function ProfileEditor({ initialData }: ProfileEditorProps) {
         <CardContent>
           <form action={passwordAction} className="space-y-4">
             <div className="space-y-2">
+              <Label htmlFor="currentPassword">Current password</Label>
+              <Input
+                id="currentPassword"
+                name="currentPassword"
+                type="password"
+                required
+              />
+              {passwordState?.fieldErrors?.currentPassword?.[0] && (
+                <p className="text-xs text-red-500">
+                  {passwordState.fieldErrors.currentPassword[0]}
+                </p>
+              )}
+            </div>
+            <div className="space-y-2">
               <Label htmlFor="newPassword">New password</Label>
               <Input
                 id="newPassword"

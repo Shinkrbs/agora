@@ -43,10 +43,21 @@ export function OrganizationProvider({
       const stored = localStorage.getItem("currentOrganization");
       if (stored) {
         const storedOrg = JSON.parse(stored);
-        // Only restore if it's in the approved organizations list
-        const isApproved = initialOrganizations.some(org => org.id === storedOrg.id && org.approval_status === "approved");
-        if (isApproved) {
-          setCurrentOrganizationState(storedOrg);
+        // Find the fresh organization data from the server props
+        const freshOrg = initialOrganizations.find(org => org.id === storedOrg.id && org.approval_status === "approved");
+        if (freshOrg) {
+          setCurrentOrganizationState(freshOrg);
+          localStorage.setItem("currentOrganization", JSON.stringify(freshOrg));
+        } else {
+          // Fallback to first approved if stored org is no longer valid
+          const fallbackOrg = initialOrganizations.find(org => org.approval_status === "approved");
+          if (fallbackOrg) {
+            setCurrentOrganizationState(fallbackOrg);
+            localStorage.setItem("currentOrganization", JSON.stringify(fallbackOrg));
+          } else {
+            setCurrentOrganizationState(null);
+            localStorage.removeItem("currentOrganization");
+          }
         }
       }
     } catch (e) {

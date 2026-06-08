@@ -11,6 +11,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 
 function normalizePath(path: string) {
@@ -33,8 +34,15 @@ function isActivePath(currentPath: string, href: string) {
 
 export function SidebarNavItems({ role }: { role: "admin" | "superadmin" }) {
   const pathname = usePathname();
+  const { isMobile, setOpenMobile } = useSidebar();
   const items: SidebarItem[] =
     role === "superadmin" ? superAdminSidebarItems : adminSidebarItems;
+
+  const handleNavigate = () => {
+    if (isMobile) {
+      setOpenMobile(false);
+    }
+  };
 
   return (
     <SidebarMenu>
@@ -44,7 +52,7 @@ export function SidebarNavItems({ role }: { role: "admin" | "superadmin" }) {
             asChild
             isActive={isActivePath(pathname, item.href)}
           >
-            <Link href={item.href}>
+            <Link href={item.href} onClick={handleNavigate}>
               <item.icon />
               <span>{item.title}</span>
             </Link>

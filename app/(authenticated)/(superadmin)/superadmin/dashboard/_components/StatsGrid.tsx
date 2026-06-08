@@ -1,11 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { GlobalStats } from "../_queries/get-superadmin-data";
-import {
-  Building2,
-  Coins,
-  TrendingUp,
-  Briefcase,
-} from "lucide-react";
+import { Building2, Coins, TrendingUp, Briefcase } from "lucide-react";
 
 interface StatsGridProps {
   stats: GlobalStats;
@@ -51,25 +46,27 @@ export function StatsGrid({ stats }: StatsGridProps) {
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+    <div className="mb-6 grid grid-cols-1 gap-3 md:mb-8 md:grid-cols-2 md:gap-4 xl:grid-cols-4">
       {statItems.map((item, index) => {
         const Icon = item.icon;
         return (
           <Card
             key={index}
-            className="p-6 hover:shadow-lg transition-shadow border border-gray-200 dark:border-gray-700"
+            className="border-border bg-card p-4 transition-shadow hover:shadow-lg md:p-6"
           >
-            <div className="flex items-start justify-between">
-              <div className="flex-1">
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0 flex-1">
+                <p className="mb-2 text-xs font-medium text-muted-foreground md:text-sm">
                   {item.label}
                 </p>
-                <p className="text-3xl font-bold text-gray-900 dark:text-white">
+                <p className="wrap-break-word text-2xl font-bold text-foreground md:text-3xl">
                   {item.value}
                 </p>
               </div>
-              <div className={`${item.bgColor} p-3 rounded-lg ml-2`}>
-                <Icon className={`h-6 w-6 ${item.color}`} />
+              <div
+                className={`${item.bgColor} shrink-0 rounded-lg p-2.5 md:p-3`}
+              >
+                <Icon className={`h-5 w-5 md:h-6 md:w-6 ${item.color}`} />
               </div>
             </div>
           </Card>

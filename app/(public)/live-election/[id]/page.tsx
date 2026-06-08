@@ -2,7 +2,6 @@
 
 import { LandingPageHeader } from "../../landing/_components/LandingPageHeader";
 import { UpcomingElectionUI } from "./_components/UpcomingElectionUI";
-import { ActiveElectionUI } from "./_components/ActiveElectionUI";
 import { CompletedElectionUI } from "./_components/CompletedElectionUI";
 import { LiveElectionHeader } from "../_components/LiveElectionHeader";
 import { CandidateRaceCard } from "../_components/CandidateRaceCard";

@@ -12,7 +12,10 @@ import {
   ConfigurationGrid,
   DashboardSkeleton,
 } from "./_components";
-import { getOrgDashboardStats, type DashboardStats } from "./_queries/get-org-dashboard-stats";
+import {
+  getOrgDashboardStats,
+  type DashboardStats,
+} from "./_queries/get-org-dashboard-stats";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -78,18 +81,18 @@ export default function DashboardPage() {
   // Show loading state while fetching stats
   if (isLoading) {
     return (
-      <div className="space-y-8 p-8 bg-gray-50 min-h-screen">
+      <div className="min-h-svh space-y-8 bg-background p-8 text-foreground">
         <DashboardSkeleton />
       </div>
     );
   }
 
   return (
-    <div className="space-y-8 p-8 bg-gray-50 min-h-screen">
+    <div className="min-h-svh space-y-8 bg-background p-8 text-foreground">
       {/* Header Section */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex-1">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          <h1 className="mb-2 text-3xl font-bold text-foreground">
             Overview: {organization.name}
           </h1>
           <div className="flex items-center gap-2 flex-wrap">
@@ -129,7 +132,7 @@ export default function DashboardPage() {
 
       {/* Stats Grid */}
       <div>
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">
+        <h2 className="mb-4 text-lg font-semibold text-foreground">
           Quick Stats
         </h2>
         <StatsGrid
@@ -141,7 +144,7 @@ export default function DashboardPage() {
 
       {/* Configuration Grid */}
       <div>
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">
+        <h2 className="mb-4 text-lg font-semibold text-foreground">
           Organization Configuration
         </h2>
         <ConfigurationGrid />

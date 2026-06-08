@@ -36,9 +36,9 @@ export default async function AdminLayout({
   return (
     <OrganizationProvider initialOrganizations={organizations}>
       <SidebarProvider>
-        <AppSidebar />
+        <AppSidebar user={user} />
         <main className="min-h-svh flex-1">
-          <AdminHeaderClient 
+          <AdminHeaderClient
             organizations={organizations}
             breadcrumbItems={breadcrumbItems}
           />

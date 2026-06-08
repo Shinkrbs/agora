@@ -37,10 +37,10 @@ export function PaymentsManagementClient({
     tabs.find((tab) => tab.value === activeTab) ?? tabs[0];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-svh overflow-x-hidden bg-background">
       {/* Header Section */}
       <div className="border-b border-border">
-        <div className="container mx-auto px-4 py-5 md:py-8">
+        <div className="mx-auto w-full max-w-7xl min-w-0 px-4 py-5 md:py-8">
           <h1 className="mb-2 text-2xl font-bold text-foreground md:text-3xl">
             Payments Management
           </h1>
@@ -51,7 +51,7 @@ export function PaymentsManagementClient({
       </div>
 
       {/* Content Section */}
-      <div className="container mx-auto px-4 py-5 md:py-8">
+      <div className="mx-auto w-full max-w-7xl min-w-0 px-4 py-5 md:py-8">
         <div className="md:hidden">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

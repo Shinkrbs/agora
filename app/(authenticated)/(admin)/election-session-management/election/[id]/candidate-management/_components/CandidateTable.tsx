@@ -20,7 +20,6 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Check, AlertCircle, Pencil, Trash2 } from "lucide-react";
 import { CandidateTableRow } from "../_types/candidate-types";
 import { ElectionSession } from "@/types/database";

@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import { toast } from "sonner";
-import { Plus, X } from "lucide-react";
+import { X } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { createPartylist } from "../_actions/create-partylist";
+import Image from "next/image";
 
 interface CreatePartylistModalProps {
   open: boolean;
@@ -171,7 +172,7 @@ export function CreatePartylistModal({
             <div className="space-y-2">
               <Label>Logo Preview</Label>
               <div className="relative inline-block">
-                <img
+                <Image
                   src={logoPreview}
                   alt="Logo preview"
                   className="h-24 w-24 object-cover rounded-md border border-input"

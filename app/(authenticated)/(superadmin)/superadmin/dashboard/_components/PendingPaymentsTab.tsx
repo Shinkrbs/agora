@@ -21,10 +21,10 @@ export function PendingPaymentsTab({ payments }: PendingPaymentsTabProps) {
     return (
       <div className="flex flex-col items-center justify-center py-12">
         <DollarSign className="h-12 w-12 text-green-500 mb-4" />
-        <p className="text-gray-600 dark:text-gray-400 text-lg font-medium">
+        <p className="text-lg font-medium text-foreground">
           No pending payments
         </p>
-        <p className="text-gray-500 dark:text-gray-500 text-sm">
+        <p className="text-sm text-muted-foreground">
           All payments have been verified.
         </p>
       </div>
@@ -32,23 +32,23 @@ export function PendingPaymentsTab({ payments }: PendingPaymentsTabProps) {
   }
 
   return (
-    <div className="rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+    <div className="overflow-hidden rounded-lg border border-border">
       <Table>
         <TableHeader>
-          <TableRow className="bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700">
-            <TableHead className="font-semibold text-gray-900 dark:text-white">
+          <TableRow className="border-border bg-muted/50">
+            <TableHead className="font-semibold text-foreground">
               Submitter
             </TableHead>
-            <TableHead className="font-semibold text-gray-900 dark:text-white">
+            <TableHead className="font-semibold text-foreground">
               Organization
             </TableHead>
-            <TableHead className="font-semibold text-gray-900 dark:text-white">
+            <TableHead className="font-semibold text-foreground">
               Payment Type
             </TableHead>
-            <TableHead className="font-semibold text-gray-900 dark:text-white">
+            <TableHead className="font-semibold text-foreground">
               Amount
             </TableHead>
-            <TableHead className="font-semibold text-gray-900 dark:text-white">
+            <TableHead className="font-semibold text-foreground">
               Date Applied
             </TableHead>
           </TableRow>
@@ -57,31 +57,29 @@ export function PendingPaymentsTab({ payments }: PendingPaymentsTabProps) {
           {payments.map((payment) => (
             <TableRow
               key={payment.id}
-              className="border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+              className="border-border transition-colors hover:bg-muted/50"
             >
-              <TableCell className="font-medium text-gray-900 dark:text-white">
+              <TableCell className="font-medium text-foreground">
                 {payment.submitter_email}
               </TableCell>
-              <TableCell className="text-gray-600 dark:text-gray-400">
+              <TableCell className="text-muted-foreground">
                 {payment.organization_name}
               </TableCell>
               <TableCell>
-                <Badge
-                  variant="outline"
-                  className="text-xs"
-                >
+                <Badge variant="outline" className="text-xs">
                   {payment.type === "organization"
                     ? "Organization"
                     : "Election"}
                 </Badge>
               </TableCell>
-              <TableCell className="font-semibold text-gray-900 dark:text-white">
-                ₱{payment.amount.toLocaleString("en-US", {
+              <TableCell className="font-semibold text-foreground">
+                ₱
+                {payment.amount.toLocaleString("en-US", {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
                 })}
               </TableCell>
-              <TableCell className="text-gray-600 dark:text-gray-400">
+              <TableCell className="text-muted-foreground">
                 {new Date(payment.created_at).toLocaleDateString("en-US", {
                   year: "numeric",
                   month: "short",

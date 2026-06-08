@@ -37,14 +37,14 @@ export default async function SuperadminDashboard() {
 
   if (userRole !== "superadmin") {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 p-6">
+      <div className="min-h-screen bg-background p-6 text-foreground">
         <div className="max-w-md mx-auto mt-20">
-          <Card className="p-8 text-center border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-950">
-            <AlertCircle className="h-12 w-12 text-red-600 dark:text-red-400 mx-auto mb-4" />
-            <h1 className="text-2xl font-bold text-red-900 dark:text-red-100 mb-2">
+          <Card className="border-destructive/20 bg-card p-8 text-center shadow-sm">
+            <AlertCircle className="mx-auto mb-4 h-12 w-12 text-destructive" />
+            <h1 className="mb-2 text-2xl font-bold text-foreground">
               Access Denied
             </h1>
-            <p className="text-red-700 dark:text-red-300">
+            <p className="text-muted-foreground">
               You do not have permission to access the Superadmin Dashboard.
               This page is restricted to superadmin users only.
             </p>
@@ -55,25 +55,21 @@ export default async function SuperadminDashboard() {
   }
 
   // Fetch all required data in parallel
-  const [
-    pendingPayments,
-    globalStats,
-    recentActivity,
-  ] = await Promise.all([
+  const [pendingPayments, globalStats, recentActivity] = await Promise.all([
     getPendingPayments(),
     getGlobalStats(),
     getRecentActivity(),
   ]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 p-6">
+    <div className="min-h-screen bg-background p-6 text-foreground">
       <div className="max-w-7xl mx-auto">
         {/* Phase 2: Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
+          <h1 className="mb-2 text-4xl font-bold text-foreground">
             Superadmin Console
           </h1>
-          <p className="text-gray-600 dark:text-gray-400 text-lg">
+          <p className="text-lg text-muted-foreground">
             System Overview &amp; Management Center
           </p>
         </div>
@@ -82,12 +78,12 @@ export default async function SuperadminDashboard() {
         <StatsGrid stats={globalStats} />
 
         {/* Phase 3: Pending Payments Overview */}
-        <Card className="mb-8 border border-gray-200 dark:border-gray-700 overflow-hidden">
-          <div className="bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+        <Card className="mb-8 overflow-hidden border border-border bg-card">
+          <div className="border-b border-border bg-muted/50 px-6 py-4">
+            <h2 className="text-xl font-semibold text-foreground">
               Pending Payments ({pendingPayments.length})
             </h2>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+            <p className="mt-1 text-sm text-muted-foreground">
               Awaiting verification and approval
             </p>
           </div>
@@ -97,12 +93,12 @@ export default async function SuperadminDashboard() {
         </Card>
 
         {/* Phase 4: Historical Ledger */}
-        <Card className="border border-gray-200 dark:border-gray-700 overflow-hidden">
-          <div className="bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+        <Card className="overflow-hidden border border-border bg-card">
+          <div className="border-b border-border bg-muted/50 px-6 py-4">
+            <h2 className="text-xl font-semibold text-foreground">
               Recent Activity &amp; Audit Log
             </h2>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+            <p className="mt-1 text-sm text-muted-foreground">
               Last 10 processed transactions
             </p>
           </div>

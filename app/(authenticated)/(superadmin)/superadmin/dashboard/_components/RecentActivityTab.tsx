@@ -21,48 +21,46 @@ export function RecentActivityTab({ activities }: RecentActivityTabProps) {
     switch (status) {
       case "verified":
       case "approved":
-        return "bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200";
+        return "bg-green-100 text-green-800 dark:bg-green-950 dark:text-green-200";
       case "rejected":
-        return "bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200";
+        return "bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-200";
       case "pending":
-        return "bg-amber-100 dark:bg-amber-900 text-amber-800 dark:text-amber-200";
+        return "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-200";
       default:
-        return "bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200";
+        return "bg-muted text-muted-foreground";
     }
   };
 
   if (activities.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-12">
-        <CheckCircle className="h-12 w-12 text-gray-300 dark:text-gray-700 mb-4" />
-        <p className="text-gray-600 dark:text-gray-400 text-lg font-medium">
+        <CheckCircle className="mb-4 h-12 w-12 text-muted-foreground/50" />
+        <p className="text-lg font-medium text-foreground">
           No recent activity
         </p>
-        <p className="text-gray-500 dark:text-gray-500 text-sm">
-          Activity log is empty.
-        </p>
+        <p className="text-sm text-muted-foreground">Activity log is empty.</p>
       </div>
     );
   }
 
   return (
-    <div className="rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+    <div className="overflow-hidden rounded-lg border border-border">
       <Table>
         <TableHeader>
-          <TableRow className="bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700">
-            <TableHead className="font-semibold text-gray-900 dark:text-white">
+          <TableRow className="border-border bg-muted/50">
+            <TableHead className="font-semibold text-foreground">
               Type
             </TableHead>
-            <TableHead className="font-semibold text-gray-900 dark:text-white">
+            <TableHead className="font-semibold text-foreground">
               Name
             </TableHead>
-            <TableHead className="font-semibold text-gray-900 dark:text-white">
+            <TableHead className="font-semibold text-foreground">
               Status
             </TableHead>
-            <TableHead className="font-semibold text-gray-900 dark:text-white">
+            <TableHead className="font-semibold text-foreground">
               Amount
             </TableHead>
-            <TableHead className="font-semibold text-gray-900 dark:text-white">
+            <TableHead className="font-semibold text-foreground">
               Date
             </TableHead>
           </TableRow>
@@ -71,7 +69,7 @@ export function RecentActivityTab({ activities }: RecentActivityTabProps) {
           {activities.map((activity) => (
             <TableRow
               key={activity.id}
-              className="border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+              className="border-border transition-colors hover:bg-muted/50"
             >
               <TableCell>
                 <Badge variant="outline" className="text-xs">
@@ -80,7 +78,7 @@ export function RecentActivityTab({ activities }: RecentActivityTabProps) {
                     : "Payment"}
                 </Badge>
               </TableCell>
-              <TableCell className="font-medium text-gray-900 dark:text-white max-w-xs truncate">
+              <TableCell className="max-w-xs truncate font-medium text-foreground">
                 {activity.name}
               </TableCell>
               <TableCell>
@@ -90,18 +88,20 @@ export function RecentActivityTab({ activities }: RecentActivityTabProps) {
               </TableCell>
               <TableCell>
                 {activity.amount ? (
-                  <div className="flex items-center font-semibold text-gray-900 dark:text-white">
-                    <span className="mr-1 text-green-600 dark:text-green-400">₱</span>
+                  <div className="flex items-center font-semibold text-foreground">
+                    <span className="mr-1 text-green-600 dark:text-green-400">
+                      ₱
+                    </span>
                     {activity.amount.toLocaleString("en-US", {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
                     })}
                   </div>
                 ) : (
-                  <span className="text-gray-500 dark:text-gray-400">-</span>
+                  <span className="text-muted-foreground">-</span>
                 )}
               </TableCell>
-              <TableCell className="text-sm text-gray-600 dark:text-gray-400">
+              <TableCell className="text-sm text-muted-foreground">
                 {new Date(activity.created_at).toLocaleDateString("en-US", {
                   year: "numeric",
                   month: "short",

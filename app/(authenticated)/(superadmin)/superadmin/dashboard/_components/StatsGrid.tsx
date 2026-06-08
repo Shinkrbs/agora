@@ -1,11 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { GlobalStats } from "../_queries/get-superadmin-data";
-import {
-  Building2,
-  Coins,
-  TrendingUp,
-  Briefcase,
-} from "lucide-react";
+import { Building2, Coins, TrendingUp, Briefcase } from "lucide-react";
 
 interface StatsGridProps {
   stats: GlobalStats;
@@ -57,14 +52,14 @@ export function StatsGrid({ stats }: StatsGridProps) {
         return (
           <Card
             key={index}
-            className="p-6 hover:shadow-lg transition-shadow border border-gray-200 dark:border-gray-700"
+            className="border-border p-6 transition-shadow hover:shadow-lg"
           >
             <div className="flex items-start justify-between">
               <div className="flex-1">
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">
+                <p className="mb-2 text-sm font-medium text-muted-foreground">
                   {item.label}
                 </p>
-                <p className="text-3xl font-bold text-gray-900 dark:text-white">
+                <p className="text-3xl font-bold text-foreground">
                   {item.value}
                 </p>
               </div>

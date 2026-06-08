@@ -4,6 +4,8 @@ import { ElectionHeaderData } from "../_types/election-header";
 import { getCurrentUser } from "@/lib/queries/users-queries";
 import { PaymentStatus } from "@/types/database";
 
+export const dynamic = 'force-dynamic'
+
 const getSupabaseClient = async () => {
     const cookieStore = await cookies();
     return createClient(cookieStore);
@@ -11,7 +13,7 @@ const getSupabaseClient = async () => {
 
 const voterCount = async (supabase: Awaited<ReturnType<typeof createClient>>, electionId: string): Promise<number> => {
     try {
-        const { data, error } = await supabase.from("voters").select("id", { count: "exact" }).eq("election_id", electionId);
+        const { data, error } = await supabase.from("voters").select("id", { count: "exact" }).eq("election_id", electionId).eq("is_deleted", false);
         if (error) {
             console.error("Error checking voter data:", error);
             return 0;
@@ -25,7 +27,7 @@ const voterCount = async (supabase: Awaited<ReturnType<typeof createClient>>, el
 
 const candidateCount = async (supabase: Awaited<ReturnType<typeof createClient>>, electionId: string): Promise<number> => {
     try {
-        const { data, error } = await supabase.from("candidates").select("id", { count: "exact" }).eq("election_id", electionId);
+        const { data, error } = await supabase.from("candidates").select("id", { count: "exact" }).eq("election_id", electionId).eq("is_deleted", false);
         if (error) {
             console.error("Error checking candidate data:", error);
             return 0;
@@ -155,7 +157,6 @@ export async function fetchElection(electionId: string): Promise<{ data: Electio
             votedCount: voted,
             sentCount: sent,
         };
-
         return { data: election, message: "Election fetched successfully", error: null };
     } catch (error) {
         console.error("Error fetching election:", error);

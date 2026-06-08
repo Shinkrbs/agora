@@ -155,7 +155,7 @@ export default function CandidateManagementPage({
               Candidate Management
             </h2>
             <p className="text-muted-foreground text-sm">
-              Manage candidates for election ID: {id}
+              Manage candidates for election
             </p>
           </div>
           <Button onClick={handleAddCandidate} disabled={isLoading} className="gap-2">

@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import { generateVoterCode } from "../_utils/generate-voter-code";
 import { sendVotingCodeEmail } from "@/lib/mailer";
+import { revalidatePath } from "next/cache";
 
 export async function addVoter(electionId: string, studentId: string, email: string): Promise<{ success: boolean; error: string | null }> {
     try {
@@ -25,7 +26,7 @@ export async function addVoter(electionId: string, studentId: string, email: str
             console.error("Error adding voter:", error);
             return { success: false, error: error.message };
         }
-
+        revalidatePath(`/admin/election-session-management/election/${electionId}/voter-management`);
         return { success: true, error: null };
     } catch (err) {
         console.error("Unexpected error adding voter:", err);
@@ -41,6 +42,28 @@ export async function importVotersCSVAction(
     const cookieStore = await cookies();
     const supabase = await createClient(cookieStore);
 
+    // Check for existing voters in this election
+    const studentIds = parsedVoters.map(v => v.student_id);
+    const { data: existingVoters, error: queryError } = await supabase
+      .from("voters")
+      .select("student_id, email")
+      .eq("election_id", electionId)
+      .in("student_id", studentIds)
+      .eq("is_deleted", false);
+
+    if (queryError) {
+      console.error("Error checking existing voters:", queryError);
+      return { success: false, error: "Failed to validate voter data." };
+    }
+
+    if (existingVoters && existingVoters.length > 0) {
+      const existingIds = existingVoters.map(v => v.student_id);
+      return { 
+        success: false, 
+        error: `The following Student IDs already exist in this election: ${existingIds.join(", ")}. Please remove duplicates and try again.` 
+      };
+    }
+
     const votersToInsert = parsedVoters.map((voter) => ({
       election_id: electionId,
       student_id: voter.student_id,
@@ -55,11 +78,11 @@ export async function importVotersCSVAction(
       .select(); 
     if (error) {
       if (error.code === "23505") {
-        return { success: false, error: "One or more Student IDs already exist in this election." };
+        return { success: false, error: "One or more Student IDs or emails already exist in this election." };
       }
       throw new Error(error.message);
     }
-
+    revalidatePath(`/admin/election-session-management/election/${electionId}/voter-management`);
     return { 
       success: true, 
       message: `Successfully imported ${data.length} voters.` 
@@ -71,7 +94,7 @@ export async function importVotersCSVAction(
   }
 }
 
-export async function editVoter(voterId: string, studentId: string, email: string): Promise<{ success: boolean; error: string | null }> {
+export async function editVoter(voterId: string, studentId: string, email: string, electionId: string): Promise<{ success: boolean; error: string | null }> {
     try {
         const cookieStore = await cookies();
         const supabase = await createClient(cookieStore);
@@ -89,6 +112,7 @@ export async function editVoter(voterId: string, studentId: string, email: strin
             return { success: false, error: error.message };
         }
 
+        revalidatePath(`/admin/election-session-management/election/${electionId}/voter-management`);
         return { success: true, error: null };
     } catch (err) {
         console.error("Unexpected error editing voter:", err);
@@ -96,7 +120,7 @@ export async function editVoter(voterId: string, studentId: string, email: strin
     }
 }
 
-export async function deleteVoter(voterId: string): Promise<{ success: boolean; error: string | null }> {
+export async function deleteVoter(voterId: string, electionId: string): Promise<{ success: boolean; error: string | null }> {
     try {
         const cookieStore = await cookies();
         const supabase = await createClient(cookieStore);
@@ -110,7 +134,7 @@ export async function deleteVoter(voterId: string): Promise<{ success: boolean; 
             console.error("Error deleting voter:", error);
             return { success: false, error: error.message };
         }
-
+        revalidatePath(`/admin/election-session-management/election/${electionId}/voter-management`);
         return { success: true, error: null };
     } catch (err) {
         console.error("Unexpected error deleting voter:", err);
@@ -138,7 +162,7 @@ export async function sendVotingCode(voterId: string, electionId: string, voting
             console.error("Error updating voter status:", updateError);
             return { success: false, error: "Failed to update voter status." };
         }
-
+        revalidatePath(`/admin/election-session-management/election/${electionId}/voter-management`);
         return { success: true, error: null };
     } catch (err) {
         console.error("Unexpected error sending voting code:", err);
@@ -189,7 +213,7 @@ export async function sendBatchedVotingCodesAction(
         console.error("Error updating voter statuses:", updateError);
       }
     }
-
+    revalidatePath(`/admin/election-session-management/election/${batch[0].election_id}/voter-management`);
     return {
       success: failedIds.length === 0,
       sentCount: successfulIds.length,

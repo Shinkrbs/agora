@@ -222,6 +222,7 @@ export function VoterTable({ voters: initialVoters, electionId, onVoterAdded }: 
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => handleDeleteVoter(voter)}
+                  disabled={voter.code_status === "VOTED"}
                   className="text-destructive"
                 >
                   Delete
@@ -405,6 +406,7 @@ export function VoterTable({ voters: initialVoters, electionId, onVoterAdded }: 
         voter={selectedVoter ?? undefined}
         electionId={electionId}
         onSuccess={onVoterAdded}
+        voterList={data}
       />
       <ImportVotersModal
         isOpen={isImportOpen}

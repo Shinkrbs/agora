@@ -152,7 +152,7 @@ export default function PartylistManagementPage({
       <div className="rounded-lg border border-border bg-card p-6">
         <h2 className="text-xl font-semibold text-foreground mb-2">Partylist Management</h2>
         <p className="text-muted-foreground text-sm mb-4">
-          Manage partylists for election ID: {id}
+          Manage partylists for election
         </p>
 
         {/* Search Bar and Create Button */}

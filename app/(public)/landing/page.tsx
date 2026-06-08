@@ -234,7 +234,7 @@ export default function HomePage() {
                   size="lg"
                   className="bg-transparent text-white border-2 border-white/80 dark:border-black/30 hover:bg-white/10 dark:hover:bg-black/20 hover:text-white font-semibold px-8 py-6 rounded-xl text-base transition-colors"
                 >
-                  <Link href="/signup">Vote Now</Link>
+                  <Link href="/live-election">Vote Now</Link>
                 </Button>
               </div>
             </div>

@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { useCurrentOrganization } from "@/app/(authenticated)/(admin)/_components/OrganizationContext";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Plus } from "lucide-react";
 import {
   LiveElectionCenter,
   StatsGrid,

@@ -1,4 +1,4 @@
-import { LayoutDashboard, UserCog, Vote, Building2, Settings, type LucideIcon, ClipboardList} from "lucide-react";
+import { LayoutDashboard, UserCog, Vote, Building2, Settings, type LucideIcon, ClipboardList } from "lucide-react";
 
 export type SidebarItem = {
   title: string;
@@ -44,11 +44,6 @@ export const superAdminSidebarItems: SidebarItem[] = [
     title: "Payments Management",
     href: "/payments-management",
     icon: UserCog,
-  },
-  {
-    title: "Settings",
-    href: "/superadmin/settings",
-    icon: Settings,
   },
 ];
 

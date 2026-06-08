@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback, useMemo } from "react";
+import React, { useState, useCallback, useMemo, useEffect } from "react";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -38,7 +38,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { VoterTableRow } from "../_types/voter-types";
-import { VoterCodeStatus } from "@/types/database";
+import { ElectionSession, VoterCodeStatus } from "@/types/database";
 import { sendVotingCode } from "../_actions/voter-actions";
 import { AddEditVoterModal } from "./AddEditVoterModal";
 import { ImportVotersModal } from "./ImportVotersModal";
@@ -48,10 +48,11 @@ import { BulkSendModal } from "./BulkSendButton";
 interface VoterTableProps {
   voters: VoterTableRow[];
   electionId: string;
+  election: ElectionSession | null;
   onVoterAdded?: () => void;
 }
 
-export function VoterTable({ voters: initialVoters, electionId, onVoterAdded }: VoterTableProps) {
+export function VoterTable({ voters: initialVoters, electionId, election, onVoterAdded }: VoterTableProps) {
   const [data, setData] = useState<VoterTableRow[]>(initialVoters);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -68,6 +69,10 @@ export function VoterTable({ voters: initialVoters, electionId, onVoterAdded }: 
   const [isImportOpen, setIsImportOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [selectedVoter, setSelectedVoter] = useState<VoterTableRow | null>(null);
+
+  useEffect(() => {
+    setData(initialVoters);
+  }, [initialVoters]);
 
   const handleCopyCode = useCallback((code: string, id: string) => {
     navigator.clipboard.writeText(code);
@@ -306,13 +311,16 @@ export function VoterTable({ voters: initialVoters, electionId, onVoterAdded }: 
           </Select>
         </div>
         <div className="flex gap-2">
-          <BulkSendModal
-            unsentVoters={data.filter((v) => v.code_status === "UNSENT")}
-          />
+          {election?.status !== "completed" && (
+            <BulkSendModal
+              unsentVoters={data.filter((v) => v.code_status === "UNSENT")}
+            />
+          )}
           <Button
             onClick={handleAddVoter}
             size="sm"
             className="gap-2"
+            disabled={election?.status === "completed"}
           >
             <Plus className="h-4 w-4" />
             Add Voter
@@ -322,6 +330,7 @@ export function VoterTable({ voters: initialVoters, electionId, onVoterAdded }: 
             variant="outline"
             size="sm"
             className="gap-2"
+            disabled={election?.status === "completed"}
           >
             <Upload className="h-4 w-4" />
             Import CSV

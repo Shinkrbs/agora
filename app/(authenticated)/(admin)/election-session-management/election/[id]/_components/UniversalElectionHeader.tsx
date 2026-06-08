@@ -7,7 +7,6 @@ import {
   Calendar,
   Settings,
   Play,
-  Download,
   RefreshCw,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";

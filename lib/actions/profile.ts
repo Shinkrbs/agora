@@ -108,10 +108,13 @@ export async function changePasswordAction(
   _prevState: ProfileActionState,
   formData: FormData,
 ): Promise<ProfileActionState> {
+  const currentPassword = String(formData.get("currentPassword") ?? "");
   const newPassword = String(formData.get("newPassword") ?? "");
   const confirmPassword = String(formData.get("confirmPassword") ?? "");
 
   const fieldErrors: ProfileActionState["fieldErrors"] = {};
+  if (!currentPassword)
+    fieldErrors.currentPassword = ["Current password is required."];
   if (newPassword.length < 8)
     fieldErrors.newPassword = ["Password must be at least 8 characters."];
   if (newPassword !== confirmPassword)
@@ -122,6 +125,24 @@ export async function changePasswordAction(
   }
 
   const supabase = await createClient(await cookies());
+  const { data: userData, error: userError } = await supabase.auth.getUser();
+
+  if (userError || !userData.user?.email) {
+    return { error: "Not authenticated." };
+  }
+
+  const { error: signInError } = await supabase.auth.signInWithPassword({
+    email: userData.user.email,
+    password: currentPassword,
+  });
+
+  if (signInError) {
+    return {
+      error: "Incorrect current password.",
+      fieldErrors: { currentPassword: ["Incorrect current password."] },
+    };
+  }
+
   const { error } = await supabase.auth.updateUser({ password: newPassword });
 
   if (error) return { error: error.message };

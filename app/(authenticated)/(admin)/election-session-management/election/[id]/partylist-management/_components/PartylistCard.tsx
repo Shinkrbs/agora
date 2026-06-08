@@ -12,17 +12,20 @@ import { Button } from "@/components/ui/button";
 import { Users, MoreVertical } from "lucide-react";
 import { PartylistWithCandidateCount } from "../_types/partylist-types";
 import { cn } from "@/lib/utils";
+import { ElectionSession } from "@/types/database";
 
 interface PartylistCardProps {
   partylist: PartylistWithCandidateCount;
   onEdit?: (partylist: PartylistWithCandidateCount) => void;
   onDelete?: (partylistId: string) => void;
+  election: ElectionSession | null;
 }
 
 export function PartylistCard({
   partylist,
   onEdit,
   onDelete,
+  election,
 }: PartylistCardProps) {
   const getInitials = (name: string) => {
     return name
@@ -77,12 +80,13 @@ export function PartylistCard({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => onEdit?.(partylist)}>
+            <DropdownMenuItem onClick={() => onEdit?.(partylist)} disabled={election?.status === "completed"}>
               Edit
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => onDelete?.(partylist.id)}
               className="text-destructive"
+              disabled={election?.status === "completed"}
             >
               Delete
             </DropdownMenuItem>

@@ -128,6 +128,7 @@ export default async function ElectionDetailsPage({
             totalBallotsCast={stats?.totalBallotsCast || 0}
             reportingPercentage={stats?.reportingPercentage || 0}
             lastUpdated={stats?.lastUpdated || "N/A"}
+            organization={currentElection.organizations}
           />
 
           {/* Access Ballot CTA */}

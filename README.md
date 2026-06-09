@@ -1,6 +1,6 @@
 # Agora
 
-*A student organization election management system built for student organizations in the Visayas State University.*
+*A student organization election management system **(SOES)** built for student organizations in the Visayas State University.*
 
 | **Internal Release Code** | Date Released | 
 | --- | --- |
@@ -10,6 +10,8 @@ AG.010.003 | 2026-04-05 |
 AG.010.004 | 2026-04-13 |
 AG.010.005| 2026-04-22 |
 AG.010.006| 2026-05-05 |
+AG.010.007| 2026-06-09 |
+AG.110.000| 2026-06-09 |
 
 ## AG.010.001 Release Notes 
 
@@ -84,6 +86,21 @@ AG.010.006| 2026-05-05 |
 ● Administrators now have a dedicated dashboard to track turnout percentages and perform individual voter management tasks (add, edit, soft-delete).
 
 ● Introduced a CSV upload tool for mass voter registration, paired with a secure, rate-limited automated email system to batch-send voting codes directly to students.
+
+## AG.010.007 Release Notes
+
+● Deployed dedicated, data-driven dashboards for Organization Admins and Superadmins, featuring real-time election tracking, aggregate statistics, and pending payment overviews.
+
+● Administrators can now seamlessly view, print, and download fully formatted PDF summaries of comprehensive election results directly from the dashboard.
+
+● Strengthened the voting process by adding strict validation for multi-seat positions (preventing voters from selecting more candidates than allowed) and introduced a new "Abstain" feature to let users intentionally skip specific positions.
+
+● Added a dedicated Admin Settings module empowering organization owners to update profiles, manage team access, promote/kick members, and securely transfer organization ownership.
+
+● Implemented historical constraints that automatically lock all edits (voters, partylists, candidates, settings) once an election is completed, and prevent start-date modifications for active elections.
+
+● Fully integrated the contact form backend on the landing page, utilizing server actions to process user inquiries seamlessly.
+
 
 ## Important Links
 

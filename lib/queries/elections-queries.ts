@@ -1,14 +1,15 @@
 import { createClient } from "../supabase/server";
 import { cookies } from "next/headers";
 import { ElectionSession, ElectionStatus, Position, Partylist, Candidate } from "@/types/database";
+import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 
 
-export async function getElectionSessionById(sessionId: string): Promise<ElectionSession | null> {
+export async function getElectionSessionById(sessionId: string): Promise<any | null> {
     try {
         const supabase = await createClient(await cookies());
         const { data: session, error } = await supabase
             .from("election_sessions")
-            .select("*")
+            .select("*, organizations(*)")
             .eq("id", sessionId)
             .single();
         if (error) {
@@ -183,6 +184,11 @@ export async function getCandidatesWithVotesForPosition(
     try {
         const supabase = await createClient(await cookies());
         
+        const supabaseAdmin = createSupabaseClient(
+            process.env.NEXT_PUBLIC_SUPABASE_URL!,
+            process.env.NEXT_SUPABASE_SERVICE_ROLE_KEY!
+        );
+        
         // Fetch candidates for the position
         const { data: candidates, error: candidatesError } = await supabase
             .from("candidates")
@@ -206,7 +212,7 @@ export async function getCandidatesWithVotesForPosition(
             const candidate = candidates[i] as Candidate;
             
             // Count votes for this candidate
-            const { count, error: countError } = await supabase
+            const { count, error: countError } = await supabaseAdmin
                 .from("votes")
                 .select("*", { count: "exact", head: true })
                 .eq("candidate_id", candidate.id)
@@ -251,10 +257,13 @@ export async function getElectionStats(
     lastUpdated: string;
 } | null> {
     try {
-        const supabase = await createClient(await cookies());
+        const supabaseAdmin = createSupabaseClient(
+            process.env.NEXT_PUBLIC_SUPABASE_URL!,
+            process.env.NEXT_SUPABASE_SERVICE_ROLE_KEY!
+        );
 
         // Count total unique voters who voted in this election
-        const { data: voters, error: votersError } = await supabase
+        const { data: voters, error: votersError } = await supabaseAdmin
             .from("voters")
             .select("id")
             .eq("election_id", electionId)
@@ -267,7 +276,7 @@ export async function getElectionStats(
         }
 
         // Count total registered voters
-        const { count: totalVoters, error: totalError } = await supabase
+        const { count: totalVoters, error: totalError } = await supabaseAdmin
             .from("voters")
             .select("*", { count: "exact", head: true })
             .eq("election_id", electionId)
@@ -283,7 +292,7 @@ export async function getElectionStats(
         const reportingPercentage = Math.round((ballotsCast / totalRegistered) * 100);
 
         // Get the last vote timestamp or use current time
-        const { data: lastVote } = await supabase
+        const { data: lastVote } = await supabaseAdmin
             .from("votes")
             .select("created_at")
             .eq("is_deleted", false)

@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { Voter } from "@/types/database";
+import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 
 export interface VoteAuthResult {
   success: boolean;
@@ -19,17 +20,20 @@ export async function authenticateVoter(
   let voter: Voter | undefined;
 
   try {
-    const cookieStore = await cookies();
-    const supabase = await createClient(cookieStore);
+    const supabaseAdmin = createSupabaseClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_SUPABASE_SERVICE_ROLE_KEY!
+    );
 
-    const normalizedCode = votingCode.replace(/-/g, "");
+    const normalizedCode = votingCode.replace(/-/g, "").toUpperCase();
     const normalizedStudentId = studentId.trim();
+    const escapedStudentId = normalizedStudentId.replace(/%/g, "\\%").replace(/_/g, "\\_");
 
-    const { data: voters, error: queryError } = await supabase
+    const { data: voters, error: queryError } = await supabaseAdmin
       .from("voters")
       .select("*")
       .eq("election_id", electionId)
-      .eq("student_id", normalizedStudentId)
+      .ilike("student_id", escapedStudentId)
       .eq("is_deleted", false);
 
     if (queryError) {
@@ -77,5 +81,5 @@ export async function authenticateVoter(
     maxAge: 60 * 60, 
   });
 
-  redirect(`/live-election/${electionId}/ballot`);
+  return { success: true };
 }

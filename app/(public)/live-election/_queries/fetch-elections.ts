@@ -4,12 +4,12 @@ import { createClient } from "@/lib/supabase/server";
 import { ElectionSession } from "@/types/database";
 import { cookies } from "next/headers";
 
-export async function fetchLiveElections(): Promise<{data: ElectionSession[] | null; error: string | null}> {
+export async function fetchLiveElections(): Promise<{data: any[] | null; error: string | null}> {
     try {
         const cookieStore = await cookies();
         const supabase = await createClient(cookieStore);
 
-        const { data, error} = await supabase.from("election_sessions").select("*").eq("status", "active").eq("is_deleted", false).order("created_at", { ascending: false });
+        const { data, error} = await supabase.from("election_sessions").select("*, organizations(*)").eq("status", "active").eq("is_deleted", false).order("created_at", { ascending: false });
         
         if (error) {
             console.error("Error fetching live elections:", error);

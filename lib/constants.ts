@@ -1,0 +1,4 @@
+export const AGORA_PRICING = {
+    ORGANIZATION_REGISTRATION_FEE: 100,
+    ELECTION_SESSION_FEE: 100,
+} as const;

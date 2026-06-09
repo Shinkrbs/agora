@@ -1,0 +1,76 @@
+"use client";
+
+import { useState, useMemo } from "react";
+import { ElectionCardSummary } from "../_types/election-card-type";
+import { ElectionStatus } from "@/types/database";
+import { ElectionCard } from "./ElectionCard";
+import { ElectionStatusTabs } from "./ElectionStatusTabs";
+import { SearchAndFilter } from "./SearchAndFilter";
+
+interface ElectionSessionsListProps {
+  initialElections: ElectionCardSummary[];
+}
+
+export function ElectionSessionsList({
+  initialElections,
+}: ElectionSessionsListProps) {
+  const [activeStatus, setActiveStatus] = useState<ElectionStatus | "all">(
+    "all",
+  );
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredElections = useMemo(() => {
+    let filtered = initialElections;
+
+    if (activeStatus !== "all") {
+      filtered = filtered.filter(
+        (election) => election.status === activeStatus,
+      );
+    }
+
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter((election) =>
+        election.title.toLowerCase().includes(query),
+      );
+    }
+
+    return filtered;
+  }, [activeStatus, searchQuery, initialElections]);
+
+  return (
+    <div className="space-y-6" suppressHydrationWarning>
+      <div className="space-y-1">
+        <h1 className="text-2xl sm:text-3xl font-bold text-foreground leading-tight">
+          Election Session Management
+        </h1>
+        <p className="text-muted-foreground text-sm">
+          Create, manage, and monitor election sessions for your organization.
+        </p>
+      </div>
+
+      <SearchAndFilter onSearch={setSearchQuery} />
+
+      <ElectionStatusTabs
+        activeStatus={activeStatus}
+        onStatusChange={setActiveStatus}
+      />
+
+      <div>
+        {filteredElections.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-muted-foreground text-sm">
+              No elections found. Try adjusting your search or filters.
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {filteredElections.map((election) => (
+              <ElectionCard key={election.id} election={election} />
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

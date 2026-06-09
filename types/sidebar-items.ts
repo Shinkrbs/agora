@@ -1,0 +1,54 @@
+import { LayoutDashboard, UserCog, Vote, Building2, Settings, type LucideIcon, ClipboardList } from "lucide-react";
+
+export type SidebarItem = {
+  title: string;
+  href: string;
+  icon: LucideIcon;
+};
+
+export const adminSidebarItems: SidebarItem[] = [
+  {
+    title: "Dashboard",
+    href: "/admin/dashboard",
+    icon: LayoutDashboard,
+  },
+  {
+    title: "Position Templates",
+    href: "/position-templates",
+    icon: ClipboardList,
+  },
+  {
+    title: "Election Session Management",
+    href: "/election-session-management",
+    icon: Vote,
+  },
+  {
+    title: "Organization Management",
+    href: "/organization-management",
+    icon: Building2,
+  },
+  {
+    title: "Settings",
+    href: "/settings",
+    icon: Settings,
+  },
+];
+
+export const superAdminSidebarItems: SidebarItem[] = [
+  {
+    title: "Dashboard",
+    href: "/superadmin/dashboard",
+    icon: LayoutDashboard,
+  },
+  {
+    title: "Payments Management",
+    href: "/payments-management",
+    icon: UserCog,
+  },
+];
+
+export interface SidebarProfile {
+  name: string;
+  email: string;
+  avatar_url?: string;
+}

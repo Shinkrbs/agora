@@ -34,8 +34,38 @@ export async function submitBallotAction(
       throw new Error("You have already cast your ballot");
     }
 
-    const votesToInsert = Object.entries(votes).flatMap(([positionId, candidateIds]) => {
+    const { data: positions, error: positionsError } = await supabaseAdmin
+      .from("positions")
+      .select("id, seat_count")
+      .eq("election_id", electionId);
+
+    if (positionsError || !positions) {
+      throw new Error("Failed to fetch election positions");
+    }
+
+    const seatCountMap = new Map(positions.map((p) => [p.id, p.seat_count]));
+
+    const validVotes: Record<string, string[]> = {};
+    for (const [positionId, candidateIds] of Object.entries(votes)) {
+      if (candidateIds === "ABSTAIN") {
+        continue;
+      }
+
       const candidates = Array.isArray(candidateIds) ? candidateIds : [candidateIds];
+      const seatCount = seatCountMap.get(positionId);
+
+      if (!seatCount) {
+        throw new Error(`Invalid position: ${positionId}`);
+      }
+
+      if (candidates.length > seatCount) {
+        throw new Error(`Too many candidates selected for a position. Maximum is ${seatCount}.`);
+      }
+
+      validVotes[positionId] = candidates;
+    }
+
+    const votesToInsert = Object.entries(validVotes).flatMap(([positionId, candidates]) => {
       return candidates.map((candidateId) => ({
         voter_id: voterId,
         election_id: electionId,
@@ -44,11 +74,13 @@ export async function submitBallotAction(
       }));
     });
 
-    const { error: insertError } = await supabaseAdmin.from("votes").insert(votesToInsert);
+    if (votesToInsert.length > 0) {
+      const { error: insertError } = await supabaseAdmin.from("votes").insert(votesToInsert);
 
-    if (insertError) {
-      console.error("Error inserting votes:", insertError);
-      throw new Error("Failed to submit ballot");
+      if (insertError) {
+        console.error("Error inserting votes:", insertError);
+        throw new Error("Failed to submit ballot");
+      }
     }
 
     const { error: updateError } = await supabaseAdmin

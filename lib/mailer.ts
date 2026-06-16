@@ -28,12 +28,12 @@ export async function sendVotingCodeEmail(
     const isDev = process.env.NODE_ENV === 'development';
     
     // Updated to use your new custom domain instead of the old Vercel URL
-    const baseUrl = isDev ? 'http://localhost:3000' : 'https://soes.qzz.io';
+    const baseUrl = isDev ? 'http://localhost:3000' : 'https://soes-election.online';
     const voteUrl = `${baseUrl}/live-election/${electionId}/vote?id=${studentId}`;
 
     const mailOptions = {
       // Must match the exact sender email you verified inside your Brevo dashboard
-      from: `"SOES Election Committee" <soes-mail@soes.qzz.io>`,
+      from: `"SOES Election Committee" <soes-mail@soes-election.online>`,
       to: recipientEmail,
       subject: "Your Official Election Voting Credentials",
       html: `

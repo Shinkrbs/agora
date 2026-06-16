@@ -1,7 +1,9 @@
 import nodemailer from "nodemailer";
 
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp-relay.brevo.com",
+  port: 587,
+  secure: false, // true for 465, false for other ports
   auth: {
     user: process.env.SMTP_EMAIL,
     pass: process.env.SMTP_PASSWORD,
@@ -24,11 +26,14 @@ export async function sendVotingCodeEmail(
   console.log("Election Id: ", electionId);
   try {
     const isDev = process.env.NODE_ENV === 'development';
-    const baseUrl = isDev ? 'http://localhost:3000' : 'https://soes-nine.vercel.app';
+    
+    // Updated to use your new custom domain instead of the old Vercel URL
+    const baseUrl = isDev ? 'http://localhost:3000' : 'https://soes.qzz.io';
     const voteUrl = `${baseUrl}/live-election/${electionId}/vote?id=${studentId}`;
 
     const mailOptions = {
-      from: `"Agora Election Committee" <${process.env.SMTP_EMAIL}>`,
+      // Must match the exact sender email you verified inside your Brevo dashboard
+      from: `"SOES Election Committee" <soes-mail@soes.qzz.io>`,
       to: recipientEmail,
       subject: "Your Official Election Voting Credentials",
       html: `
@@ -44,7 +49,7 @@ export async function sendVotingCodeEmail(
             
             <!-- Header -->
             <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 20px; text-align: center; color: white;">
-              <h1 style="margin: 0; font-size: 28px; font-weight: 600;">Agora Election</h1>
+              <h1 style="margin: 0; font-size: 28px; font-weight: 600;">SOES Election</h1>
               <p style="margin: 8px 0 0 0; font-size: 14px; opacity: 0.9;">Your Official Voting Credentials</p>
             </div>
 
@@ -107,7 +112,7 @@ export async function sendVotingCodeEmail(
 
               <!-- Footer Note -->
               <p style="margin: 32px 0 0 0; padding-top: 24px; border-top: 1px solid #e5e7eb; font-size: 13px; color: #888;">
-                If you have any questions or need assistance, please reach out to the Agora Election Committee support team.
+                If you have any questions or need assistance, please reach out to the SOES Election Committee support team.
               </p>
             </div>
 
@@ -117,7 +122,7 @@ export async function sendVotingCodeEmail(
                 This is an automated message. Please do not reply to this email.
               </p>
               <p style="margin: 8px 0 0 0; font-size: 12px; color: #999;">
-                © 2026 Agora Election Committee. All rights reserved.
+                © 2026 SOES Election Committee. All rights reserved.
               </p>
             </div>
           </div>

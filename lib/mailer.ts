@@ -26,7 +26,7 @@ export async function sendVotingCodeEmail(
   console.log("Election Id: ", electionId);
   try {
     const isDev = process.env.NODE_ENV === 'development';
-    
+
     // Updated to use your new custom domain instead of the old Vercel URL
     const baseUrl = isDev ? 'http://localhost:3000' : 'https://soes-election.online';
     const voteUrl = `${baseUrl}/live-election/${electionId}/vote?id=${studentId}`;

@@ -13,6 +13,8 @@ import {
 } from "@/components/ui/input-otp";
 import { authenticateVoter } from "../../_actions/vote-auth";
 import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
+import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp";
 
 interface VoteAuthFormProps {
   electionId: string;
@@ -42,6 +44,9 @@ export function VoteAuthForm({
       );
 
       if (result.success) {
+        toast.success("Verification Successful", {
+          description: "Redirecting you to your ballot...",
+        });
         router.push(`/live-election/${electionId}/ballot`);
       } else {
         setError(result.error || "Authentication failed");
@@ -97,6 +102,8 @@ export function VoteAuthForm({
                 value={votingCode}
                 onChange={setVotingCode}
                 disabled={isLoading}
+                inputMode="text"
+                pattern={REGEXP_ONLY_DIGITS_AND_CHARS}
               >
                 <InputOTPGroup>
                   <InputOTPSlot index={0} />
